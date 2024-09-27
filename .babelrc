@@ -1,0 +1,16 @@
+{
+  "presets": ["@babel/preset-react", "@babel/preset-env"],
+  "plugins": [
+    [
+      "react-css-modules",
+      {
+        "filetypes": {
+          ".css": {
+            "syntax": "postcss"
+          }
+        },
+        "generateScopedName": "[name]__[local]___[hash:base64:5]"
+      }
+    ]
+  ]
+}

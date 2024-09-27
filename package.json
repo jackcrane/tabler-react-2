@@ -1,0 +1,32 @@
+{
+  "name": "tabler-react-2",
+  "version": "0.1.26",
+  "description": "A react implementation of Tabler ui",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "cd demo && yarn start",
+    "build:css": "postcss src/**/*.css --dir dist",
+    "build": "babel src --out-dir dist && npm run build:css"
+  },
+  "author": "Jack Crane",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.24.8",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-react": "^7.24.7",
+    "@tabler/icons-react": "^3.14.0",
+    "classnames": "^2.5.1",
+    "prop-types": "^15.8.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.2"
+  },
+  "devDependencies": {
+    "babel-plugin-react-css-modules": "^5.2.6",
+    "babel-plugin-transform-assets": "^1.0.2",
+    "babel-plugin-transform-css-import-to-string": "^0.0.2",
+    "postcss": "^8.4.45",
+    "postcss-cli": "^11.0.0"
+  }
+}
