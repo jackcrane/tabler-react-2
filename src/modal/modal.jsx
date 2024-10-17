@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Button } from "../button";
 
@@ -93,4 +93,56 @@ Modal.propTypes = {
   ),
   children: PropTypes.node.isRequired,
   modalId: PropTypes.string.isRequired,
+};
+
+export const useModal = (options) => {
+  const [modalState, setModalState] = useState({
+    open: false,
+    resolve: null,
+    title: options?.title,
+    text: options?.text,
+    buttons: options?.buttons,
+  });
+
+  const modal = useCallback((newOptions = {}) => {
+    return new Promise((resolve) => {
+      setModalState((prevState) => ({
+        ...prevState,
+        open: true,
+        resolve,
+        // Overwrite title and other options if provided
+        title: newOptions.title || prevState.title,
+        text: newOptions.text || prevState.text,
+        buttons: newOptions.buttons || prevState.buttons,
+      }));
+    });
+  }, []);
+
+  const handleDecision = (decision) => {
+    if (modalState.resolve) {
+      modalState.resolve(decision);
+      setModalState((prevState) => ({
+        ...prevState,
+        open: false,
+        resolve: null,
+      }));
+    }
+  };
+
+  const ModalElement = (
+    <Modal
+      open={modalState.open}
+      onClose={() => handleDecision(false)}
+      title={modalState.title} // Use dynamic title
+      buttons={modalState.buttons?.map((button) => ({
+        text: button.text,
+        variant: button.variant,
+        onClick: () => handleDecision(button.value), // Fix onClick behavior
+      }))}
+    >
+      {modalState.text}
+    </Modal>
+  );
+
+  return { modal, ModalElement };
 };

@@ -41,10 +41,10 @@ export const DropdownInput = ({
   };
 
   return (
-    <div className="dropdown" {...props}>
+    <div className={`dropdown`} {...props}>
       <a
         href="#"
-        className="btn dropdown-toggle"
+        className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""}`}
         data-bs-toggle="dropdown"
         {...aprops}
       >

@@ -35,6 +35,7 @@ import Steps from "../../src/steps";
 import { Table } from "../../src/table";
 import { DropdownInput, SelectGroup, Switch } from "../../src/input";
 import { Router, Routes } from "react-router-dom";
+import { useModal } from "../../src/modal/modal";
 const { H1, H2, H3, H4, Text, Strong, I, U, B, Special } = Typography;
 
 const colors = [
@@ -403,6 +404,13 @@ const _Modal = () => {
     cancelText: "No",
   });
 
+  const { modal, ModalElement } = useModal({
+    title: "Modal Title",
+    text: "Modal text",
+    commitText: "Yes",
+    cancelText: "No",
+  });
+
   const handleClick = async () => {
     const result = await confirm({ title: "Are you sure?" });
     if (result) {
@@ -455,6 +463,10 @@ const _Modal = () => {
       <H2>Confirm Modals</H2>
       <Button onClick={handleClick}>Open confirm modal</Button>
       {ConfirmModal}
+      <Button onClick={() => modal({ title: "asdf" })}>
+        Open hook-driven modal
+      </Button>
+      {ModalElement}
     </Card>
   );
 };
