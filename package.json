@@ -1,6 +1,6 @@
 {
   "name": "tabler-react-2",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "A react implementation of Tabler ui",
   "main": "dist/index.js",
   "scripts": {
@@ -15,7 +15,6 @@
     "@babel/core": "^7.24.8",
     "@babel/preset-env": "^7.24.8",
     "@babel/preset-react": "^7.24.7",
-    "@tabler/icons-react": "^3.14.0",
     "classnames": "^2.5.1",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
