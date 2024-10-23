@@ -44,7 +44,9 @@ export const DropdownInput = ({
     <div className={`dropdown`} {...props}>
       <a
         href="#"
-        className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""}`}
+        className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""} ${
+          props.color ? `btn-${props.outline && "outline-"}${props.color}` : ""
+        }`}
         data-bs-toggle="dropdown"
         {...aprops}
       >
@@ -94,4 +96,6 @@ DropdownInput.propTypes = {
     PropTypes.number,
   ]),
   onChange: PropTypes.func.isRequired,
+  color: PropTypes.string,
+  outline: PropTypes.bool,
 };

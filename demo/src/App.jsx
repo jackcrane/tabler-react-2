@@ -406,7 +406,13 @@ const _Modal = () => {
 
   const { modal, ModalElement } = useModal({
     title: "Modal Title",
-    text: "Modal text",
+    text: (
+      <p>
+        HULLO <b>world</b>
+        <br />
+        <Input title="Input" placeholder="Type here..." />
+      </p>
+    ),
     commitText: "Yes",
     cancelText: "No",
   });
@@ -606,7 +612,7 @@ const _Table = () => {
     },
     {
       label: "Role",
-      accessor: "role",
+      accessor: "role.t",
       className: "text-secondary",
       sortable: true,
     },
@@ -618,31 +624,31 @@ const _Table = () => {
       name: "Paweł Kuna",
       title: "UI Designer, Training",
       email: "paweluna@howstuffworks.com",
-      role: "User",
+      role: { t: "User" },
     },
     {
       name: "Jeffie Lewzey",
       title: "Chemical Engineer, Support",
       email: "jlewzey1@seesaa.net",
-      role: "Admin",
+      role: { t: "Admin" },
     },
     {
       name: "Mallory Hulme",
       title: "Geologist IV, Support",
       email: "mhulme2@domainmarket.com",
-      role: "User",
+      role: { t: "User" },
     },
     {
       name: "Dunn Slane",
       title: "Research Nurse, Sales",
       email: "dslane3@epa.gov",
-      role: "Owner",
+      role: { t: "Owner" },
     },
     {
       name: "Emmy Levet",
       title: "VP Product Management, Accounting",
       email: "elevet4@senate.gov",
-      role: "Admin",
+      role: { t: "Admin" },
     },
   ];
 
@@ -808,6 +814,8 @@ const _Input = () => {
           ]}
           onChange={setDropdownValue}
           value={dropdownValue}
+          color="red"
+          outline
         />
       </div>
     </Card>

@@ -11,11 +11,13 @@ const Badge = ({ href, children, color, outline, soft, ...props }) => {
   );
 
   return href ? (
-    <a href={href} className={classes}>
+    <a href={href} className={classes} {...props}>
       {children}
     </a>
   ) : (
-    <span className={classes}>{children}</span>
+    <span className={classes} {...props}>
+      {children}
+    </span>
   );
 };
 

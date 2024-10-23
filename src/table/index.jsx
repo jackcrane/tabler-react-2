@@ -1,10 +1,71 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import {
-  IconArrowsSort,
-  IconSortAscending,
-  IconSortDescending,
-} from "@tabler/icons-react";
+
+const IconSortDescending = ({ size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="icon icon-tabler icons-tabler-outline icon-tabler-sort-descending"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M4 6l9 0" />
+    <path d="M4 12l7 0" />
+    <path d="M4 18l7 0" />
+    <path d="M15 15l3 3l3 -3" />
+    <path d="M18 6l0 12" />
+  </svg>
+);
+
+const IconSortAscending = ({ size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="icon icon-tabler icons-tabler-outline icon-tabler-sort-ascending"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M4 6l7 0" />
+    <path d="M4 12l7 0" />
+    <path d="M4 18l9 0" />
+    <path d="M15 9l3 -3l3 3" />
+    <path d="M18 6l0 12" />
+  </svg>
+);
+
+const IconArrowsSort = ({ size }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className="icon icon-tabler icons-tabler-outline icon-tabler-arrows-sort"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M3 9l4 -4l4 4m-4 -4v14" />
+    <path d="M21 15l-4 4l-4 -4m4 4v-14" />
+  </svg>
+);
+
+const getValueByAccessor = (object, accessor) =>
+  accessor.split(".").reduce((acc, part) => acc && acc[part], object);
 
 export const Table = ({ columns, data, nowrap, stickyHeader }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -29,8 +90,10 @@ export const Table = ({ columns, data, nowrap, stickyHeader }) => {
       const sortFunction = sortColumn.sortFn || defaultSortFn;
 
       return [...data].sort((a, b) => {
+        const aValue = getValueByAccessor(a, key);
+        const bValue = getValueByAccessor(b, key);
         const order = direction === "asc" ? 1 : -1;
-        return sortFunction(a[key], b[key]) * order;
+        return sortFunction(aValue, bValue) * order;
       });
     }
     return data;
@@ -81,8 +144,11 @@ export const Table = ({ columns, data, nowrap, stickyHeader }) => {
               {columns.map((column, colIndex) => (
                 <td key={colIndex} className={column.className || ""}>
                   {column.render
-                    ? column.render(row[column.accessor], row)
-                    : row[column.accessor]}
+                    ? column.render(
+                        getValueByAccessor(row, column.accessor),
+                        row
+                      )
+                    : getValueByAccessor(row, column.accessor)}
                 </td>
               ))}
             </tr>

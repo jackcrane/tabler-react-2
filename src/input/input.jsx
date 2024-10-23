@@ -56,7 +56,7 @@ export const Input = ({
         variant && `border-${variant}`,
         variant && `text-${variant}`,
         variant && `bg-${variant}-lt`,
-        size && `form-control-${size}`,
+        size && `form-control-${size}`
       )}
       placeholder={placeholder}
       value={value ?? ""} // Always ensure value is a string
@@ -81,7 +81,7 @@ export const Input = ({
       ) : (
         <>
           {icon || loader ? (
-            <div className="input-icon mb-3">
+            <div className="input-icon">
               {iconPos === "leading" && icon && (
                 <span className="input-icon-addon">{icon}</span>
               )}

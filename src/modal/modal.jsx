@@ -129,6 +129,13 @@ export const useModal = (options) => {
     }
   };
 
+  const update = () => {
+    setModalState({
+      ...modalState,
+      text: options.text,
+    });
+  };
+
   const ModalElement = (
     <Modal
       open={modalState.open}
@@ -144,5 +151,10 @@ export const useModal = (options) => {
     </Modal>
   );
 
-  return { modal, ModalElement };
+  return {
+    modal,
+    ModalElement,
+    update,
+    close: (v = false) => handleDecision(v),
+  };
 };
