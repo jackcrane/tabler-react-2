@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Button } from "../button";
 
@@ -10,60 +10,50 @@ export const Modal = ({
   children,
   modalId,
   status,
+  modalBodyStyle,
 }) => {
-  const modalRef = useRef(null);
-
-  useEffect(() => {
-    const modalElement = modalRef.current;
-    let modalInstance;
-
-    if (open) {
-      modalInstance = new window.bootstrap.Modal(modalElement, {
-        backdrop: true,
-        keyboard: true,
-      });
-      modalInstance.show();
-
-      modalElement.addEventListener("hidden.bs.modal", onClose);
-    } else {
-      modalInstance = window.bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) modalInstance.hide();
-    }
-
-    return () => {
-      if (modalElement) {
-        modalElement.removeEventListener("hidden.bs.modal", onClose);
-      }
-    };
-  }, [open, onClose]);
-
   return (
-    <div className="modal" id={modalId} ref={modalRef} tabIndex="-1">
-      <div className="modal-dialog" role="document">
-        <div className="modal-content">
-          {status && <div className={`modal-status bg-${status}`}></div>}
-          {title ? (
-            <div className="modal-header">
-              <h5 className="modal-title">{title}</h5>
+    <>
+      <div
+        className={`modal fade ${open ? "show" : ""}`}
+        id={modalId}
+        tabIndex="-1"
+        role="dialog"
+        aria-modal="true"
+        style={{ display: open ? "block" : "none" }}
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            {status && <div className={`modal-status bg-${status}`} />}
+            {title ? (
+              <div className="modal-header">
+                <h5 className="modal-title">{title}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={onClose}
+                  aria-label="Close"
+                />
+              </div>
+            ) : (
               <button
                 type="button"
                 className="btn-close"
                 onClick={onClose}
                 aria-label="Close"
-              ></button>
+              />
+            )}
+            <div
+              className="modal-body"
+              style={{
+                maxHeight: "80dvh",
+                ...modalBodyStyle,
+              }}
+            >
+              {children}
             </div>
-          ) : (
-            <button
-              type="button"
-              className="btn-close"
-              onClick={onClose}
-              aria-label="Close"
-            ></button>
-          )}
-          <div className="modal-body">{children}</div>
-          <div className="modal-footer">
-            {buttons &&
-              buttons.map((button, index) => (
+            <div className="modal-footer">
+              {buttons?.map((button, index) => (
                 <Button
                   variant={button.variant}
                   key={index}
@@ -73,10 +63,14 @@ export const Modal = ({
                   {button.text}
                 </Button>
               ))}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Conditionally render the backdrop when open */}
+      {open && <div className="modal-backdrop fade show" />}
+    </>
   );
 };
 
@@ -146,6 +140,7 @@ export const useModal = (options) => {
         variant: button.variant,
         onClick: () => handleDecision(button.value), // Fix onClick behavior
       }))}
+      {...(options.modalProps || {})}
     >
       {modalState.text}
     </Modal>

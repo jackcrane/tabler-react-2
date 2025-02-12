@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
-export const Switch = ({ value: defaultValue, onChange, label, color }) => {
+export const Switch = ({
+  value: defaultValue,
+  onChange,
+  label,
+  color,
+  disabled,
+}) => {
   const [value, setValue] = useState(defaultValue);
 
   useEffect(() => {
@@ -17,6 +23,7 @@ export const Switch = ({ value: defaultValue, onChange, label, color }) => {
   return (
     <label className="form-check form-switch">
       <input
+        disabled={disabled}
         className={classNames(
           "form-check-input",
           color && `bg-${color}${value ? "" : "-lt"}`

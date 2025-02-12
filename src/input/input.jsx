@@ -9,6 +9,7 @@ export const Input = ({
   placeholder,
   value: controlledValue = "", // Ensure default empty string if undefined
   onChange,
+  onRawChange,
   onInput,
   icon,
   iconPos = "leading",
@@ -22,6 +23,8 @@ export const Input = ({
   datalistItems = [],
   variant,
   size,
+  noMargin = false,
+  inputProps,
   ...props
 }) => {
   // State for managing uncontrolled input value
@@ -46,6 +49,10 @@ export const Input = ({
     if (onInput) {
       onInput(e.target.value);
     }
+
+    if (onRawChange) {
+      onRawChange(e);
+    }
   };
 
   const renderInput = () => (
@@ -62,18 +69,24 @@ export const Input = ({
       value={value ?? ""} // Always ensure value is a string
       onChange={handleInputChange}
       list={datalistItems.length > 0 ? "datalist-options" : undefined}
+      {...inputProps}
     />
   );
 
   return (
-    <div className="mb-3" {...props}>
+    <div className={`${noMargin ? "" : "mb-3"}`} {...props}>
       {label && <label className="form-label">{label}</label>}
 
       {separated ? (
         <div className="row g-2">
           <div className="col">{renderInput()}</div>
           <div className="col-auto">
-            <a href="#" className="btn btn-icon" aria-label="Button">
+            <a
+              href={appendedLinkHref ? appendedLinkHref : "#"}
+              onClick={appendedLinkOnClick}
+              className="btn btn-icon"
+              aria-label="Button"
+            >
               {loader ? <Spinner size="sm" /> : icon}
             </a>
           </div>
@@ -101,7 +114,11 @@ export const Input = ({
               )}
             </div>
           ) : prependedText || appendedText ? (
-            <div className="input-group input-group-flat mb-2">
+            <div
+              className={`input-group input-group-flat ${
+                noMargin ? "" : "mb-3"
+              }`}
+            >
               {prependedText && (
                 <span className="input-group-text">{prependedText}</span>
               )}

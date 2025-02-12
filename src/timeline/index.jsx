@@ -1,11 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
-export const Timeline = ({ events }) => {
+export const Timeline = ({ events, dense }) => {
   return (
     <ul className="timeline">
       {events.map((event, index) => (
-        <li className="timeline-event" key={index}>
+        <li
+          className={classNames(
+            "timeline-event",
+            dense && "timeline-event-tight"
+          )}
+          key={index}
+        >
           <div
             className={`timeline-event-icon ${
               event.iconBgColor && `bg-${event.iconBgColor}-lt`
@@ -13,7 +20,7 @@ export const Timeline = ({ events }) => {
           >
             {event.icon && <event.icon />}
           </div>
-          <div className="card timeline-event-card">
+          <div className={`card timeline-event-card ${dense && "card-sm"}`}>
             <div className="card-body">
               <div className="text-secondary float-end">{event.time}</div>
               <h4>{event.title}</h4>

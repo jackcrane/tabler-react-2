@@ -10,13 +10,14 @@ export const DropdownInput = ({
   aprops,
   ...props
 }) => {
-  const [selectedValue, setSelectedValue] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredValues, setFilteredValues] = useState(values);
-
-  // Helper to get value either from object or directly from value
   const getId = (val) =>
     typeof val === "object" && val !== null ? val.id : val;
+
+  const [selectedValue, setSelectedValue] = useState(
+    values.find((val) => val.id === getId(value)) || null
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredValues, setFilteredValues] = useState(values);
 
   // Update selected value if the `value` prop changes
   useEffect(() => {
@@ -69,7 +70,7 @@ export const DropdownInput = ({
             onClick={() => handleSelection(value)}
             style={{ cursor: "pointer" }}
           >
-            {value.label}
+            {value.dropdownText || value.label}
           </a>
         ))}
         {filteredValues.length === 0 && (
@@ -86,6 +87,7 @@ DropdownInput.propTypes = {
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
       label: PropTypes.string.isRequired,
+      dropdownText: PropTypes.string,
     })
   ).isRequired,
   value: PropTypes.oneOfType([

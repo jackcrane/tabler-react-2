@@ -1,7 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-export const Dropdown = ({ prompt, items }) => {
+export const Dropdown = ({
+  prompt,
+  items,
+  toggleStyle,
+  hideToggleIcon,
+  dropdownClassName,
+}) => {
   const handleClick = (e, onclick) => {
     if (onclick) {
       e.preventDefault();
@@ -11,7 +17,14 @@ export const Dropdown = ({ prompt, items }) => {
 
   return (
     <div className="dropdown">
-      <a href="#" className="btn dropdown-toggle" data-bs-toggle="dropdown">
+      <a
+        href="#"
+        className={`btn ${!hideToggleIcon && "dropdown-toggle"} ${
+          dropdownClassName ? dropdownClassName : ""
+        }`}
+        data-bs-toggle="dropdown"
+        style={toggleStyle}
+      >
         {prompt}
       </a>
       <div className="dropdown-menu">

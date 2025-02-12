@@ -33,6 +33,7 @@ export const Avatar = ({
       style={{
         backgroundImage: avatarUrl ? `url(${avatarUrl})` : null,
         backgroundColor: !avatarUrl && initialsColor ? initialsColor : null,
+        flexShrink: 0,
       }}
     >
       {status ? <span className={`badge bg-${status}`}>{badge}</span> : null}

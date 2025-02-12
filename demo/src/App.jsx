@@ -33,7 +33,12 @@ import Badge from "../../src/badge";
 import { Ribbon } from "../../src/ribbon";
 import Steps from "../../src/steps";
 import { Table } from "../../src/table";
-import { DropdownInput, SelectGroup, Switch } from "../../src/input";
+import {
+  DropdownInput,
+  EnclosedSelectGroup,
+  SelectGroup,
+  Switch,
+} from "../../src/input";
 import { Router, Routes } from "react-router-dom";
 import { useModal } from "../../src/modal/modal";
 const { H1, H2, H3, H4, Text, Strong, I, U, B, Special } = Typography;
@@ -686,7 +691,13 @@ const _Timeline = () => {
 
   return (
     <Card title="Timeline">
-      <Timeline events={events} />
+      <Card title="Standard Timeline">
+        <Timeline events={events} />
+      </Card>
+
+      <Card title="Dense Timeline">
+        <Timeline dense events={events} />
+      </Card>
     </Card>
   );
 };
@@ -798,11 +809,10 @@ const _Input = () => {
       </Row>
       <Hr />
       <H2>Dropdown</H2>
-      {JSON.stringify(dropdownValue)}
+      {/* {JSON.stringify(dropdownValue)} */}
       <div
         style={{
           padding: 20,
-          overflow: "hidden",
         }}
       >
         <DropdownInput
@@ -869,6 +879,7 @@ const _SelectGroup = () => {
         onChange={setSelectValue}
         multiple
       />
+      <Hr />
       <H2>Single Select</H2>
       {JSON.stringify(singleSelectValue)}
       <br />
@@ -877,6 +888,29 @@ const _SelectGroup = () => {
           { value: "one", label: "One" },
           { value: "two", label: "Two" },
           { value: "three", label: "Three" },
+        ]}
+        value={singleSelectValue}
+        onChange={setSingleSelectValue}
+      />
+      <Hr />
+      <H2>Enclosed Select Group</H2>
+      <br />
+      <EnclosedSelectGroup
+        items={[
+          { value: "one", content: <b>One</b> },
+          { value: "two", content: "Two" },
+          { value: "three", content: "Three" },
+        ]}
+        value={singleSelectValue}
+        onChange={setSingleSelectValue}
+      />
+      <br /> <br />
+      <EnclosedSelectGroup
+        direction="column"
+        items={[
+          { value: "one", content: <b>One</b> },
+          { value: "two", content: "Two" },
+          { value: "three", content: "Three" },
         ]}
         value={singleSelectValue}
         onChange={setSingleSelectValue}
