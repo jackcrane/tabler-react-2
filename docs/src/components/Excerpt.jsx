@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Tabler } from "./Tabler";
+export { Flex } from "./Flex";
 
 const _Excerpt = styled.div`
   background: white;

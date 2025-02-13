@@ -133,6 +133,7 @@ const Special = {
   Code: loadable(() =>
     import("tabler-react-2").then((mod) => mod.Typography.Special.Code)
   ),
+  Link: loadable(() => import("tabler-react-2").then((mod) => mod.Link)),
 };
 
 export const Typography = {

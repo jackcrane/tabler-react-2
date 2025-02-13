@@ -1,0 +1,276 @@
+---
+title: Buttons
+---
+
+import { Excerpt, Flex } from "../../components/Excerpt.jsx";
+import { Button, Typography } from "../../components/LoadableTabler";
+
+Buttons are used to trigger actions.
+
+## Signature
+
+```jsx
+import { Button } from "tabler-react-2";
+
+<ButtonButton {...props} />;
+```
+
+### Props
+
+| Prop       | Required | Type                       | Default | Description                                                           |
+| ---------- | -------- | -------------------------- | ------- | --------------------------------------------------------------------- |
+| `children` | No       | node                       |         | The content inside the button.                                        |
+| `href`     | No       | string                     |         | The URL that the user will be directed to when they click the button. |
+| `onClick`  | No       | function                   |         | A function that will fire when the button is clicked                  |
+| `variant`  | No       | [color](/utilities/colors) |         | The color variant of the button.                                      |
+| `color`    | No       | [color](/utilities/colors) |         | The color of the button.                                              |
+| `fill`     | No       | boolean                    |         | The fill color of the button.                                         |
+| `ghost`    | No       | boolean                    |         | Whether the button should be shown without a background or border     |
+| `outline`  | No       | boolean                    |         | Whether the button should be shown with only an outline               |
+| `square`   | No       | boolean                    |         | Whether the button should be shown with 0 border radius               |
+| `pill`     | No       | boolean                    |         | Whether the button should be shown with a fully rounded border        |
+| `size`     | No       | [`sm`, `md`, `lg`]         | `md`    | The size of the button.                                               |
+| `disabled` | No       | boolean                    |         | Whether the button should be disabled.                                |
+| `loading`  | No       | boolean                    |         | Whether the button should show a loading spinner.                     |
+
+## Basic Usage
+
+The `Button` component is used to trigger actions.
+
+<Excerpt>
+  <Button>Button</Button>
+</Excerpt>
+
+```jsx
+<Button>Button</Button>
+```
+
+## Variants
+
+The `Button` component can be used to display different types of buttons. The `variant` prop accepts a [color](/utilities/color) or null. Null (or unset) sets it to the default.
+
+`color` and `variant` are the exact same. When possible you should use `variant` as it is more reflective of the rest of the Tabler React 2 system.
+
+<Excerpt>
+  <Flex>
+    {[
+      null,
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "pink",
+      "yellow",
+    ].map((variant) => (
+      <Button key={variant} variant={variant}>
+        {variant || "default"}
+      </Button>
+    ))}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button>default</Button>
+<Button variant="primary">primary</Button>
+<Button variant="secondary">secondary</Button>
+<Button variant="success">success</Button>
+<Button variant="danger">danger</Button>
+<Button variant="warning">warning</Button>
+<Button variant="info">info</Button>
+<Button variant="pink">pink</Button>
+<Button variant="yellow">yellow</Button>
+```
+
+## Colors
+
+`color` and `variant` are the exact same. When possible you should use `variant` as it is more reflective of the rest of the Tabler React 2 system.
+
+<Excerpt>
+  <Flex>
+    {[
+      null,
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "pink",
+      "yellow",
+    ].map((color) => (
+      <Button key={color} color={color}>
+        {color || "default"}
+      </Button>
+    ))}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button>default</Button>
+<Button color="primary">primary</Button>
+<Button color="secondary">secondary</Button>
+<Button color="success">success</Button>
+<Button color="danger">danger</Button>
+<Button color="warning">warning</Button>
+<Button color="info">info</Button>
+<Button color="pink">pink</Button>
+<Button color="yellow">yellow</Button>
+```
+
+## Fill
+
+The only difference is that `fill` buttons will be shown with a background even on null.
+
+<Excerpt>
+  <Flex>
+    <Button fill>filled button</Button>
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button fill>filled button</Button>
+```
+
+## Ghost
+
+You can use the `ghost` prop to create a ghost button. Ghost buttons are shown without a background or border, but still take the same space as a regular button. Ghost buttons require a `color` or `variant`.
+
+<Excerpt>
+  <Flex>
+    {[null, "primary", "secondary", "success", "danger", "warning", "info"].map(
+      (variant) => (
+        <Button key={variant} variant={variant} ghost>
+          {variant || "default"}
+        </Button>
+      )
+    )}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button ghost>default</Button>
+<Button ghost variant="primary">primary</Button>
+<Button ghost variant="secondary">secondary</Button>
+<Button ghost variant="success">success</Button>
+<Button ghost variant="danger">danger</Button>
+<Button ghost variant="warning">warning</Button>
+<Button ghost variant="info">info</Button>
+```
+
+## Outline
+
+You can use the `outline` prop to create a outline button. Outline buttons are shown without a background but with a border. Outline buttons require a `color` or `variant`.
+
+<Excerpt>
+  <Flex>
+    {[null, "primary", "secondary", "success", "danger", "warning", "info"].map(
+      (variant) => (
+        <Button key={variant} variant={variant} outline>
+          {variant || "default"}
+        </Button>
+      )
+    )}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button outline>default</Button>
+<Button outline variant="primary">primary</Button>
+<Button outline variant="secondary">secondary</Button>
+<Button outline variant="success">success</Button>
+<Button outline variant="danger">danger</Button>
+<Button outline variant="warning">warning</Button>
+<Button outline variant="info">info</Button>
+```
+
+## Shape
+
+You can set the `square` or `pill` prop to create a sharp or pill button.
+
+<Excerpt>
+  <Flex>
+    <Button>default</Button>
+    <Button square>square</Button>
+    <Button pill>pill</Button>
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button>default</Button>
+<Button square>square</Button>
+<Button pill>pill</Button>
+```
+
+## Sizes
+
+You can set the `size` prop to change the size of the button.
+
+<Excerpt>
+  <Flex>
+    {["sm", "md", "lg"].map((size) => (
+      <Button key={size} size={size}>
+        {size}
+      </Button>
+    ))}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button size="sm">sm</Button>
+<Button size="md">md</Button>
+<Button size="lg">lg</Button>
+```
+
+## Disabled
+
+You can use the `disabled` prop to signify that a button is disabled and to prevent user click events.
+
+<Excerpt>
+  <Flex>
+    {[null, "primary", "secondary", "success", "danger", "warning", "info"].map(
+      (variant) => (
+        <Button key={variant} variant={variant} disabled>
+          {variant || "default"}
+        </Button>
+      )
+    )}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button disabled>default</Button>
+<Button disabled variant="primary">primary</Button>
+<Button disabled variant="secondary">secondary</Button>
+<Button disabled variant="success">success</Button>
+<Button disabled variant="danger">danger</Button>
+<Button disabled variant="warning">warning</Button>
+<Button disabled variant="info">info</Button>
+```
+
+## Loading
+
+You can use the `loading` prop to signify that a button is loading. It wil still fire click events.
+
+<Excerpt>
+  <Flex>
+    {[null, "primary", "secondary", "success", "danger", "warning", "info"].map(
+      (variant) => (
+        <Button key={variant} variant={variant} loading>
+          {variant || "default"}
+        </Button>
+      )
+    )}
+  </Flex>
+</Excerpt>
+
+```jsx
+<Button loading>default</Button>
+<Button loading variant="primary">primary</Button>
+<Button loading variant="secondary">secondary</Button>
+<Button loading variant="success">success</Button>
+<Button loading variant="danger">danger</Button>
+<Button loading variant="warning">warning</Button>
+<Button loading variant="info">info</Button>
+```

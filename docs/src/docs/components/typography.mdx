@@ -88,6 +88,30 @@ All body text elements have a bottom margin. You can override this by passing th
 
 This class works on all elements in Tabler, but is most commonly used on `Typography.Text`. See the [margins](/utilities/margins) documentation page for more information.
 
+## Inline links
+
+You can use either a [button](/components/button) or an inline link to direct a user to a destination.
+
+```jsx
+import { Typography } from "tabler-react-2";
+
+<Typography.Link href="https://google.com">Google</Typography.Link>;
+```
+
+<blockquote>
+<p>
+
+It will default to a `Link` component from the `react-router-dom` library, but you can make it use an `a` tag by setting `window.USE_FALLBACK_ANCHOR` to `true`.
+
+```html
+<script>
+  window.USE_FALLBACK_ANCHOR = true;
+</script>
+```
+
+</p>
+</blockquote>
+
 ## Special text
 
 Special text is provided by the `Typography.Special.*` components.

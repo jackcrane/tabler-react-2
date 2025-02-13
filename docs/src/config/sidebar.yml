@@ -18,6 +18,8 @@
       link: "/components/avatar"
     - label: "Badges"
       link: "/components/badges"
+    - label: "Buttons"
+      link: "/components/buttons"
 - label: "Utilities"
   items:
     - label: "Colors"
