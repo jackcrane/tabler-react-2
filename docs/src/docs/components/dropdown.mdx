@@ -1,0 +1,104 @@
+---
+title: Dropdowns
+---
+
+import { Dropdown } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Dropdowns are used to select an option from a list of options.
+
+## Signature
+
+```jsx
+import { Dropdown } from "tabler-react-2";
+
+<Dropdown {...props}>{children}</Dropdown>;
+```
+
+### Props
+
+| Prop                | Required | Type    | Default | Description                                             |
+| ------------------- | -------- | ------- | ------- | ------------------------------------------------------- |
+| `prompt`            | No       | String  |         | The text to display in the dropdown.                    |
+| `items`             | No       | Array   |         | An array of objects with `text` and `value` properties. |
+| `toggleStyle`       | No       | Object  |         | An object with `width` and `height` properties.         |
+| `hideToggleIcon`    | No       | Boolean |         | Whether to hide the toggle icon.                        |
+| `dropdownClassName` | No       | String  |         | The class name of the dropdown.                         |
+
+## Basic Usage
+
+The `Dropdown` component is used to select an option from a list of options.
+
+<Excerpt>
+  <Dropdown
+    prompt="Select a value"
+    items={[
+      {
+        type: "item",
+        href: "#",
+        text: "Link 1",
+      },
+      {
+        type: "item",
+        onclick: () => alert("Clicked"),
+        text: "Button 2",
+        disabled: true,
+      },
+      {
+        type: "divider",
+      },
+      {
+        type: "header",
+        text: "Header",
+      },
+      {
+        type: "item",
+        href: "#",
+        text: "Link 3",
+        active: true,
+      },
+      {
+        type: "item",
+        onclick: () => alert("Clicked"),
+        text: "Button 4",
+      },
+    ]}
+  />
+</Excerpt>
+
+```jsx
+<Dropdown
+  prompt="Select a value"
+  items={[
+    {
+      type: "item",
+      href: "#",
+      text: "Link 1",
+    },
+    {
+      type: "item",
+      onclick: () => alert("Clicked"),
+      text: "Button 2",
+      disabled: true,
+    },
+    {
+      type: "divider",
+    },
+    {
+      type: "header",
+      text: "Header",
+    },
+    {
+      type: "item",
+      href: "#",
+      text: "Link 3",
+      active: true,
+    },
+    {
+      type: "item",
+      onclick: () => alert("Clicked"),
+      text: "Button 4",
+    },
+  ]}
+/>
+```
