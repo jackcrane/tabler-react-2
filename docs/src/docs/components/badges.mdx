@@ -1,0 +1,190 @@
+---
+title: Badges
+---
+
+import { Badge } from "tabler-react-2";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Badges are used to display a small label.
+
+## Signature
+
+```jsx
+import { Badge } from "tabler-react-2";
+
+<Badge {...props}>{children}</Badge>;
+```
+
+### Props
+
+| Prop      | Required | Type                       | Default | Description                           |
+| --------- | -------- | -------------------------- | ------- | ------------------------------------- |
+| `color`   | No       | [Color](/utilities/colors) |         | The color of the badge.               |
+| `outline` | No       | Boolean                    |         | Whether the badge should be outlined. |
+| `soft`    | No       | Boolean                    |         | Whether the badge should be soft.     |
+
+## Basic Usage
+
+The `Badge` component is used to display a badge.
+
+<Excerpt>
+  <Badge>Badge</Badge>
+</Excerpt>
+
+```jsx
+<Badge>Badge</Badge>
+```
+
+## Colors
+
+Badges can be colored using the `color` prop. The `color` prop accepts a string value of any [color](/utilities/colors).
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {[
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "dark",
+      "blue",
+      "azure",
+      "indigo",
+      "purple",
+      "pink",
+      "red",
+      "orange",
+      "yellow",
+      "lime",
+      "green",
+      "teal",
+      "cyan",
+    ].map((color) => (
+      <Badge key={color} color={color}>
+        {color}
+      </Badge>
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Badge color="primary">primary</Badge>
+<Badge color="secondary">secondary</Badge>
+<Badge color="success">success</Badge>
+<Badge color="danger">danger</Badge>
+<Badge color="warning">warning</Badge>
+<Badge color="info">info</Badge>
+<Badge color="dark">dark</Badge>
+<Badge color="blue">blue</Badge>
+<Badge color="azure">azure</Badge>
+<Badge color="indigo">indigo</Badge>
+```
+
+## Outline
+
+Badges can be outlined using the `outline` prop. The `outline` prop accepts a boolean value.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["primary", "secondary", "success", "danger", "warning", "info"].map(
+      (color) => (
+        <Badge key={color} color={color} outline>
+          {color}
+        </Badge>
+      )
+    )}
+  </div>
+</Excerpt>
+
+```jsx
+<Badge color="primary" outline>primary</Badge>
+<Badge color="secondary" outline>secondary</Badge>
+<Badge color="success" outline>success</Badge>
+<Badge color="danger" outline>danger</Badge>
+<Badge color="warning" outline>warning</Badge>
+<Badge color="info" outline>info</Badge>
+```
+
+## Soft
+
+Badges can be soft using the `soft` prop. The `soft` prop accepts a boolean value.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["primary", "secondary", "success", "danger", "warning", "info"].map(
+      (color) => (
+        <Badge key={color} color={color} soft>
+          {color}
+        </Badge>
+      )
+    )}
+  </div>
+</Excerpt>
+
+```jsx
+<Badge color="primary" soft>primary</Badge>
+<Badge color="secondary" soft>secondary</Badge>
+<Badge color="success" soft>success</Badge>
+<Badge color="danger" soft>danger</Badge>
+<Badge color="warning" soft>warning</Badge>
+<Badge color="info" soft>info</Badge>
+```
+
+## Soft + Outline
+
+Badges can be soft and outlined using the `soft` and `outline` props. The `soft` and `outline` props accept a boolean value.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["primary", "secondary", "success", "danger", "warning", "info"].map(
+      (color) => (
+        <Badge key={color} color={color} soft outline>
+          {color}
+        </Badge>
+      )
+    )}
+  </div>
+</Excerpt>
+
+```jsx
+<Badge color="primary" soft outline>primary</Badge>
+<Badge color="secondary" soft outline>secondary</Badge>
+<Badge color="success" soft outline>success</Badge>
+<Badge color="danger" soft outline>danger</Badge>
+<Badge color="warning" soft outline>warning</Badge>
+<Badge color="info" soft outline>info</Badge>
+```

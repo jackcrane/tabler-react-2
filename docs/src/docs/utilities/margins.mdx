@@ -1,0 +1,90 @@
+---
+title: Margins
+---
+
+import { Margin } from "../../components/Margin.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+# Margin utilities
+
+Margin utilities are provided by the `m[direction]-[0-6]` classes.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
+    }}
+  >
+    <Margin className="m-auto" />
+    <Margin className="m-0" />
+    <Margin className="m-1" />
+    <Margin className="m-2" />
+    <Margin className="m-3" />
+    <Margin className="m-4" />
+    <Margin className="m-5" />
+  </div>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
+    }}
+  >
+    <Margin className="mt-auto" />
+    <Margin className="mt-0" />
+    <Margin className="mt-1" />
+    <Margin className="mt-2" />
+    <Margin className="mt-3" />
+    <Margin className="mt-4" />
+    <Margin className="mt-5" />
+  </div>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      justifyContent: "center",
+      alignItems: "center",
+      marginBottom: 10,
+    }}
+  >
+    <Margin className="mb-auto" />
+    <Margin className="mb-0" />
+    <Margin className="mb-1" />
+    <Margin className="mb-2" />
+    <Margin className="mb-3" />
+    <Margin className="mb-4" />
+    <Margin className="mb-5" />
+  </div>
+</Excerpt>
+
+## Margin directions
+
+The margin utilities can be applied to the following directions:
+
+- `mt-*` = `margin-top`
+- `mb-*` = `margin-bottom`
+- `m-*` = `margin`
+
+## Margin sizes
+
+The margin utilities can be applied to the following sizes:
+
+- `0` = `0`
+- `1` = `.25rem`
+- `2` = `.5rem`
+- `3` = `1rem`
+- `4` = `2rem`
+- `5` = `4rem`
+- `auto` = `auto`

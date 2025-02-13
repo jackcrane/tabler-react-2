@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Steps = ({
+export const Steps = ({
   steps,
   color,
   numbered = false,
@@ -57,5 +57,3 @@ Steps.propTypes = {
   numbered: PropTypes.bool, // Whether steps are numbered
   hideText: PropTypes.bool, // Hide text inside the steps (useful for numbered)
 };
-
-export default Steps;

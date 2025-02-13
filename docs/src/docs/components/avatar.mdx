@@ -1,0 +1,259 @@
+---
+title: Avatars
+---
+
+import { Avatar, AvatarStackedList } from "tabler-react-2";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Avatars are used to display a user's profile picture or initials.
+
+## Signature
+
+```jsx
+import { Avatar } from "tabler-react-2";
+
+<Avatar {...props}>{children}</Avatar>;
+```
+
+### Props
+
+| Prop            | Required | Type                       | Default | Description                              |
+| --------------- | -------- | -------------------------- | ------- | ---------------------------------------- |
+| `src`           | No       | String                     |         | The URL of the avatar image.             |
+| `initials`      | No       | String                     |         | The initials of the avatar.              |
+| `initialsColor` | No       | [Color](/utilities/colors) |         | The background color of the initials.    |
+| `dicebear`      | No       | String \| Boolean          |         | The style of the avatar.                 |
+| `size`          | No       | [`sm`, `md`, `lg`]         |         | The size of the avatar.                  |
+| `status`        | No       | [Color](/utilities/colors) |         | The status of the avatar.                |
+| `badge`         | No       | String                     |         | The badge to be displayed on the avatar. |
+| `color`         | No       | [Color](/utilities/colors) |         | The color of the avatar.                 |
+
+## Basic Usage
+
+The `Avatar` component is used to display an avatar.
+
+<Excerpt>
+  <Avatar src="https://picsum.photos/200" />
+</Excerpt>
+
+```jsx
+<Avatar src="https://picsum.photos/200" />
+```
+
+## Initials
+
+You can pass an `initials` prop to the `Avatar` component to display initials.
+
+<Excerpt>
+  <Avatar initials="JC" />
+</Excerpt>
+
+```jsx
+<Avatar initials="JC" />
+```
+
+## Color
+
+You can pass a `color` prop to the `Avatar` component to change the color of the avatar.
+
+<Excerpt>
+  <div
+    style={{ display: "flex", flexDirection: "row", gap: 10, flexWrap: "wrap" }}
+  >
+    {[
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "dark",
+      "yellow",
+      "pink",
+      "purple",
+    ].map((color) => (
+      <Avatar key={color} initials="JC" color={color} />
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Avatar initials="JC" color="primary" />
+<Avatar initials="JC" color="secondary" />
+<Avatar initials="JC" color="success" />
+<Avatar initials="JC" color="danger" />
+<Avatar initials="JC" color="warning" />
+```
+
+## Initials Color
+
+> **Note**: Unless explicitly required, you should not use the `initialsColor` prop. Instead, use the `color` prop.
+
+You can pass an `initialsColor` prop to the `Avatar` component to change the color of the initials.
+
+<Excerpt>
+  <Avatar initials="JC" initialsColor="cyan" />
+</Excerpt>
+
+```jsx
+<Avatar initials="JC" initialsColor="cyan" />
+```
+
+## Dicebear
+
+You can use Dicebear to generate avatars. You can pass a `dicebear` attribute to the `Avatar` component to instruct it to use a Dicebear image. Dicebear will use the `initials` prop as a seed. When a dicebear style is not provided, it defaults to `shapes`.
+
+<Excerpt>
+  <Avatar dicebear initials="JC" />
+</Excerpt>
+
+```jsx
+<Avatar dicebear initials="JC" />
+```
+
+### Dicebear Styles
+
+You can pass a `dicebear` prop to the `Avatar` component to instruct it to use a specific Dicebear style. The `dicebear` prop accepts a string value of the style name or a boolean.
+
+### Dicebear Styles
+
+<Excerpt>
+  <div
+    style={{ display: "flex", flexDirection: "row", gap: 10, flexWrap: "wrap" }}
+  >
+    {[
+      "adventurer",
+      "bottts",
+      "identicon",
+      "initials",
+      "croodles",
+      "dylan",
+      "icons",
+      "lorelei",
+    ].map((style) => (
+      <Avatar key={style} dicebear={style} initials="JC" />
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Avatar dicebear="bottts" initials="JC" />
+<Avatar dicebear="identicon" initials="JC" />
+<Avatar dicebear="initials" initials="JC" />
+<Avatar dicebear="croodles" initials="JC" />
+<Avatar dicebear="dylan" initials="JC" />
+<Avatar dicebear="icons" initials="JC" />
+<Avatar dicebear="lorelei" initials="JC" />
+```
+
+Styles are at the [Dicebear docs page](https://www.dicebear.com/styles/) and work out-of-the-box.
+
+## Sizes
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["sm", "md", "lg"].map((size) => (
+      <Avatar key={size} size={size} initials="JC" />
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Avatar size="sm" initials="JC" />
+<Avatar size="md" initials="JC" />
+<Avatar size="lg" initials="JC" />
+```
+
+## Statuses
+
+You can pass a `status` prop to the `Avatar` component to display a badge on the avatar. The `status` prop accepts a string value [color](/utilities/colors).
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {[
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "dark",
+    ].map((status) => (
+      <Avatar key={status} status={status} initials="JC" />
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Avatar status="primary" initials="JC" />
+<Avatar status="secondary" initials="JC" />
+<Avatar status="success" initials="JC" />
+<Avatar status="danger" initials="JC" />
+<Avatar status="warning" initials="JC" />
+<Avatar status="info" initials="JC" />
+<Avatar status="dark" initials="JC" />
+```
+
+## Badges
+
+You can pass a `badge` prop to the `Avatar` component to display a badge on the avatar. Badges require a `status` prop to be present in order to be displayed.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {[1, 2, 3, 4, 5].map((badge) => (
+      <Avatar key={badge} badge={badge} status="danger" initials="JC" />
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Avatar badge={1} status="danger" initials="JC" />
+<Avatar badge={2} status="danger" initials="JC" />
+<Avatar badge={3} status="danger" initials="JC" />
+<Avatar badge={4} status="danger" initials="JC" />
+<Avatar badge={5} status="danger" initials="JC" />
+```
+
+## Stacked Avatars
+
+You can use the `AvatarStackedList` component to stack avatars.
+
+<Excerpt>
+  <AvatarStackedList>
+    <Avatar stacked dicebear initials="JC" />
+    <Avatar stacked dicebear initials="AB" />
+  </AvatarStackedList>
+</Excerpt>
+
+```jsx
+import { Avatar, AvatarStackedList } from "tabler-react-2";
+
+<AvatarStackedList>
+  <Avatar stacked initials="JC" />
+  <Avatar stacked initials="JC" />
+</AvatarStackedList>;
+```

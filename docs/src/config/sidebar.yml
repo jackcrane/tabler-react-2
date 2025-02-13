@@ -1,0 +1,36 @@
+# Sidebar navigation
+
+- label: "Introduction"
+  link: "/"
+- label: "Getting started"
+  link: "/getting-started"
+- label: "Components"
+  items:
+    - label: "Typography"
+      link: "/components/typography"
+    - label: "Cards"
+      link: "/components/cards"
+    - label: "Horizontal Rule"
+      link: "/components/hr"
+    - label: "Alerts"
+      link: "/components/alerts"
+    - label: "Avatars"
+      link: "/components/avatar"
+    - label: "Badges"
+      link: "/components/badges"
+- label: "Utilities"
+  items:
+    - label: "Colors"
+      link: "/utilities/colors"
+    - label: "Margins"
+      link: "/utilities/margins"
+- label: "More"
+  items:
+    - label: "To do list"
+      link: "/todo"
+# - label: More
+#   items:
+#     - label: FAQ
+#       link: /faq
+#     - label: "Github"
+#       link: https://github.com/jpedroschmitz/rocketdocs

@@ -1,0 +1,245 @@
+---
+title: Cards
+---
+
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { Card } from "tabler-react-2";
+
+Cards are used to group related content and tasks. They can be used to display information, tasks, or actions.
+
+## Signature
+
+```jsx
+import { Card } from "tabler-react-2";
+
+<Card {...props}>{children}</Card>;
+```
+
+### Props
+
+| Prop         | Required | Type               | Default | Description                                                  |
+| ------------ | -------- | ------------------ | ------- | ------------------------------------------------------------ |
+| `children`   | No       | node               |         | The content inside the card.                                 |
+| `size`       | No       | [`sm`, `md`, `lg`] |         | The size of the card.                                        |
+| `title`      | No       | String             |         | The title shown in a top cell of the card.                   |
+| `variant`    | No       | String             |         | The color variant of the card.                               |
+| `variantPos` | No       | [`top`, `side`]    | `top`   | The position of the colored bar.                             |
+| `stacked`    | No       | Boolean            | false   | Whether there should be a second card placed below the card. |
+| `tabs`       | No       | `TabList`          |         | A list of tabs to be shown in the card.                      |
+
+## Basic Usage
+
+The `Card` component wraps a div with some default styles.
+
+<Excerpt>
+  <Card>
+    <p>Card content</p>
+  </Card>
+</Excerpt>
+
+```jsx
+<Card>
+  <p>Card content</p>
+</Card>
+```
+
+## Title
+
+The `title` prop can be used to add a title to the card. The title is rendered as a heading element.
+
+<Excerpt>
+  <Card title="Card Title">
+    <p>Card content</p>
+  </Card>
+</Excerpt>
+
+```jsx
+<Card title="Card Title">
+  <p>Card content</p>
+</Card>
+```
+
+## Sizes
+
+Cards can be sized using the `size` prop. The `size` prop accepts a string value of `sm`, `md`, or `lg`.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+          alignItems: "center",
+
+    }}
+
+>
+
+    {["sm", "md", "lg"].map((size) => (
+      <Card key={size} size={size} style={{ maxWidth: 250, minWidth: 150 }}>
+        {size} card
+      </Card>
+    ))}
+
+  </div>
+</Excerpt>
+
+```jsx
+<Card size="sm">
+  <p>Small card</p>
+</Card>
+<Card size="md">
+  <p>Medium card</p>
+</Card>
+<Card size="lg">
+  <p>Large card</p>
+</Card>
+```
+
+## Colors
+
+Cards can be colored using the `variant` prop. The `variant` prop accepts a string value of any [color](/utilities/colors).
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {[
+      "primary",
+      "secondary",
+      "success",
+      "danger",
+      "warning",
+      "info",
+      "light",
+      "dark",
+      "blue",
+      "orange",
+      "cyan",
+      "twitter",
+    ].map((variant) => (
+      <Card
+        key={variant}
+        variant={variant}
+        size="sm"
+        style={{ maxWidth: 250, minWidth: 150 }}
+      >
+        {variant} card
+      </Card>
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Card variant="primary">
+  <p>Card content</p>
+</Card>
+```
+
+### Variant Position
+
+You can change the position of the colored bar by passing the `variantPos` prop. The `variantPos` prop accepts a string value of `top` or `side`.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["top", "side"].map((pos) => (
+      <Card
+        key={pos}
+        variant="danger"
+        variantPos={pos}
+        size="sm"
+        style={{ maxWidth: 250, minWidth: 150 }}
+      >
+        {pos} card
+      </Card>
+    ))}
+  </div>
+</Excerpt>
+
+```jsx
+<Card variant="danger" variantPos="side">
+  <p>side card</p>
+</Card>
+```
+
+## Stacked Cards
+
+You can pass a `stacked` prop to the `Card` component to create the effect of a stacked card. This is useful for signifying a list of cards.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    <Card stacked>
+      <p>Stacked Card</p>
+    </Card>
+  </div>
+</Excerpt>
+
+```jsx
+<Card stacked>
+  <p>Stacked Card</p>
+</Card>
+```
+
+_Note: Stacked cards do not support size props._
+
+## Tabs
+
+The `Card` component can be used to display tabs. The `tabs` prop accepts a `TabList` type (see below).
+
+<Excerpt>
+  <div>
+    <Card
+      size="md"
+      variantPos="top"
+      tabs={[
+        { title: "Tab 1", content: <p>Content of Tab 1</p> },
+        { title: "Tab 2", content: <p>Content of Tab 2</p> },
+      ]}
+    />
+  </div>
+</Excerpt>
+
+```jsx
+<Card
+  size="md"
+  variantPos="top"
+  tabs={[
+    { title: "Tab 1", content: <p>Content of Tab 1</p> },
+    { title: "Tab 2", content: <p>Content of Tab 2</p> },
+  ]}
+/>
+```
+
+### TabList
+
+The `TabList` type is used to define the tabs for a `Card` component. The `TabList` type inherits from `Array` and expects each object to have a `title` and `content` property.
+
+```ts
+type TabList = Array<{
+  title: string;
+  content: React.ReactNode;
+}>;
+```

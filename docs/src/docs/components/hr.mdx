@@ -1,0 +1,68 @@
+---
+title: Horizontal Rule
+---
+
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { Util } from "tabler-react-2";
+
+Horizontal rules are used to separate content in a layout.
+
+## Signature
+
+```jsx
+import { Util } from "tabler-react-2";
+
+<Util.Hr {...props} />;
+```
+
+<blockquote>
+<p>
+**Tip:** You can destructure the `Util` component to bring individual components into scope. For example:
+
+```jsx
+import { Util } from "tabler-react-2";
+const { Hr } = Util;
+
+export default () => (
+  <>
+    <Hr />
+  </>
+);
+```
+
+</p>
+</blockquote>
+
+### Props
+
+| Prop   | Required | Type     | Default | Description                                 |
+| ------ | -------- | -------- | ------- | ------------------------------------------- |
+| `text` | No       | `string` |         | The text to display in the horizontal rule. |
+
+## Basic Usage
+
+The `Hr` component is used to create a horizontal rule.
+
+<Excerpt>
+  <div style={{ minWidth: 200 }}>
+    <Util.Hr />
+  </div>
+</Excerpt>
+
+```jsx
+<Hr />
+```
+
+## Text
+
+You can pass a `text` prop to the `Hr` component to display text in the horizontal rule.
+
+<Excerpt>
+  <div style={{ minWidth: 200 }}>
+    <Util.Hr text="Hello world" />
+  </div>
+</Excerpt>
+
+```jsx
+<Hr text="Hello world" />
+```

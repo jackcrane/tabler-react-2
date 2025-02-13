@@ -14,6 +14,10 @@ import {
   Typography,
   useConfirm,
   Alert,
+  Badge,
+  Steps,
+  Ribbon,
+  Table,
 } from "../../src/index";
 import { Col, Hr, Row } from "../../src/util";
 import {
@@ -29,10 +33,6 @@ import {
   IconShoppingCart,
 } from "@tabler/icons-react";
 import { Link } from "../../src/typography";
-import Badge from "../../src/badge";
-import { Ribbon } from "../../src/ribbon";
-import Steps from "../../src/steps";
-import { Table } from "../../src/table";
 import {
   DropdownInput,
   EnclosedSelectGroup,

@@ -1,0 +1,124 @@
+---
+title: Alerts
+---
+
+import { Alert } from "tabler-react-2";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { IconAlertCircle } from "tabler-icons";
+
+Alerts are used to display important messages to the user. Not to be confused with toasts.
+
+## Signature
+
+```jsx
+import { Alert } from "tabler-react-2";
+
+<Alert {...props}>{children}</Alert>;
+```
+
+### Props
+
+| Prop        | Required | Type                       | Default | Description                                                |
+| ----------- | -------- | -------------------------- | ------- | ---------------------------------------------------------- |
+| `variant`   | No       | [Color](/utilities/colors) |         | The color variant of the alert.                            |
+| `title`     | No       | String                     |         | The title of the alert.                                    |
+| `onDismiss` | No       | function                   |         | A function that fires when the user clicks a close button. |
+| `icon`      | No       | `React.ReactNode`          |         | An icon to be displayed in the alert.                      |
+
+## Basic Usage
+
+The `Alert` component is used to display an alert message.
+
+<Excerpt>
+  <Alert>This is a basic alert.</Alert>
+</Excerpt>
+
+```jsx
+<Alert>This is a basic alert.</Alert>
+```
+
+## Variants
+
+The `Alert` component can be used to display different types of alerts. The `variant` prop accepts a string value of `success`, `failure`, `warning`, `info`, `danger`, or `dark`.
+
+<Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    {["success", "failure", "warning", "info", "danger", "dark"].map(
+      (variant) => (
+        <Alert
+          key={variant}
+          variant={variant}
+          title={variant}
+          style={{ maxWidth: 250, minWidth: 150 }}
+        >
+          {variant} alert
+        </Alert>
+      )
+    )}
+  </div>
+</Excerpt>
+
+```jsx
+<Alert variant="success" title="success">
+  success alert
+</Alert>
+<Alert variant="failure" title="failure">
+  failure alert
+</Alert>
+```
+
+## Titles
+
+You can pass a `title` prop to the `Alert` component to display a title in boldface and the variant color.
+
+<Excerpt>
+  <Alert title="My awesome title">A card with a title.</Alert>
+</Excerpt>
+
+```jsx
+<Alert title="My awesome title">A card with a title.</Alert>
+```
+
+## Dismissible Alerts
+
+You can pass an `onDismiss` prop to the `Alert` component to display a close button. When the user clicks the close button, the `onDismiss` function is called.
+
+<Excerpt>
+  <Alert title="Dismissible alert" onDismiss={() => alert("Alert dismissed!")}>
+    A dismissible alert.
+  </Alert>
+</Excerpt>
+
+```jsx
+<Alert title="Dismissible alert" onDismiss={() => alert("Alert dismissed!")}>
+  A dismissible alert.
+</Alert>
+```
+
+> **Note**: The alert component does not manage its own state. If you want the alert to go away when the user clicks the close button, you must unmount it yourself.
+
+## Icons
+
+You can pass an `icon` prop to the `Alert` component to display an icon in the alert.
+
+<Excerpt>
+  <Alert title="Alert with icon" icon={<IconAlertCircle />}>
+    An alert with an icon.
+  </Alert>
+</Excerpt>
+
+```jsx
+<Alert title="Alert with icon" icon={<IconAlertCircle />}>
+  An alert with an icon.
+</Alert>
+```
+
+I recommend using [tabler icons](https://tabler.io/icons) for icons
