@@ -35,7 +35,7 @@ export const Button = forwardRef(
       className?.split(" ")
     );
 
-    const ElementToRender = window.USE_FALLBACK_ANCHOR ? "a" : Link;
+    const ElementToRender = window?.USE_FALLBACK_ANCHOR ? "a" : Link;
 
     if (href) {
       return (

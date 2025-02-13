@@ -8,7 +8,8 @@ export const Tabler = ({ children }) => {
 
   useEffect(() => {
     if (containerRef.current && !shadowRef.current) {
-      shadowRef.current = containerRef.current.attachShadow({ mode: "open" });
+      const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
+      shadowRef.current = shadowRoot; // Assign once to avoid duplicate execution
 
       // Load local Tabler styles
       const styleLink = document.createElement("link");
@@ -25,14 +26,15 @@ export const Tabler = ({ children }) => {
       const script = document.createElement("script");
       script.src =
         "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js";
+      script.async = true; // Ensure it loads properly
 
       const inlineScript = document.createElement("script");
       inlineScript.textContent = "window.USE_FALLBACK_ANCHOR = true;";
 
-      shadowRef.current.appendChild(styleLink);
-      shadowRef.current.appendChild(wrapperDiv);
-      shadowRef.current.appendChild(script);
-      shadowRef.current.appendChild(inlineScript);
+      shadowRoot.appendChild(styleLink);
+      shadowRoot.appendChild(wrapperDiv);
+      shadowRoot.appendChild(script);
+      shadowRoot.appendChild(inlineScript);
 
       setWrapper(wrapperDiv);
     }

@@ -7,6 +7,7 @@
   "license": "MIT",
   "starter-name": "gatsby-starter-rocketdocs",
   "dependencies": {
+    "@loadable/component": "^5.16.4",
     "@rocketseat/gatsby-theme-docs": "^4.0.0",
     "ajv": "^8.17.1",
     "gatsby": "^5.9.0",
@@ -20,8 +21,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "styled-components": "^6.1.15",
-    "tabler-icons": "^1.35.0",
-    "tabler-react-2": "^0.1.77"
+    "tabler-react-2": "^0.1.78"
   },
   "devDependencies": {},
   "keywords": [

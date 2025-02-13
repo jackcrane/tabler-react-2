@@ -103,7 +103,7 @@ export const Responsive = ({
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= threshold) {
+      if (window?.innerWidth <= threshold) {
         setDirection(defaultDirection === "row" ? "column" : "row");
       } else {
         setDirection(defaultDirection);
@@ -114,10 +114,10 @@ export const Responsive = ({
     handleResize();
 
     // Add event listener for window resize
-    window.addEventListener("resize", handleResize);
+    window?.addEventListener("resize", handleResize);
 
     // Cleanup the event listener on component unmount
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window?.removeEventListener("resize", handleResize);
   }, [threshold, defaultDirection]);
 
   return (

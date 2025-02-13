@@ -2,9 +2,8 @@
 title: Alerts
 ---
 
-import { Alert } from "tabler-react-2";
+import { Alert } from "../../components/LoadableTabler";
 import { Excerpt } from "../../components/Excerpt.jsx";
-import { IconAlertCircle } from "tabler-icons";
 
 Alerts are used to display important messages to the user. Not to be confused with toasts.
 
@@ -104,21 +103,3 @@ You can pass an `onDismiss` prop to the `Alert` component to display a close but
 ```
 
 > **Note**: The alert component does not manage its own state. If you want the alert to go away when the user clicks the close button, you must unmount it yourself.
-
-## Icons
-
-You can pass an `icon` prop to the `Alert` component to display an icon in the alert.
-
-<Excerpt>
-  <Alert title="Alert with icon" icon={<IconAlertCircle />}>
-    An alert with an icon.
-  </Alert>
-</Excerpt>
-
-```jsx
-<Alert title="Alert with icon" icon={<IconAlertCircle />}>
-  An alert with an icon.
-</Alert>
-```
-
-I recommend using [tabler icons](https://tabler.io/icons) for icons
