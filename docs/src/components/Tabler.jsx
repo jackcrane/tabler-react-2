@@ -7,7 +7,7 @@ export const Tabler = ({ children }) => {
   const [wrapper, setWrapper] = useState(null);
 
   useEffect(() => {
-    if (containerRef.current && !shadowRef.current) {
+    if (containerRef.current && !shadowRef.current && window) {
       const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
       shadowRef.current = shadowRoot;
 
