@@ -20,8 +20,10 @@
       link: "/components/badges"
     - label: "Buttons"
       link: "/components/buttons"
-    - label: "Dropdowns"
+    - label: "Dropdown"
       link: "/components/dropdown"
+    - label: "Dropdown Input"
+      link: "/components/dropdown-input"
 - label: "Utilities"
   items:
     - label: "Colors"

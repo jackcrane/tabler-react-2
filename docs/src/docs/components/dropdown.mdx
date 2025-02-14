@@ -7,6 +7,8 @@ import { Excerpt } from "../../components/Excerpt.jsx";
 
 Dropdowns are used to select an option from a list of options.
 
+> **Note**: The `Dropdown` component does not provide a return or onChange handler. To use the `Dropdown` component as a form element, use the [`DropdownInput` component](/components/dropdown-input).
+
 ## Signature
 
 ```jsx
@@ -17,13 +19,13 @@ import { Dropdown } from "tabler-react-2";
 
 ### Props
 
-| Prop                | Required | Type    | Default | Description                                             |
-| ------------------- | -------- | ------- | ------- | ------------------------------------------------------- |
-| `prompt`            | No       | String  |         | The text to display in the dropdown.                    |
-| `items`             | No       | Array   |         | An array of objects with `text` and `value` properties. |
-| `toggleStyle`       | No       | Object  |         | An object with `width` and `height` properties.         |
-| `hideToggleIcon`    | No       | Boolean |         | Whether to hide the toggle icon.                        |
-| `dropdownClassName` | No       | String  |         | The class name of the dropdown.                         |
+| Prop                | Required | Type                    | Default | Description                                     |
+| ------------------- | -------- | ----------------------- | ------- | ----------------------------------------------- |
+| `prompt`            | No       | String                  |         | The text to display in the dropdown.            |
+| `items`             | No       | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown.     |
+| `toggleStyle`       | No       | Object                  |         | An object with `width` and `height` properties. |
+| `hideToggleIcon`    | No       | Boolean                 |         | Whether to hide the toggle icon.                |
+| `dropdownClassName` | No       | String                  |         | The class name of the dropdown.                 |
 
 ## Basic Usage
 
@@ -62,43 +64,70 @@ The `Dropdown` component is used to select an option from a list of options.
         onclick: () => alert("Clicked"),
         text: "Button 4",
       },
+      {
+        type: "item",
+        text: <kbd>Button 5</kbd>,
+      },
     ]}
   />
 </Excerpt>
 
+{/* prettier-ignore */}
 ```jsx
 <Dropdown
   prompt="Select a value"
   items={[
-    {
-      type: "item",
-      href: "#",
-      text: "Link 1",
-    },
-    {
-      type: "item",
-      onclick: () => alert("Clicked"),
-      text: "Button 2",
-      disabled: true,
-    },
-    {
-      type: "divider",
-    },
-    {
-      type: "header",
-      text: "Header",
-    },
-    {
-      type: "item",
-      href: "#",
-      text: "Link 3",
-      active: true,
-    },
-    {
-      type: "item",
-      onclick: () => alert("Clicked"),
-      text: "Button 4",
-    },
+    { type: "item", href: "#", text: "Link 1" },
+    { type: "item", onclick: () => alert("Clicked"), text: "Button 2", disabled: true },
+    { type: "divider" },
+    { type: "header", text: "Header" },
+    { type: "item", href: "#", text: "Link 3", active: true },
+    { type: "item", onclick: () => alert("Clicked"), text: "Button 4" },
+    { type: "item", text: <kbd>Button 5</kbd> },
   ]}
 />
+```
+
+## ItemList
+
+The `items` prop of the `Dropdown` component accepts an array of objects. It accepts 2 types of entries: an `item` and a `divider`.
+
+### Item
+
+An `item` object has the following properties:
+
+| Prop       | Required | Type                | Default | Description                                                                                              |
+| ---------- | -------- | ------------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| `type`     | Yes      | [`item`, `divider`] |         | The type of the item. Must be `item` or `divider`.                                                       |
+| `text`     | Yes      | String \| node      |         | The text to display in the item.                                                                         |
+| `href`     | No       | String              |         | The URL of the item.                                                                                     |
+| `onclick`  | No       | Function            |         | The function to call when the item is clicked.                                                           |
+| `disabled` | No       | Boolean             |         | Whether the item is disabled. Prevents mouse interaction.                                                |
+| `active`   | No       | Boolean             |         | Whether the item is active. Will not set the prompt value of the dropdown, but will show as highlighted. |
+
+```ts
+type ItemList = Array<{
+  type: "item";
+  text: string | React.ReactNode;
+  href?: string;
+  onclick?: () => void;
+  disabled?: boolean;
+  active?: boolean;
+}
+```
+
+**Note:** If neither `href` nor `onclick` is provided, the item will be rendered as a link with the href as `#`.
+
+### Divider
+
+A `divider` object seperates items in the dropdown. It has the following properties:
+
+| Prop   | Required | Type                | Default | Description                                        |
+| ------ | -------- | ------------------- | ------- | -------------------------------------------------- |
+| `type` | Yes      | [`item`, `divider`] |         | The type of the item. Must be `item` or `divider`. |
+
+```ts
+type ItemList = Array<{
+  type: "divider";
+}
 ```

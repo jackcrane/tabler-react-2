@@ -24,6 +24,9 @@ export const Button = loadable(() =>
 export const Dropdown = loadable(() =>
   import("tabler-react-2").then((mod) => mod.Dropdown)
 );
+export const DropdownInput = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.DropdownInput)
+);
 export const Form = loadable(() =>
   import("tabler-react-2").then((mod) => mod.Form)
 );

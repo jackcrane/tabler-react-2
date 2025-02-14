@@ -4,12 +4,15 @@ import { Input } from "./input";
 
 export const DropdownInput = ({
   prompt,
-  values,
+  values: ivalues,
+  items,
   value,
   onChange,
   aprops,
+  showSearch = true,
   ...props
 }) => {
+  const values = ivalues || items;
   const getId = (val) =>
     typeof val === "object" && val !== null ? val.id : val;
 
@@ -54,13 +57,15 @@ export const DropdownInput = ({
         {selectedValue ? selectedValue.label : prompt}
       </a>
       <div className="dropdown-menu">
-        <div className="px-2 py-1">
-          <Input
-            placeholder={"Search..."}
-            value={searchQuery}
-            onChange={(value) => setSearchQuery(value)}
-          />
-        </div>
+        {showSearch && (
+          <div className="px-2 py-1">
+            <Input
+              placeholder={"Search..."}
+              value={searchQuery}
+              onChange={(value) => setSearchQuery(value)}
+            />
+          </div>
+        )}
         {filteredValues.map((value, index) => (
           <a
             key={index}
@@ -100,4 +105,49 @@ DropdownInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   color: PropTypes.string,
   outline: PropTypes.bool,
+};
+
+export const LoadableDropdownInput = ({
+  values,
+  value,
+  onChange,
+  prompt,
+  loading,
+  label,
+  showLabel = true,
+  disabled = false,
+  disabledText,
+  ...props
+}) => {
+  if (loading)
+    return (
+      <Util.Col>
+        {showLabel && <label className="form-label">{label}</label>}
+        <Button loading disabled>
+          {prompt}
+        </Button>
+      </Util.Col>
+    );
+
+  if (disabled)
+    return (
+      <Util.Col>
+        {showLabel && <label className="form-label">{label}</label>}
+        <Button disabled>{disabledText || prompt}</Button>
+      </Util.Col>
+    );
+
+  return (
+    <Util.Col>
+      {showLabel && <label className="form-label">{label}</label>}
+      <DropdownInput
+        values={values}
+        value={value}
+        onChange={onChange}
+        prompt={prompt}
+        data-value={value}
+        {...props}
+      />
+    </Util.Col>
+  );
 };

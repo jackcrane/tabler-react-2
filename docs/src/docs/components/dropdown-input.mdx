@@ -1,0 +1,53 @@
+---
+title: Dropdown Input
+---
+
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { DropdownInput } from "../../components/LoadableTabler";
+
+Dropdown inputs are used to select an option from a list of options.
+
+## Signature
+
+```jsx
+import { DropdownInput } from "tabler-react-2";
+
+<DropdownInput {...props}>{children}</DropdownInput>;
+```
+
+### Props
+
+| Prop       | Required | Type                    | Default | Description                                                    |
+| ---------- | -------- | ----------------------- | ------- | -------------------------------------------------------------- |
+| `prompt`   | Yes      | String                  |         | The text to display in the dropdown.                           |
+| `values`   | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown.                    |
+| `items`    | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown. Alias of `values`. |
+| `value`    | No       | String                  |         | The selected value's id.                                       |
+| `onChange` | No       | Function                |         | The function to call when the value is changed.                |
+
+## Basic Usage
+
+The `DropdownInput` component is used to select an option from a list of options.
+
+<Excerpt>
+  <DropdownInput
+    prompt="Select a value"
+    values={[
+      { id: 1, label: "Sam" },
+      { id: 2, label: "Bob" },
+      { id: 3, label: "John" },
+    ]}
+    onChange={(value) => alert(`Selected value: ${JSON.stringify(value)}`)}
+  />
+</Excerpt>
+
+```jsx
+<DropdownInput
+  prompt="Select a value"
+  items={[
+    { id: 1, label: "Sam" },
+    { id: 2, label: "Bob" },
+    { id: 3, label: "John" },
+  ]}
+/>
+```
