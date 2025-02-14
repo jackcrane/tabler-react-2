@@ -9,12 +9,15 @@ export const Tabler = ({ children }) => {
   useEffect(() => {
     if (containerRef.current && !shadowRef.current) {
       const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
-      shadowRef.current = shadowRoot; // Assign once to avoid duplicate execution
+      shadowRef.current = shadowRoot;
 
-      // Load local Tabler styles
+      // Set the global so tabler.min.js uses the shadowRoot
+      window.SHADOW_DOC = shadowRoot;
+
+      // Load Tabler styles
       const styleLink = document.createElement("link");
       styleLink.rel = "stylesheet";
-      styleLink.href = "/tabler.replaced.css"; // Ensure the path is correct
+      styleLink.href = "/tabler.replaced.css";
 
       // Create a wrapper div for children
       const wrapperDiv = document.createElement("div");
@@ -24,9 +27,8 @@ export const Tabler = ({ children }) => {
 
       // Inject Tabler scripts
       const script = document.createElement("script");
-      script.src =
-        "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js";
-      script.async = true; // Ensure it loads properly
+      script.src = "/tabler.min.js";
+      script.async = true;
 
       const inlineScript = document.createElement("script");
       inlineScript.textContent = "window.USE_FALLBACK_ANCHOR = true;";
