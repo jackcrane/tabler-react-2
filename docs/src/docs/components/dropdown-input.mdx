@@ -17,13 +17,17 @@ import { DropdownInput } from "tabler-react-2";
 
 ### Props
 
-| Prop       | Required | Type                    | Default | Description                                                    |
-| ---------- | -------- | ----------------------- | ------- | -------------------------------------------------------------- |
-| `prompt`   | Yes      | String                  |         | The text to display in the dropdown.                           |
-| `values`   | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown.                    |
-| `items`    | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown. Alias of `values`. |
-| `value`    | No       | String                  |         | The selected value's id.                                       |
-| `onChange` | No       | Function                |         | The function to call when the value is changed.                |
+| Prop           | Required | Type                    | Default | Description                                                    |
+| -------------- | -------- | ----------------------- | ------- | -------------------------------------------------------------- |
+| `prompt`       | Yes      | String                  |         | The text to display in the dropdown.                           |
+| `values`       | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown.                    |
+| `items`        | Yes      | [`ItemList`](#itemlist) |         | A list of items to display in the dropdown. Alias of `values`. |
+| `value`        | No       | String                  |         | The selected value's id.                                       |
+| `onChange`     | No       | Function                |         | The function to call when the value is changed.                |
+| `loading`      | No       | Boolean                 |         | Whether to show a loading indicator.                           |
+| `disabled`     | No       | Boolean                 |         | Whether the dropdown is disabled.                              |
+| `disabledText` | No       | String                  |         | The text to display when the dropdown is disabled.             |
+| `label`        | No       | String                  |         | The text to display in the label.                              |
 
 ## Basic Usage
 
@@ -102,7 +106,7 @@ By default, the dropdown will show a search input. You can hide it by passing in
   />
 </Excerpt>
 
-```jsx
+```jsx highlight={8}
 <DropdownInput
   prompt="Select a value"
   items={[
@@ -119,6 +123,56 @@ By default, the dropdown will show a search input. You can hide it by passing in
 You can disable the dropdown by passing in `disabled={true}`.
 
 <Excerpt>
+  <div
+    style={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 10,
+      flexWrap: "wrap",
+      alignItems: "center",
+    }}
+  >
+    <DropdownInput
+      prompt="Select a value"
+      items={[
+        { id: 1, label: "Sam" },
+        { id: 2, label: "Bob" },
+        { id: 3, label: "John" },
+      ]}
+      disabled={true}
+    />
+    <DropdownInput
+      prompt="Select a value"
+      items={[
+        { id: 1, label: "Sam" },
+        { id: 2, label: "Bob" },
+        { id: 3, label: "John" },
+      ]}
+      disabled={true}
+      disabledText="Custom disabled text"
+    />
+  </div>
+</Excerpt>
+
+```jsx highlight={4,9-10}
+<DropdownInput
+  prompt="Select a value"
+  items={[...]}
+  disabled={true}
+/>
+<DropdownInput
+  prompt="Select a value"
+  items={[...]}
+  disabled={true}
+  disabledText="Custom disabled text"
+/>
+```
+
+## label
+
+You can pass in a `label` prop to show a label for the dropdown.
+
+<Excerpt>
   <DropdownInput
     prompt="Select a value"
     items={[
@@ -126,11 +180,11 @@ You can disable the dropdown by passing in `disabled={true}`.
       { id: 2, label: "Bob" },
       { id: 3, label: "John" },
     ]}
-    disabled={true}
+    label="Select a value"
   />
 </Excerpt>
 
-```jsx
+```jsx highlight={8}
 <DropdownInput
   prompt="Select a value"
   items={[
@@ -138,6 +192,69 @@ You can disable the dropdown by passing in `disabled={true}`.
     { id: 2, label: "Bob" },
     { id: 3, label: "John" },
   ]}
-  disabled={true}
+  label="Select a value"
 />
+```
+
+## Loading
+
+You can show a loading indicator by passing in `loading={true}`.
+
+<Excerpt>
+  <DropdownInput
+    prompt="Select a value"
+    items={[
+      { id: 1, label: "Sam" },
+      { id: 2, label: "Bob" },
+      { id: 3, label: "John" },
+    ]}
+    loading={true}
+  />
+</Excerpt>
+
+```jsx highlight={8}
+<DropdownInput
+  prompt="Select a vadlue"
+  items={[
+    { id: 1, label: "Sam" },
+    { id: 2, label: "Bob" },
+    { id: 3, label: "John" },
+  ]}
+  loading={true}
+/>
+```
+
+## Custom content
+
+<Excerpt>
+  <DropdownInput
+    prompt="Select a value"
+    items={[
+      { id: 1, label: "Sam" },
+      { id: 2, label: "Bob" },
+      { id: 3, label: "John" },
+    ]}
+  />
+</Excerpt>
+
+## ItemList
+
+The `items` prop of the `DropdownInput` component accepts an array of objects. It accepts 2 types of entries: an `item` and a `divider`.
+
+### Item
+
+An `item` object has the following properties:
+
+| Prop           | Required | Type   | Default | Description                                                                     |
+| -------------- | -------- | ------ | ------- | ------------------------------------------------------------------------------- |
+| `id`           | Yes      | Any    |         | The id of the item. Must be unique.                                             |
+| `label`        | Yes      | String |         | The text to display in the item.                                                |
+| `dropdownText` | No       | String |         | The text to display in the dropdown. If not provided, the `label` will be used. |
+
+```ts
+type ItemList = Array<{
+  id: string | number;
+  label: string;
+  dropdownText?: string;
+}
 ```

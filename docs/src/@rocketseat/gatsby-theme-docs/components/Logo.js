@@ -57,6 +57,7 @@ export default function Logo(props) {
           fill="white"
         />
       </svg>
+      React 2
       <div dangerouslySetInnerHTML={{ __html: inject }} />
     </>
   );

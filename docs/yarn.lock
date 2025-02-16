@@ -11893,10 +11893,10 @@ table@^6.0.9:
     string-width "^4.2.3"
     strip-ansi "^6.0.1"
 
-tabler-react-2@^0.1.79:
-  version "0.1.79"
-  resolved "https://registry.yarnpkg.com/tabler-react-2/-/tabler-react-2-0.1.79.tgz#2ab243f9a45d7b0973566bdb3dcbf4fb6e3e58b3"
-  integrity sha512-YKZ3mS+ybmkgsYXXanKr2+zu3YwZKA1gGuXs6NIZys5OfVcbivsFiSjl3A8ER2QSe3WAg+K0ZXikDZqiCoAkUA==
+tabler-react-2@0.1.82:
+  version "0.1.82"
+  resolved "https://registry.yarnpkg.com/tabler-react-2/-/tabler-react-2-0.1.82.tgz#93952c9895a7b57e39a90245dfa6f06f698bd75e"
+  integrity sha512-NJJmioIQ4bVxjR0sSXeHyTbiwchX2HEZt2NJ1piqlMn+DKjjgiCF7L4LmDMNDu2k0r3HxTxINu8PrqapI7XArA==
   dependencies:
     "@babel/cli" "^7.24.8"
     "@babel/core" "^7.24.8"
