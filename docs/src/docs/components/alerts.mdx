@@ -4,6 +4,7 @@ title: Alerts
 
 import { Alert } from "../../components/LoadableTabler";
 import { Excerpt } from "../../components/Excerpt.jsx";
+import { IconAlertCircle } from "@tabler/icons-react";
 
 Alerts are used to display important messages to the user. Not to be confused with toasts.
 
@@ -92,7 +93,7 @@ You can pass an `onDismiss` prop to the `Alert` component to display a close but
 
 <Excerpt>
   <Alert title="Dismissible alert" onDismiss={() => alert("Alert dismissed!")}>
-    A dismissible alert.
+    <span>A dismissible alert.</span>
   </Alert>
 </Excerpt>
 
@@ -103,3 +104,25 @@ You can pass an `onDismiss` prop to the `Alert` component to display a close but
 ```
 
 > **Note**: The alert component does not manage its own state. If you want the alert to go away when the user clicks the close button, you must unmount it yourself.
+
+## Icons
+
+You can pass an `icon` prop to the `Alert` component to display an icon in the alert.
+
+<Excerpt>
+  <Alert title="Icon alert" icon={<IconAlertCircle />}>
+    <span>An alert with an icon.</span>
+  </Alert>
+  <Alert title="Icon alert" icon={<IconAlertCircle />} variant="success">
+    <span>An alert with an icon and variant.</span>
+  </Alert>
+</Excerpt>
+
+```jsx
+<Alert title="Dismissible alert" icon={<IconAlertCircle />}>
+  An alert with an icon.
+</Alert>
+<Alert title="Dismissible alert" icon={<IconAlertCircle />} variant="success">
+  An alert with an icon and variant.
+</Alert>
+```

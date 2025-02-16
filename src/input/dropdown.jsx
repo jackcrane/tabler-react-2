@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { Input } from "./input";
-import { Button } from "./button";
-import Util from "./util";
+import { Input } from "../index";
+import { Button } from "../index";
+import { Util } from "../index";
 
 export const DropdownInput = ({
   prompt,
