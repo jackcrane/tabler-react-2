@@ -1,0 +1,147 @@
+---
+title: Ribbons
+---
+
+import { Ribbon, Card } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { IconAerialLift } from "@tabler/icons-react";
+
+You can assign a ribbon to a card to display a small badge.
+
+## Signature
+
+```jsx
+import { Ribbon } from "tabler-react-2";
+
+<Ribbon {...props}>{children}</Ribbon>;
+```
+
+### Props
+
+| Prop       | Required | Type                       | Default | Description                                         |
+| ---------- | -------- | -------------------------- | ------- | --------------------------------------------------- |
+| `variant`  | No       | [Color](/utilities/colors) | primary | The color variant of the ribbon.                    |
+| `color`    | No       | [Color](/utilities/colors) |         | The color variant of the ribbon. Alias of `variant` |
+| `content`  | No       | React.ReactNode            |         | The content to display in the ribbon.               |
+| `position` | No       | String                     |         | The position of the ribbon.                         |
+
+## Basic Usage
+
+The `Ribbon` component is used to display a ribbon.
+
+<Excerpt>
+  <Card style={{ minWidth: 150, maxWidth: 250 }}>
+    Ribbon
+    <Ribbon />
+  </Card>
+</Excerpt>
+
+```jsx
+<Card>
+  Ribbon
+  <Ribbon />
+</Card>
+```
+
+## Variants
+
+You can pass a `variant` prop to the `Ribbon` component to change the color of the ribbon.
+
+<Excerpt f>
+  {[
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+    "purple",
+  ].map((color) => (
+    <Card key={color} style={{ minWidth: 150, maxWidth: 250 }}>
+      {color}
+      <Ribbon variant={color} />
+    </Card>
+  ))}
+</Excerpt>
+
+```jsx
+<Card>
+primary
+  <Ribbon variant="primary" />
+</Card>
+<Card>
+secondary
+  <Ribbon variant="secondary" />
+</Card>
+```
+
+## Positions
+
+You can pass a `position` prop to the `Ribbon` component to change the position of the ribbon.
+
+<Excerpt f>
+  {["top", "start", "end"].map((pos) => (
+    <Card
+      key={pos}
+      style={{ minWidth: 150, maxWidth: 250, textAlign: "center" }}
+    >
+      <Ribbon position={pos}>{pos}</Ribbon>
+    </Card>
+  ))}
+</Excerpt>
+
+```jsx
+<Card>
+  <Ribbon position="top">top</Ribbon>
+</Card>
+<Card>
+  <Ribbon position="start">start</Ribbon>
+</Card>
+<Card>
+  <Ribbon position="end">end</Ribbon>
+</Card>
+```
+
+## Shapes
+
+You can pass a `shape` prop to the `Ribbon` component to change the shape of the ribbon.
+
+<Excerpt f>
+  <Card style={{ minWidth: 150, maxWidth: 250 }}>
+    <span>Bookmark</span>
+    <Ribbon shape="bookmark" />
+  </Card>
+  <Card style={{ minWidth: 150, maxWidth: 250 }}>
+    <span>Normal</span>
+    <Ribbon />
+  </Card>
+</Excerpt>
+
+```jsx
+<Card>
+  <span>Ribbon</span>
+  <Ribbon shape="bookmark" />
+</Card>
+<Card>
+  <span>Ribbon</span>
+  <Ribbon />
+</Card>
+```
+
+## Custom Content
+
+You can pass a `content` prop to the `Ribbon` component to change the content of the ribbon.
+
+<Excerpt>
+  <Card style={{ minWidth: 150, maxWidth: 250 }}>
+    <Ribbon content={<IconAerialLift />}>Ribbon</Ribbon>
+  </Card>
+</Excerpt>
+
+```jsx
+<Card>
+  <Ribbon content={<IconAerialLift />}>Ribbon</Ribbon>
+</Card>
+```

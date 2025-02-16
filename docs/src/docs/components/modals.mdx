@@ -1,0 +1,184 @@
+---
+title: Modals
+---
+
+import { Modal } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { Button } from "../../components/LoadableTabler";
+import { ButtonedModal } from "../../components/ButtonedModal.jsx";
+
+> **Note**: The `Modal` component is a simple component that provides very few creature comforts. You can use the [_hook-driven modal_](/components/hook-driven-modal) component instead if you don't want or need to manage your own state.
+
+> **Note**: For extremely simple confirm modals, you can use the [_ConfirmModal_](/components/confirm-modal) component.
+
+Modals are used to display content in a layer above the main content. They can be used to display forms, confirmations, or other types of content.
+
+## Signature
+
+```jsx
+import { Modal } from "tabler-react-2";
+
+<Modal {...props}>{children}</Modal>;
+```
+
+### Props
+
+| Prop      | Required | Type                         | Default | Description                                           |
+| --------- | -------- | ---------------------------- | ------- | ----------------------------------------------------- |
+| `open`    | Yes      | Boolean                      |         | Whether the modal is open.                            |
+| `onClose` | Yes      | Function                     |         | A function that fires when the user closes the modal. |
+| `title`   | No       | String                       |         | The title of the modal.                               |
+| `status`  | No       | [`Color`](/utilities/colors) |         | The color variant of the modal.                       |
+| `buttons` | No       | [`ButtonList`](#buttonlist)  |         | A list of buttons to display in the modal footer.     |
+
+## Basic Usage
+
+The `Modal` component is used to display a modal.
+
+<Excerpt>
+  <ButtonedModal title="Modal Title">
+    <p>A basic modal.</p>
+  </ButtonedModal>
+</Excerpt>
+
+```jsx
+<Modal open={true} title="Modal Title">
+  <p>A basic modal.</p>
+</Modal>
+```
+
+## Status
+
+You can pass in a `status` prop to the `Modal` component to change the color of the border top modal. The `status` prop accepts a string value of any [color](/utilities/colors).
+
+<Excerpt f>
+  <ButtonedModal
+    title="Modal Title"
+    status="danger"
+    button="Open danger modal"
+    buttonProps={{ outline: true, variant: "danger" }}
+  >
+    <p>A danger modal.</p>
+  </ButtonedModal>
+  <ButtonedModal
+    title="Modal Title"
+    status="success"
+    button="Open success modal"
+    buttonProps={{ outline: true, variant: "success" }}
+  >
+    <p>A success modal.</p>
+  </ButtonedModal>
+  <ButtonedModal
+    title="Modal Title"
+    status="purple"
+    button="Open purple modal"
+    buttonProps={{ outline: true, variant: "purple" }}
+  >
+    <p>A purple modal.</p>
+  </ButtonedModal>
+</Excerpt>
+
+```jsx highlight={3,9,15}
+<Modal
+  open={true} title="Modal Title"
+  status="danger"
+>
+  <p>A danger modal.</p>
+</Modal>
+<Modal
+  open={true} title="Modal Title"
+  status="success"
+>
+  <p>A danger modal.</p>
+</Modal>
+<Modal
+  open={true} title="Modal Title"
+  status="purple"
+>
+  <p>A danger modal.</p>
+</Modal>
+```
+
+## Buttons
+
+You can pass [`ButtonList`](#buttonlist) to the `buttons` prop to display buttons in the modal footer.
+
+<Excerpt>
+  <ButtonedModal
+    title="Modal Title"
+    commitText="Commit"
+    cancelText="Cancel"
+    buttons={[
+      {
+        text: "Button 1",
+        variant: "danger",
+        attrs: { outline: true },
+        onClick: () => alert("Clicked button 1"),
+      },
+      {
+        text: "Button 2",
+        variant: "success",
+        attrs: { outline: true },
+        onClick: () => alert("Clicked button 2"),
+      },
+    ]}
+  >
+    <p>A modal with buttons.</p>
+  </ButtonedModal>
+</Excerpt>
+
+```jsx highlight={5-16}
+<Modal
+  open={true}
+  onClose={() => alert("Closed!")}
+  title="Modal Title"
+  buttons={[
+    {
+      text: "Button 1",
+      variant: "danger",
+      onClick: () => alert("Clicked"),
+    },
+    {
+      text: "Button 2",
+      variant: "success",
+      onClick: () => alert("Clicked"),
+    },
+  ]}
+>
+  <p>A modal with buttons.</p>
+</Modal>
+```
+
+### ButtonList
+
+The `buttons` prop of the `Modal` component accepts an array of objects.
+
+A `button` object has the following properties:
+
+| Prop      | Required | Type                         | Default | Description                                    |
+| --------- | -------- | ---------------------------- | ------- | ---------------------------------------------- |
+| `text`    | Yes      | String                       |         | The text to display in the button.             |
+| `variant` | No       | [`Color`](/utilities/colors) |         | The color variant of the button.               |
+| `onClick` | Yes      | Func                         |         | A function to call when the button is clicked. |
+
+```ts
+type ButtonList = Array<{
+  text: string;
+  variant?: string;
+  onClick: () => void;
+}
+```
+
+## Custom content
+
+<Excerpt>
+  <ButtonedModal title="Modal Title">
+    <kbd>A modal with custom content.</kbd>
+  </ButtonedModal>
+</Excerpt>
+
+```jsx
+<Modal open={true} title="Modal Title">
+  <kbd>A modal with custom content.</kbd>
+</Modal>
+```

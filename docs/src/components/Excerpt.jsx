@@ -20,10 +20,26 @@ const _Excerpt = styled.div`
   margin-bottom: 16px;
 `;
 
-export const Excerpt = ({ children }) => {
+export const Excerpt = ({ children, f }) => {
   return (
     <_Excerpt>
-      <Tabler>{children}</Tabler>
+      <Tabler>
+        {f ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 10,
+              flexWrap: "wrap",
+              alignItems: "center",
+            }}
+          >
+            {children}
+          </div>
+        ) : (
+          children
+        )}
+      </Tabler>
     </_Excerpt>
   );
 };

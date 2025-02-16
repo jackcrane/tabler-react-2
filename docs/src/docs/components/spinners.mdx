@@ -1,0 +1,76 @@
+---
+title: Spinners
+---
+
+import { Spinner } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Spinners are used to indicate that something is loading.
+
+## Signature
+
+```jsx
+import { Spinner } from "tabler-react-2";
+
+<Spinner {...props}>{children}</Spinner>;
+```
+
+### Props
+
+| Prop      | Required | Type                       | Default | Description                                        |
+| --------- | -------- | -------------------------- | ------- | -------------------------------------------------- |
+| `size`    | No       | [`sm` \| `lg`]             | `lg`    | The size of the spinner.                           |
+| `color`   | No       | [Color](/utilities/colors) |         | The color variant of the spinner.                  |
+| `variant` | No       | String                     |         | The color variant of the spinner. Alias of `color` |
+
+## Basic Usage
+
+The `Spinner` component is used to display a spinner.
+
+<Excerpt>
+  <Spinner />
+</Excerpt>
+
+```jsx
+<Spinner />
+```
+
+## Sizes
+
+You can pass a `size` prop to the `Spinner` component to change the size of the spinner.
+
+<Excerpt f>
+  {["sm", "lg"].map((size) => (
+    <Spinner key={size} size={size} />
+  ))}
+</Excerpt>
+
+```jsx
+<Spinner size="sm" />
+<Spinner size="lg" />
+```
+
+## Variant
+
+You can pass a `color` prop to the `Spinner` component to change the color of the spinner.
+
+<Excerpt f>
+  {[
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+    "purple",
+  ].map((color) => (
+    <Spinner key={color} variant={color} />
+  ))}
+</Excerpt>
+
+```jsx
+<Spinner variant="primary" />
+<Spinner variant="secondary" />
+```

@@ -24,6 +24,12 @@
       link: "/components/dropdown"
     - label: "Dropdown Input"
       link: "/components/dropdown-input"
+    - label: "Modals"
+      link: "/components/modals"
+    - label: "Ribbons"
+      link: "/components/ribbons"
+    - label: "Spinners"
+      link: "/components/spinners"
 - label: "Utilities"
   items:
     - label: "Colors"

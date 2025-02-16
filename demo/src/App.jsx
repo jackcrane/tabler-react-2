@@ -489,7 +489,7 @@ const _Ribbons = () => {
       <Row wrap gap={1}>
         {colors.map((color) => (
           <Card key={color} size="sm">
-            <Ribbon color={color} />
+            <Ribbon variant={color} />
             <br />A {color} ribbon!
           </Card>
         ))}

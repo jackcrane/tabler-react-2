@@ -23,10 +23,13 @@ const IconStar = ({ size }) => (
 export const Ribbon = ({
   children,
   position = "top",
-  color = "primary",
+  color: passedColor,
+  variant: passedVariant,
   content = <IconStar />,
   shape,
 }) => {
+  const color = passedVariant || passedColor || "primary";
+
   return (
     <div>
       {children}
