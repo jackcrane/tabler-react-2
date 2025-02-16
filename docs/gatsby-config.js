@@ -29,7 +29,7 @@ module.exports = {
       options: {
         name: `Rocket Docs`,
         short_name: `Rocket Docs`,
-        start_url: `/`,
+        start_url: `/getting-started`,
         background_color: `#ffffff`,
         display: `standalone`,
         icon: `static/favicon.png`,
