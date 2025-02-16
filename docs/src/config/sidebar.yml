@@ -4,6 +4,8 @@
   link: "/"
 - label: "Getting started"
   link: "/getting-started"
+- label: "Theme"
+  link: "/theme"
 - label: "Components"
   items:
     - label: "Typography"

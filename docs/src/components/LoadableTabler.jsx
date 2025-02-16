@@ -153,3 +153,6 @@ export const Typography = {
   U,
   Special,
 };
+export const TablerProvider = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.TablerProvider)
+);

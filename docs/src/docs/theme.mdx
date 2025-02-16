@@ -1,0 +1,151 @@
+---
+title: "Themes"
+---
+
+import { TablerProvider } from "../components/LoadableTabler.jsx";
+import { Excerpt } from "../components/Excerpt.jsx";
+
+Tabler React 2 provides a light and dark theme. You can use the `TablerProvider` component to set the theme. You can set the `colorScheme` prop to either `light` or `dark`, or let it default to `light`.
+
+```jsx
+<TablerProvider colorScheme="dark">
+  <h1>Hello, world!</h1>
+</TablerProvider>
+```
+
+## Customization
+
+You can pass in a `theme` object to the `TablerProvider` component to customize the theme. The `theme` object accepts a nested object with the following keys:
+
+| Key                     | Value                                                                                            |
+| ----------------------- | ------------------------------------------------------------------------------------------------ |
+| primary                 | `#206bc4`                                                                                        |
+| primary-rgb             | `32, 107, 196`                                                                                   |
+| primary-text            | `#1a569d`                                                                                        |
+| primary-bg-subtle       | `#d2e1f3`                                                                                        |
+| primary-border-subtle   | `#a6c4e7`                                                                                        |
+| secondary               | `#616876`                                                                                        |
+| secondary-rgb           | `97, 104, 118`                                                                                   |
+| secondary-text          | `#49566c`                                                                                        |
+| secondary-bg-subtle     | `#f1f5f9`                                                                                        |
+| secondary-border-subtle | `#e2e8f0`                                                                                        |
+| success                 | `#2fb344`                                                                                        |
+| success-rgb             | `47, 179, 68`                                                                                    |
+| success-text            | `#268f36`                                                                                        |
+| success-bg-subtle       | `#d5f0da`                                                                                        |
+| success-border-subtle   | `#ace1b4`                                                                                        |
+| info                    | `#4299e1`                                                                                        |
+| info-rgb                | `66, 153, 225`                                                                                   |
+| info-text               | `#0e616e`                                                                                        |
+| info-bg-subtle          | `#d1ecf1`                                                                                        |
+| info-border-subtle      | `#a2dae3`                                                                                        |
+| warning                 | `#f76707`                                                                                        |
+| warning-rgb             | `247, 103, 7`                                                                                    |
+| warning-text            | `#935f00`                                                                                        |
+| warning-bg-subtle       | `#fdeccc`                                                                                        |
+| warning-border-subtle   | `#fbd999`                                                                                        |
+| danger                  | `#d63939`                                                                                        |
+| danger-rgb              | `214, 57, 57`                                                                                    |
+| danger-text             | `#ab2e2e`                                                                                        |
+| danger-bg-subtle        | `#f7d7d7`                                                                                        |
+| danger-border-subtle    | `#efb0b0`                                                                                        |
+| light                   | `#f8fafc`                                                                                        |
+| light-rgb               | `248, 250, 252`                                                                                  |
+| light-text              | `#49566c`                                                                                        |
+| light-bg-subtle         | `#f8fafc`                                                                                        |
+| light-border-subtle     | `#e2e8f0`                                                                                        |
+| dark                    | `#1d273b`                                                                                        |
+| dark-rgb                | `29, 39, 59`                                                                                     |
+| dark-text               | `#313c52`                                                                                        |
+| dark-bg-subtle          | `#9ba9be`                                                                                        |
+| dark-border-subtle      | `#6c7a91`                                                                                        |
+| muted                   | `#616876`                                                                                        |
+| muted-rgb               | `97, 104, 118`                                                                                   |
+| black                   | `#000000`                                                                                        |
+| black-rgb               | `0, 0, 0`                                                                                        |
+| white                   | `#ffffff`                                                                                        |
+| white-rgb               | `255, 255, 255`                                                                                  |
+| blue                    | `#206bc4`                                                                                        |
+| blue-rgb                | `32, 107, 196`                                                                                   |
+| azure                   | `#4299e1`                                                                                        |
+| azure-rgb               | `66, 153, 225`                                                                                   |
+| indigo                  | `#4263eb`                                                                                        |
+| indigo-rgb              | `66, 99, 235`                                                                                    |
+| purple                  | `#ae3ec9`                                                                                        |
+| purple-rgb              | `174, 62, 201`                                                                                   |
+| pink                    | `#d6336c`                                                                                        |
+| pink-rgb                | `214, 51, 108`                                                                                   |
+| red                     | `#d63939`                                                                                        |
+| red-rgb                 | `214, 57, 57`                                                                                    |
+| orange                  | `#f76707`                                                                                        |
+| orange-rgb              | `247, 103, 7`                                                                                    |
+| yellow                  | `#f59f00`                                                                                        |
+| yellow-rgb              | `245, 159, 0`                                                                                    |
+| lime                    | `#74b816`                                                                                        |
+| lime-rgb                | `116, 184, 22`                                                                                   |
+| green                   | `#2fb344`                                                                                        |
+| green-rgb               | `47, 179, 68`                                                                                    |
+| teal                    | `#0ca678`                                                                                        |
+| teal-rgb                | `12, 166, 120`                                                                                   |
+| cyan                    | `#17a2b8`                                                                                        |
+| cyan-rgb                | `23, 162, 184`                                                                                   |
+| facebook                | `#1877f2`                                                                                        |
+| facebook-rgb            | `24, 119, 242`                                                                                   |
+| twitter                 | `#1da1f2`                                                                                        |
+| twitter-rgb             | `29, 161, 242`                                                                                   |
+| linkedin                | `#0a66c2`                                                                                        |
+| linkedin-rgb            | `10, 102, 194`                                                                                   |
+| google                  | `#dc4e41`                                                                                        |
+| google-rgb              | `220, 78, 65`                                                                                    |
+| youtube                 | `#ff0000`                                                                                        |
+| youtube-rgb             | `255, 0, 0`                                                                                      |
+| vimeo                   | `#1ab7ea`                                                                                        |
+| vimeo-rgb               | `26, 183, 234`                                                                                   |
+| dribbble                | `#ea4c89`                                                                                        |
+| dribbble-rgb            | `234, 76, 137`                                                                                   |
+| github                  | `#181717`                                                                                        |
+| github-rgb              | `24, 23, 23`                                                                                     |
+| instagram               | `#e4405f`                                                                                        |
+| instagram-rgb           | `228, 64, 95`                                                                                    |
+| pinterest               | `#bd081c`                                                                                        |
+| pinterest-rgb           | `189, 8, 28`                                                                                     |
+| vk                      | `#6383a8`                                                                                        |
+| vk-rgb                  | `99, 131, 168`                                                                                   |
+| rss                     | `#ffa500`                                                                                        |
+| rss-rgb                 | `255, 165, 0`                                                                                    |
+| flickr                  | `#0063dc`                                                                                        |
+| flickr-rgb              | `0, 99, 220`                                                                                     |
+| bitbucket               | `#0052cc`                                                                                        |
+| bitbucket-rgb           | `0, 82, 204`                                                                                     |
+| tabler                  | `#206bc4`                                                                                        |
+| tabler-rgb              | `32, 107, 196`                                                                                   |
+| body-color              | `#1d273b`                                                                                        |
+| body-color-rgb          | `29, 39, 59`                                                                                     |
+| body-bg                 | `#f1f5f9`                                                                                        |
+| body-bg-rgb             | `241, 245, 249`                                                                                  |
+| border-color            | `#e6e7e9`                                                                                        |
+| border-radius           | `4px`                                                                                            |
+| border-radius-sm        | `2px`                                                                                            |
+| border-radius-lg        | `8px`                                                                                            |
+| border-radius-xl        | `1rem`                                                                                           |
+| border-radius-2xl       | `2rem`                                                                                           |
+| border-radius-pill      | `100rem`                                                                                         |
+| box-shadow              | `0 0.5rem 1rem rgba(29, 39, 59, 0.15)`                                                           |
+| emphasis-color          | `#000000`                                                                                        |
+| emphasis-color-rgb      | `0, 0, 0`                                                                                        |
+| font-sans-serif         | `-apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif` |
+| font-monospace          | `Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace`                               |
+| body-font-family        | `var(--font-sans-serif)`                                                                         |
+| body-font-size          | `0.875rem`                                                                                       |
+| body-font-weight        | `400`                                                                                            |
+| body-line-height        | `1.4285714286`                                                                                   |
+| link-color              | `#206bc4`                                                                                        |
+| link-hover-color        | `#1a569d`                                                                                        |
+| highlight-bg            | `#fdeccc`                                                                                        |
+| border-width            | `1px`                                                                                            |
+| breakpoint-xs           | `0`                                                                                              |
+| breakpoint-sm           | `576px`                                                                                          |
+| breakpoint-md           | `768px`                                                                                          |
+| breakpoint-lg           | `992px`                                                                                          |
+| breakpoint-xl           | `1200px`                                                                                         |
+| breakpoint-xxl          | `1400px`                                                                                         |

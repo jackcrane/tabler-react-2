@@ -41,6 +41,7 @@ import {
 } from "../../src/input";
 import { Router, Routes } from "react-router-dom";
 import { useModal } from "../../src/modal/modal";
+import { TablerProvider } from "../../src/provider/Tabler";
 const { H1, H2, H3, H4, Text, Strong, I, U, B, Special } = Typography;
 
 const colors = [
@@ -71,233 +72,243 @@ const variants = [
 ];
 
 export default () => (
-  <div style={{ margin: 10 }}>
-    <H1 style={{ fontSize: 48, lineHeight: "unset" }}>Tabler React 2</H1>
-    <Col gap={1}>
-      <Card title="Typography" size="sm">
-        <H1>Typography.H1</H1>
-        <H2>Typography.H2</H2>
-        <H3>Typography.H3</H3>
-        <H4>Typography.H4</H4>
-        <Text>Typography.Text</Text>
-        <Col>
-          <Strong>Typography.Strong</Strong>
-          <B>Typography.B</B>
-          <I>Typography.I</I>
-          <U>Typography.U</U>
-        </Col>
-        <br />
-        <Card title={"Special Typography"}>
+  <TablerProvider
+    colorScheme="dark"
+    theme={{
+      primary: "#ff6600",
+    }}
+  >
+    <div style={{ margin: 10 }}>
+      <H1 style={{ fontSize: 48, lineHeight: "unset" }}>Tabler React 2</H1>
+      <Col gap={1}>
+        <Card title="Typography" size="sm">
+          <H1>Typography.H1</H1>
+          <H2>Typography.H2</H2>
+          <H3>Typography.H3</H3>
+          <H4>Typography.H4</H4>
+          <Text>Typography.Text</Text>
           <Col>
-            {["Abbr", "Cite", "Del", "Em", "Ins", "S", "Samp", "Var"].map(
-              (El) => {
-                const EoF = Typography.Special[El];
-                return <EoF key={El}>{El}</EoF>;
-              }
-            )}
-            <span>
-              Time: <Special.Time>18:00</Special.Time>
-            </span>
-            <span>
-              Sub <Special.Sub>Subscript</Special.Sub>
-            </span>
-            <span>
-              Sup <Special.Sup>Superscript</Special.Sup>
-            </span>
+            <Strong>Typography.Strong</Strong>
+            <B>Typography.B</B>
+            <I>Typography.I</I>
+            <U>Typography.U</U>
           </Col>
-          <Special.Kbd>Kbd</Special.Kbd> <br />
-          <Special.Mark>Mark</Special.Mark> <br />
-          <Special.Code>Code</Special.Code>
-        </Card>
-      </Card>
-      <Card title={"Cards"} size="sm">
-        <H2>Colors</H2>
-        <Row wrap gap={1}>
-          {[
-            "primary",
-            "secondary",
-            "success",
-            "danger",
-            "warning",
-            "info",
-            "light",
-            "dark",
-          ].map((variant) => (
-            <Card
-              key={variant}
-              title={variant}
-              variant={variant}
-              size="sm"
-              style={{ width: "calc(25% - 8px)" }}
-            >
-              {variant} card
-            </Card>
-          ))}
-        </Row>
-        <H2>Color Positions</H2>
-        <Row gap={1}>
-          {["top", "side"].map((pos) => (
-            <Card
-              key={pos}
-              title={pos}
-              variant={"danger"}
-              variantPos={pos}
-              size="sm"
-              style={{ width: "calc(25% - 8px)" }}
-            >
-              {pos} card
-            </Card>
-          ))}
-        </Row>
-        <H2>Special</H2>
-        <Row wrap gap={1}>
-          <Card title="Stacked" stacked style={{ width: "calc(25% - 8px)" }}>
-            Stacked Card
+          <br />
+          <Card title={"Special Typography"}>
+            <Col>
+              {["Abbr", "Cite", "Del", "Em", "Ins", "S", "Samp", "Var"].map(
+                (El) => {
+                  const EoF = Typography.Special[El];
+                  return <EoF key={El}>{El}</EoF>;
+                }
+              )}
+              <span>
+                Time: <Special.Time>18:00</Special.Time>
+              </span>
+              <span>
+                Sub <Special.Sub>Subscript</Special.Sub>
+              </span>
+              <span>
+                Sup <Special.Sup>Superscript</Special.Sup>
+              </span>
+            </Col>
+            <Special.Kbd>Kbd</Special.Kbd> <br />
+            <Special.Mark>Mark</Special.Mark> <br />
+            <Special.Code>Code</Special.Code>
           </Card>
-          <Card
-            size="md"
-            variantPos="top"
-            tabs={[
-              { title: "Tab 1", content: <p>Content of Tab 1</p> },
-              { title: "Tab 2", content: <p>Content of Tab 2</p> },
-              { title: "Tab 3", content: <p>Content of Tab 3</p> },
-            ]}
-            style={{ width: "calc(50% - 16px)" }}
-          />
-        </Row>
-      </Card>
-      <Card title={"Horizontal Rules"}>
-        <Text>Standard hr's</Text>
-        <Hr />
-        <Text>Look like this. Hr's with text look like this:</Text>
-        <Hr text="Just a text attr!" />
-        <Text>Neat huh!</Text>
-      </Card>
-      <Card title="Alerts">
-        <Row wrap gap={1}>
-          {[
-            {
-              variant: "danger",
-              icon: <IconRadioactive />,
-            },
-            {
-              variant: "warning",
-              icon: <IconAlertCircle />,
-            },
-            {
-              variant: "success",
-              icon: <IconCircleDashedCheck />,
-            },
-            {
-              variant: "info",
-              icon: <IconInfoHexagon />,
-            },
-            {
-              variant: "dark",
-              icon: <IconComet />,
-            },
-          ].map((v) => (
-            <Alert
-              key={v.variant}
-              variant={v.variant}
-              title={v.variant}
-              icon={v.icon}
-            >
-              {v.variant}
-            </Alert>
-          ))}
-          <Alert title="dismissable" onDismiss={() => alert("Gone!")}>
-            Dismissable
-          </Alert>
-        </Row>
-      </Card>
-      <Card title="Form Elements">
-        <Card title="Autosize Textarea">
-          <Form.Autosize title="Autosize Textarea" placeholder="Type here..." />
         </Card>
-      </Card>
-      <Card title="Avatars">
-        <Avatar src="https://picsum.photos/200" initials={"JC"} />
-        <Avatar initials={"JC"} />
-        <Avatar initials={"JC"} status="danger" />
-        <Avatar initials={"JC"} status="info" badge={5} />
-        <Avatar
-          dicebearSeed={"asdf"}
-          dicebearStyle={"adventurer"}
-          status="info"
-          badge={5}
-        />
-        <br />
-        <br />
-        <Avatar dicebear initials={"JC"} size="lg" />
-        <br />
-        <br />
-        <AvatarStackedList>
+        <Card title={"Cards"} size="sm">
+          <H2>Colors</H2>
+          <Row wrap gap={1}>
+            {[
+              "primary",
+              "secondary",
+              "success",
+              "danger",
+              "warning",
+              "info",
+              "light",
+              "dark",
+            ].map((variant) => (
+              <Card
+                key={variant}
+                title={variant}
+                variant={variant}
+                size="sm"
+                style={{ width: "calc(25% - 8px)" }}
+              >
+                {variant} card
+              </Card>
+            ))}
+          </Row>
+          <H2>Color Positions</H2>
+          <Row gap={1}>
+            {["top", "side"].map((pos) => (
+              <Card
+                key={pos}
+                title={pos}
+                variant={"danger"}
+                variantPos={pos}
+                size="sm"
+                style={{ width: "calc(25% - 8px)" }}
+              >
+                {pos} card
+              </Card>
+            ))}
+          </Row>
+          <H2>Special</H2>
+          <Row wrap gap={1}>
+            <Card title="Stacked" stacked style={{ width: "calc(25% - 8px)" }}>
+              Stacked Card
+            </Card>
+            <Card
+              size="md"
+              variantPos="top"
+              tabs={[
+                { title: "Tab 1", content: <p>Content of Tab 1</p> },
+                { title: "Tab 2", content: <p>Content of Tab 2</p> },
+                { title: "Tab 3", content: <p>Content of Tab 3</p> },
+              ]}
+              style={{ width: "calc(50% - 16px)" }}
+            />
+          </Row>
+        </Card>
+        <Card title={"Horizontal Rules"}>
+          <Text>Standard hr's</Text>
+          <Hr />
+          <Text>Look like this. Hr's with text look like this:</Text>
+          <Hr text="Just a text attr!" />
+          <Text>Neat huh!</Text>
+        </Card>
+        <Card title="Alerts">
+          <Row wrap gap={1}>
+            {[
+              {
+                variant: "danger",
+                icon: <IconRadioactive />,
+              },
+              {
+                variant: "warning",
+                icon: <IconAlertCircle />,
+              },
+              {
+                variant: "success",
+                icon: <IconCircleDashedCheck />,
+              },
+              {
+                variant: "info",
+                icon: <IconInfoHexagon />,
+              },
+              {
+                variant: "dark",
+                icon: <IconComet />,
+              },
+            ].map((v) => (
+              <Alert
+                key={v.variant}
+                variant={v.variant}
+                title={v.variant}
+                icon={v.icon}
+              >
+                {v.variant}
+              </Alert>
+            ))}
+            <Alert title="dismissable" onDismiss={() => alert("Gone!")}>
+              Dismissable
+            </Alert>
+          </Row>
+        </Card>
+        <Card title="Form Elements">
+          <Card title="Autosize Textarea">
+            <Form.Autosize
+              title="Autosize Textarea"
+              placeholder="Type here..."
+            />
+          </Card>
+        </Card>
+        <Card title="Avatars">
+          <Avatar src="https://picsum.photos/200" initials={"JC"} />
           <Avatar initials={"JC"} />
-          <Avatar dicebear initials={"JC"} />
-          <Avatar initials={"JC"} />
-        </AvatarStackedList>
-        <br />
-        <Text>
-          Defaults to just showing initials, but you can also use a dicebear
-          seed-based avatar by passing the dicebear prop. Specify the style with
-          dicebear="style". A specific image URL can be passed with the src
-          prop. Dicebear styles can be found{" "}
-          <Link href="https://dicebear.com/styles" target="blank">
-            here
-          </Link>
-          .
-        </Text>
-      </Card>
-      <Card title="Badges">
-        <H2>Default</H2>
-        {colors.map((color) => (
-          <Badge key={color} color={color}>
-            {color}
-          </Badge>
-        ))}
-        <H2>Outline</H2>
-        {colors.map((color) => (
-          <Badge outline key={color} color={color}>
-            {color}
-          </Badge>
-        ))}
-        <H2>Soft + outline</H2>
-        {colors.map((color) => (
-          <Badge outline soft key={color} color={color}>
-            {color}
-          </Badge>
-        ))}
-        <H2>Soft</H2>
-        {colors.map((color) => (
-          <Badge soft key={color} color={color}>
-            {color}
-          </Badge>
-        ))}
-      </Card>
-      <Card title="Breadcrumbs">
-        <Breadcrumb>
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-          <Breadcrumb.Item href="#" active>
-            Home
-          </Breadcrumb.Item>
-        </Breadcrumb>
-      </Card>
-      {_Buttons}
-      <_Dropdown />
-      <_Modal />
-      <_Ribbons />
-      <_Spinner />
-      <_Steps />
-      <_Table />
-      <_Timeline />
-      <_Input />
-      <_Switch />
-      <_SelectGroup />
-    </Col>
-  </div>
+          <Avatar initials={"JC"} status="danger" />
+          <Avatar initials={"JC"} status="info" badge={5} />
+          <Avatar
+            dicebearSeed={"asdf"}
+            dicebearStyle={"adventurer"}
+            status="info"
+            badge={5}
+          />
+          <br />
+          <br />
+          <Avatar dicebear initials={"JC"} size="lg" />
+          <br />
+          <br />
+          <AvatarStackedList>
+            <Avatar initials={"JC"} />
+            <Avatar dicebear initials={"JC"} />
+            <Avatar initials={"JC"} />
+          </AvatarStackedList>
+          <br />
+          <Text>
+            Defaults to just showing initials, but you can also use a dicebear
+            seed-based avatar by passing the dicebear prop. Specify the style
+            with dicebear="style". A specific image URL can be passed with the
+            src prop. Dicebear styles can be found{" "}
+            <Link href="https://dicebear.com/styles" target="blank">
+              here
+            </Link>
+            .
+          </Text>
+        </Card>
+        <Card title="Badges">
+          <H2>Default</H2>
+          {colors.map((color) => (
+            <Badge key={color} color={color}>
+              {color}
+            </Badge>
+          ))}
+          <H2>Outline</H2>
+          {colors.map((color) => (
+            <Badge outline key={color} color={color}>
+              {color}
+            </Badge>
+          ))}
+          <H2>Soft + outline</H2>
+          {colors.map((color) => (
+            <Badge outline soft key={color} color={color}>
+              {color}
+            </Badge>
+          ))}
+          <H2>Soft</H2>
+          {colors.map((color) => (
+            <Badge soft key={color} color={color}>
+              {color}
+            </Badge>
+          ))}
+        </Card>
+        <Card title="Breadcrumbs">
+          <Breadcrumb>
+            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+            <Breadcrumb.Item href="#" active>
+              Home
+            </Breadcrumb.Item>
+          </Breadcrumb>
+        </Card>
+        {_Buttons}
+        <_Dropdown />
+        <_Modal />
+        <_Ribbons />
+        <_Spinner />
+        <_Steps />
+        <_Table />
+        <_Timeline />
+        <_Input />
+        <_Switch />
+        <_SelectGroup />
+      </Col>
+    </div>
+  </TablerProvider>
 );
 
 const _Buttons = (
