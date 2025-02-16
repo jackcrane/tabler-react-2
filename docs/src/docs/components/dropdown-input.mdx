@@ -51,3 +51,93 @@ The `DropdownInput` component is used to select an option from a list of options
   ]}
 />
 ```
+
+## State Machine
+
+The `DropdownInput` component manages its own state. To fully implement a stateful `DropdownInput`, you need to provide the `value`, `onChange` and `items` props. The `items` prop will be an [ItemList](#itemlist) type, the `value` prop should be the id of the value you wish to be selected.
+
+If I am selecting from a list of states, and my `value` should ne the 2-letter state abbreviation, but to offer the user the full state name, you would set up your `items` prop as follows:
+
+```jsx
+items={[
+  { id: "AL", label: "Alabama", isGoodState: false },
+  { id: "AK", label: "Alaska", isGoodState: false },
+  { id: "AZ", label: "Arizona", isGoodState: false },
+  { id: "AR", label: "Arkansas", isGoodState: false },
+  { id: "OH", label: "Ohio", isGoodState: true }, // long live the best state!
+  ...
+]}
+```
+
+If you wanted to default to Ohio, you would pass in the ID of the state as the value:
+
+```jsx
+value = "OH";
+```
+
+Then, when you handle the change event, you would get the full object back:
+
+```jsx
+onChange={(value) => console.log(value)}
+
+// Output:
+// >> { id: "OH", label: "Ohio", isGoodState: true }
+```
+
+You can also pass in other keys to the `items` object. They will not be used by the dropdown, but they will be returned in the change event (example the `isGoodState` key above).
+
+## Hiding the search input
+
+By default, the dropdown will show a search input. You can hide it by passing in `showSearch={false}`.
+
+<Excerpt>
+  <DropdownInput
+    prompt="Select a value"
+    items={[
+      { id: 1, label: "Sam" },
+      { id: 2, label: "Bob" },
+      { id: 3, label: "John" },
+    ]}
+    showSearch={false}
+  />
+</Excerpt>
+
+```jsx
+<DropdownInput
+  prompt="Select a value"
+  items={[
+    { id: 1, label: "Sam" },
+    { id: 2, label: "Bob" },
+    { id: 3, label: "John" },
+  ]}
+  showSearch={false}
+/>
+```
+
+## Disabled
+
+You can disable the dropdown by passing in `disabled={true}`.
+
+<Excerpt>
+  <DropdownInput
+    prompt="Select a value"
+    items={[
+      { id: 1, label: "Sam" },
+      { id: 2, label: "Bob" },
+      { id: 3, label: "John" },
+    ]}
+    disabled={true}
+  />
+</Excerpt>
+
+```jsx
+<DropdownInput
+  prompt="Select a value"
+  items={[
+    { id: 1, label: "Sam" },
+    { id: 2, label: "Bob" },
+    { id: 3, label: "John" },
+  ]}
+  disabled={true}
+/>
+```

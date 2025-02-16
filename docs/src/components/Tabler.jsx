@@ -7,39 +7,51 @@ export const Tabler = ({ children }) => {
   const [wrapper, setWrapper] = useState(null);
 
   useEffect(() => {
-    if (containerRef.current && !shadowRef.current && window) {
-      const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
-      shadowRef.current = shadowRoot;
+    const initialize = async () => {
+      if (containerRef.current && !shadowRef.current) {
+        // Create a shadow root for this instance
+        const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
+        shadowRef.current = shadowRoot;
 
-      // Set the global so tabler.min.js uses the shadowRoot
-      window.SHADOW_DOC = shadowRoot;
+        // Inject Tabler stylesheet
+        const styleLink = document.createElement("link");
+        styleLink.rel = "stylesheet";
+        styleLink.href = "/tabler.replaced.css";
 
-      // Load Tabler styles
-      const styleLink = document.createElement("link");
-      styleLink.rel = "stylesheet";
-      styleLink.href = "/tabler.replaced.css";
+        // Create a wrapper div for children
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.style.display = "inline-block";
+        wrapperDiv.style.width = "auto";
+        wrapperDiv.style.height = "auto";
 
-      // Create a wrapper div for children
-      const wrapperDiv = document.createElement("div");
-      wrapperDiv.style.display = "inline-block";
-      wrapperDiv.style.width = "auto";
-      wrapperDiv.style.height = "auto";
+        shadowRoot.appendChild(styleLink);
+        shadowRoot.appendChild(wrapperDiv);
+        setWrapper(wrapperDiv);
 
-      // Inject Tabler scripts
-      const script = document.createElement("script");
-      script.src = "/tabler.min.js";
-      script.async = true;
+        // Load and run Tabler script in an isolated context
+        try {
+          const response = await fetch("/tabler.min.js");
+          const scriptText = await response.text();
 
-      const inlineScript = document.createElement("script");
-      inlineScript.textContent = "window.USE_FALLBACK_ANCHOR = true;";
+          // Wrap the code in a function that temporarily sets window.SHADOW_DOC
+          const runTablerScript = new Function(
+            "shadowRoot",
+            `
+            window.USE_FALLBACK_ANCHOR = true;
+            const originalShadowDoc = window.SHADOW_DOC;
+            window.SHADOW_DOC = shadowRoot;
+            ${scriptText}
+            window.SHADOW_DOC = originalShadowDoc;
+          `
+          );
+          runTablerScript(shadowRoot);
+        } catch (err) {
+          console.error("Failed to load Tabler script:", err);
+        }
+      }
+    };
 
-      shadowRoot.appendChild(styleLink);
-      shadowRoot.appendChild(wrapperDiv);
-      shadowRoot.appendChild(script);
-      shadowRoot.appendChild(inlineScript);
-
-      setWrapper(wrapperDiv);
-    }
+    initialize();
   }, []);
 
   return (
