@@ -15,11 +15,13 @@ html {
 blockquote>p {
   background-color:rgba(6, 111, 209, 0.08)!important;
   border-left: 4px solid #066fd1!important;
+  color: #6C6C80!important;
 }
 blockquote>p p {
   background-color: unset!important;
   padding: 0!important;
   padding-bottom: 1rem!important;
+  color: #6C6C80!important;
 }
 blockquote>p strong {
   color: #066fd1!important;
