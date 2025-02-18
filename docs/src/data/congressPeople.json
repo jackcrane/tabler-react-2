@@ -2,7 +2,7 @@
   {
     "name": "Ed Case",
     "email": "ed.case@mail.house.gov",
-    "party": "Democrat",
+    "party": "democrat",
     "region": {
       "state": "Hawaii",
       "abbr": "HI",
@@ -13,7 +13,7 @@
   {
     "name": "Mike Carey",
     "email": "mike.carey@mail.house.gov",
-    "party": "Republican",
+    "party": "republican",
     "region": {
       "state": "Ohio",
       "abbr": "OH",
@@ -24,7 +24,7 @@
   {
     "name": "Andrew Clyde",
     "email": "andrew.clyde@mail.house.gov",
-    "party": "Republican",
+    "party": "republican",
     "region": {
       "state": "Georgia",
       "abbr": "GA",
@@ -35,7 +35,7 @@
   {
     "name": "Angie Craig",
     "email": "angie.craig@mail.house.gov",
-    "party": "Democrat",
+    "party": "democrat",
     "region": {
       "state": "Minnesota",
       "abbr": "MN",
@@ -46,7 +46,7 @@
   {
     "name": "Rick Crawford",
     "email": "rick.crawford@mail.house.gov",
-    "party": "Republican",
+    "party": "republican",
     "region": {
       "state": "Arkansas",
       "abbr": "AR",
@@ -57,7 +57,7 @@
   {
     "name": "Jared Golden",
     "email": "jared.golden@mail.house.gov",
-    "party": "Democrat",
+    "party": "democrat",
     "region": {
       "state": "Maine",
       "abbr": "ME",
@@ -68,7 +68,7 @@
   {
     "name": "Dusty Johnson",
     "email": "dusty.johnson@mail.house.gov",
-    "party": "Republican",
+    "party": "republican",
     "region": {
       "state": "South Dakota",
       "abbr": "SD",
@@ -79,7 +79,7 @@
   {
     "name": "Susie Lee",
     "email": "susie.lee@mail.house.gov",
-    "party": "Democrat",
+    "party": "democrat",
     "region": {
       "state": "Nevada",
       "abbr": "NV",
