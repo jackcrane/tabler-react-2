@@ -36,6 +36,12 @@ export const Input = loadable(() =>
 export const Modal = loadable(() =>
   import("tabler-react-2").then((mod) => mod.Modal)
 );
+export const ButtonedHookModal = loadable(() =>
+  import("./ButtonedHookModal").then((mod) => mod.ButtonedHookModal)
+);
+export const ConfirmModal = loadable(() =>
+  import("./ConfirmModal").then((mod) => mod.ConfirmModal)
+);
 export const Ribbon = loadable(() =>
   import("tabler-react-2").then((mod) => mod.Ribbon)
 );

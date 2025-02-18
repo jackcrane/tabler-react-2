@@ -18,6 +18,7 @@ import {
   Steps,
   Ribbon,
   Table,
+  useModal,
 } from "../../src/index";
 import { Col, Hr, Row } from "../../src/util";
 import {
@@ -40,7 +41,6 @@ import {
   Switch,
 } from "../../src/input";
 import { Router, Routes } from "react-router-dom";
-import { useModal } from "../../src/modal/modal";
 import { TablerProvider } from "../../src/provider/Tabler";
 const { H1, H2, H3, H4, Text, Strong, I, U, B, Special } = Typography;
 
@@ -72,12 +72,7 @@ const variants = [
 ];
 
 export default () => (
-  <TablerProvider
-    colorScheme="dark"
-    theme={{
-      primary: "#ff6600",
-    }}
-  >
+  <TablerProvider colorScheme="ligth">
     <div style={{ margin: 10 }}>
       <H1 style={{ fontSize: 48, lineHeight: "unset" }}>Tabler React 2</H1>
       <Col gap={1}>

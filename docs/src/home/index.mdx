@@ -1,23 +1,31 @@
 # Introduction
 
-Rocket Docs is a complete and awesome Gatsby Theme for documentation websites. We've
-developed it to be easy to use and customize. Forget about other
-things and focus on what matters: **writing docs.**
+Tabler React 2 is a React implementation of [Tabler](https://tabler.io) UI components, but is not an official project of Tabler. It is still a work in progress, but breaking changes are not to be expected.
 
-## Features
+## Installation
 
-- ⚛️ Ready for Gatsby v5;
-- 📝 MDX for docs;
-- 🛣 Yaml-based sidebar navigation;
-- 📱 Responsive and mobile friendly;
-- 🖥 Code highlighting with [prism-react-renderer](https://github.com/FormidableLabs/prism-react-renderer) and [react-live](https://github.com/FormidableLabs/react-live) support;
-- 🥇 SEO (Sitemap, schema.org data, Open Graph and Twitter tags).
-- 📈 Google Analytics support;
-- 📄 Custom docs schema;
-- 🖱 Table of Contents;
-- ⚡️ Offline Support & WebApp Manifest;
-- and much more 🔥
+To install Tabler React 2, you can use npm or yarn.
 
-<br />
+```bash
+npm install tabler-react-2 @tabler/icons-react
+```
 
-[Get started now!](/getting-started)
+```bash
+yarn add tabler-react-2 @tabler/icons-react
+```
+
+## Usage
+
+To use Tabler React 2, you need to wrap your application with the `TablerProvider` component. This component provides the necessary CSS and JavaScript files for Tabler React 2.
+
+```jsx
+import { TablerProvider } from "tabler-react-2";
+
+function App() {
+  return (
+    <TablerProvider>
+      <YourApp />
+    </TablerProvider>
+  );
+}
+```

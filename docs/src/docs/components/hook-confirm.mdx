@@ -1,0 +1,106 @@
+---
+title: Hook-driven confirm
+---
+
+import { ConfirmModal } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Hook-driven confirms are used to display content in a layer above the main content. They can be used to display forms, confirmations, or other types of content.
+
+The hook will provide a `confirm` function that returns a promise. The promise will resolve with the value of the button clicked, or `false` if the modal is closed without a button click. It will also return a `<ConfirmModal />` component that you need to render in your application.
+
+If the user clicks the cancel button, the promise will resolve with `false`, functionally the same as if the user clicked cancel.
+
+## Signature
+
+```jsx
+import { useConfirm } from "tabler-react-2";
+
+const { confirm, ConfirmModal } = useConfirm({
+  title: "Confirm Title",
+  text: "Text",
+  commitText: "Commit",
+  cancelText: "Cancel",
+});
+
+<ConfirmModal />
+<Button onClick={() => confirm()}>Open hook-driven confirm</Button>
+```
+
+### Props
+
+| Prop         | Required | Type           | Default | Description                           |
+| ------------ | -------- | -------------- | ------- | ------------------------------------- |
+| `title`      | No       | String         |         | The title of the modal.               |
+| `text`       | No       | String \| node |         | The text of the modal.                |
+| `commitText` | No       | String         |         | The text of the commit button.        |
+| `cancelText` | No       | String         |         | The text of the cancel button.        |
+| `modalProps` | No       | Object         |         | Additional props to pass to the modal |
+
+<blockquote>
+<p>
+
+**Tip**: If you need to use multiple hook driven confirms in a single scope or want to descriptively name the confirm variables you can re-assign the variable names in the deconstruction:
+
+```jsx
+const Home = () => {
+  const { confirm: signup, ConfirmModal: SignupPopup } = useConfirm({
+    title: "Confirm Title",
+    text: "Text",
+    commitText: "Commit",
+    cancelText: "Cancel",
+  });
+
+  return (
+    <>
+      <Button onClick={() => signup()}>Open hook-driven confirm</Button>
+      {SignupPopup}
+    </>
+  );
+};
+```
+
+</p>
+</blockquote>
+
+> **Note**: You don't need to use a `<Button />` component to open the confirm. The `confirm()` function is in scope and can be called directly or any other way you would typically call a function.
+
+## Basic Usage
+
+The `useConfirm` hook is used to display a confirm.
+
+<Excerpt>
+  <ConfirmModal
+    on={alert}
+    hookProps={{
+      title: "Confirm Title",
+      text: <kbd>A hook-driven confirm.</kbd>,
+      commitText: "Commit",
+      cancelText: "Cancel",
+    }}
+  />
+</Excerpt>
+
+For the basic usage, this shows the entire component, not just the implementation like usual. This is because of the extra implementation steps.
+
+```jsx title="./index.jsx"
+import { useConfirm, Button } from "tabler-react-2";
+
+const Home = () => {
+  const { confirm, ConfirmModal } = useConfirm({
+    title: "Confirm Title",
+    text: "Text",
+    commitText: "Commit",
+    cancelText: "Cancel",
+  });
+
+  return (
+    <>
+      <Button onClick={async () => alert(await confirm())}>
+        Open hook-driven confirm
+      </Button>
+      {ConfirmModal}
+    </>
+  );
+};
+```

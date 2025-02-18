@@ -1,0 +1,219 @@
+---
+title: Hook-driven modals
+---
+
+import { ButtonedHookModal } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Hook-driven modals are used to display content in a layer above the main content. They can be used to display forms, confirmations, or other types of content.
+
+The hook will provide a `modal` function that returns a promise. The promise will resolve with the value of the button clicked, or `false` if the modal is closed without a button click. It will also return a `<ModalElement />` component that you need to render in your application.
+
+## Signature
+
+```jsx
+import { useModal } from "tabler-react-2";
+
+const { modal, ModalElement } = useModal({
+  title: "Modal Title",
+  text: "Text",
+  buttons: []
+});
+
+<ModalElement />
+<Button onClick={() => modal()}>Open hook-driven modal</Button>
+```
+
+### Props
+
+| Prop         | Required | Type                      | Default | Description                           |
+| ------------ | -------- | ------------------------- | ------- | ------------------------------------- |
+| `title`      | No       | String                    |         | The title of the modal.               |
+| `text`       | No       | String \| node            |         | The text of the modal.                |
+| `buttons`    | No       | [ButtonList](#buttonlist) |         | An array of buttons to display        |
+| `modalProps` | No       | Object                    |         | Additional props to pass to the modal |
+
+<blockquote>
+<p>
+
+**Tip**: If you need to use multiple hook driven modals in a single scope or want to descriptively name the modal variables you can re-assign the variable names in the deconstruction:
+
+```jsx
+const Home = () => {
+  const { modal: signup, ModalElement: SignupPopup } = useModal({
+    title: "Modal Title",
+    text: "Text",
+    buttons: [],
+  });
+
+  return (
+    <>
+      <Button onClick={() => signup()}>Open hook-driven modal</Button>
+      {SignupPopup}
+    </>
+  );
+};
+```
+
+</p>
+</blockquote>
+
+> **Note**: You don't need to use a `<Button />` component to open the modal. The `modal()` function is in scope and can be called directly or any other way you would typically call a function.
+
+## Basic Usage
+
+The `useModal` hook is used to display a modal.
+
+<Excerpt>
+  <ButtonedHookModal
+    on={console.log}
+    hookProps={{
+      title: "Modal Title",
+      text: <kbd>A hook-driven modal.</kbd>,
+    }}
+  />
+</Excerpt>
+
+For the basic usage, this shows the entire component, not just the implementation like usual. This is because of the extra implementation steps.
+
+```jsx title="./index.jsx"
+import { useModal, Button } from "tabler-react-2";
+
+const Home = () => {
+  const { modal, ModalElement } = useModal({
+    title: "Modal Title",
+    text: "Text",
+  });
+
+  return (
+    <>
+      <Button onClick={() => modal()}>Open hook-driven modal</Button>
+      {ModalElement}
+    </>
+  );
+};
+
+export default Home;
+```
+
+## Buttons
+
+You can pass [`ButtonList`](#buttonlist) to the `buttons` prop to display buttons in the modal footer. When the button is clicked, the modal will close and the promise returned by the `modal` function will resolve with the value of the clicked button.
+
+<Excerpt f>
+  <ButtonedHookModal
+    on={(d) => alert(d)}
+    hookProps={{
+      title: "Modal Title",
+      text: <kbd>A hook-driven modal with buttons.</kbd>,
+      buttons: [
+        {
+          text: "Button 1",
+          variant: "danger",
+          value: "one",
+        },
+        {
+          text: "Button 2",
+          variant: "success",
+          value: "two",
+        },
+      ],
+    }}
+  />
+</Excerpt>
+
+```jsx
+const Home = () => {
+  const {} = useModal({
+    title: "Modal Title",
+    text: "Text",
+    buttons: [
+      {
+        text: "Button 1",
+        variant: "danger",
+        value: "one",
+      },
+      {
+        text: "Button 2",
+        variant: "success",
+        value: "two",
+      },
+    ],
+  });
+
+  return (
+    <>
+      <Button onClick={async () => alert(await modal())}>
+        Open hook-driven modal
+      </Button>
+      {ModalElement}
+    </>
+  );
+};
+```
+
+### ButtonList
+
+The `buttons` prop of the `useModal` hook accepts an array of objects.
+
+A `button` object has the following properties:
+
+| Prop      | Required | Type   | Default | Description                                     |
+| --------- | -------- | ------ | ------- | ----------------------------------------------- |
+| `text`    | Yes      | String |         | The text to display in the button.              |
+| `variant` | No       | String |         | The color variant of the button.                |
+| `value`   | No       | Any    |         | The value to return when the button is clicked. |
+
+```ts
+type ButtonList = Array<{
+  text: string;
+  variant?: string;
+  value?: any;
+}
+```
+
+## Overriding modal setup
+
+You can pass an object to the `modal()` function to override the default modal setup:
+
+<Excerpt f>
+  <ButtonedHookModal
+    on={(d) => alert(d)}
+    hookProps={{
+      title: "This not show up",
+      text: <kbd>A hook-driven modal with buttons.</kbd>,
+      buttons: [
+        {
+          text: "Button 1",
+          variant: "danger",
+          value: "one",
+        },
+        {
+          text: "Button 2",
+          variant: "success",
+          value: "two",
+        },
+      ],
+    }}
+    buttonOn={{ title: "This will though!" }}
+  />
+</Excerpt>
+
+```jsx
+const Home = () => {
+  const { modal, ModalElement } = useModal({
+    title: "This will not show up",
+    text: "Text",
+    buttons: [],
+  });
+
+  return (
+    <>
+      <Button onClick={() => modal({ title: "This will though!" })}>
+        Open hook-driven modal
+      </Button>
+      {ModalElement}
+    </>
+  );
+};
+```
