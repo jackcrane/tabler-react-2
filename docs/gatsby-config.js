@@ -32,7 +32,7 @@ module.exports = {
         start_url: `/getting-started`,
         background_color: `#ffffff`,
         display: `standalone`,
-        icon: `https://tabler.io/favicon.ico`,
+        icon: `/favicon.png`,
       },
     },
     `gatsby-plugin-sitemap`,
