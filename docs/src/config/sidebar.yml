@@ -36,6 +36,10 @@
       link: "/components/ribbons"
     - label: "Spinners"
       link: "/components/spinners"
+    - label: "Steps"
+      link: "/components/steps"
+    - label: "Tables"
+      link: "/components/tables"
 - label: "Utilities"
   items:
     - label: "Colors"

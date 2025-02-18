@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 
 export const Steps = ({
   steps,
-  color,
+  color: passedColor,
+  variant: passedVariant,
   numbered = false,
   hideText = false,
   vertical = false,
 }) => {
+  const color = passedColor || passedVariant;
   const stepClass = `steps ${color ? `steps-${color}` : ""} ${
     numbered ? "steps-counter" : ""
   } ${vertical ? "steps-vertical" : ""}`;

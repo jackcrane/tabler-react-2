@@ -1,0 +1,90 @@
+[
+  {
+    "name": "Ed Case",
+    "email": "ed.case@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Hawaii",
+      "abbr": "HI",
+      "district": "1st"
+    },
+    "website": "https://case.house.gov"
+  },
+  {
+    "name": "Mike Carey",
+    "email": "mike.carey@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Ohio",
+      "abbr": "OH",
+      "district": "15th"
+    },
+    "website": "https://carey.house.gov"
+  },
+  {
+    "name": "Andrew Clyde",
+    "email": "andrew.clyde@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Georgia",
+      "abbr": "GA",
+      "district": "9th"
+    },
+    "website": "https://clyde.house.gov"
+  },
+  {
+    "name": "Angie Craig",
+    "email": "angie.craig@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Minnesota",
+      "abbr": "MN",
+      "district": "2nd"
+    },
+    "website": "https://craig.house.gov"
+  },
+  {
+    "name": "Rick Crawford",
+    "email": "rick.crawford@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Arkansas",
+      "abbr": "AR",
+      "district": "1st"
+    },
+    "website": "https://crawford.house.gov"
+  },
+  {
+    "name": "Jared Golden",
+    "email": "jared.golden@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Maine",
+      "abbr": "ME",
+      "district": "2nd"
+    },
+    "website": "https://golden.house.gov"
+  },
+  {
+    "name": "Dusty Johnson",
+    "email": "dusty.johnson@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "South Dakota",
+      "abbr": "SD",
+      "district": "At-Large"
+    },
+    "website": "https://dustyjohnson.house.gov"
+  },
+  {
+    "name": "Susie Lee",
+    "email": "susie.lee@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Nevada",
+      "abbr": "NV",
+      "district": "3rd"
+    },
+    "website": "https://susielee.house.gov"
+  }
+]

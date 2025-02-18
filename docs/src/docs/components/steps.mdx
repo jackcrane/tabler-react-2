@@ -1,0 +1,221 @@
+---
+title: Steps
+---
+
+import { Steps } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+
+Steps are used to display a series of steps to communicate a process or workflow.
+
+## Signature
+
+```jsx
+import { Steps } from "tabler-react-2";
+
+<Steps {...props} />;
+```
+
+### Props
+
+| Prop       | Required | Type                       | Default | Description                               |
+| ---------- | -------- | -------------------------- | ------- | ----------------------------------------- |
+| `steps`    | Yes      | [`StepList`](#steplist)    |         | An array of step objects.                 |
+| `variant`  | No       | [Color](/utilities/colors) |         | The color of the steps.                   |
+| `color`    | No       | [Color](/utilities/colors) |         | The color of the steps. Alias of variant  |
+| `numbered` | No       | Boolean                    | false   | Whether to display the steps as numbered. |
+| `hideText` | No       | Boolean                    | false   | Whether to hide the text of the steps.    |
+| `vertical` | No       | Boolean                    | false   | Whether to display the steps vertically.  |
+
+## Basic Usage
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+    />
+  </div>
+</Excerpt>
+
+{/* prettier-ignore */}
+```jsx
+<Steps steps={[
+  { text: "Step 1" },
+  { text: "Step 2" },
+  { text: "Step 3" }
+]} />
+```
+
+### StepList
+
+The `steps` prop is an array of step objects. Each step object can have the following properties:
+
+| Prop      | Required | Type     | Description                           |
+| --------- | -------- | -------- | ------------------------------------- |
+| `text`    | true     | String   | The text to display inside the step.  |
+| `tooltip` | false    | String   | The tooltip description for the step. |
+| `active`  | false    | Bool     | Whether the step is active.           |
+| `href`    | false    | String   | The href of the step.                 |
+| `onClick` | false    | Function | The onClick function of the step.     |
+
+## Links & Clickable Steps
+
+You can use the `href` or `onClick` props to make steps links or clickable.
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      steps={[
+        { text: "Step 1", href: "#" },
+        { text: "Step 2", href: "#" },
+        {
+          text: "Step 3",
+          onClick: () => alert("You clicked on step 3!"),
+        },
+      ]}
+    />
+  </div>
+</Excerpt>
+
+{/* prettier-ignore */}
+```jsx
+<Steps steps={[
+  { text: "Step 1", href: "#" },
+  { text: "Step 2", href: "#" },
+  { text: "Step 3", onClick: () => alert("You clicked on step 3!") }
+]} />
+```
+
+## Progress
+
+You can set an `active` attribute on a step. Steps after the `active` step will be greyed out, and the `active` step will be bold.
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      steps={[
+        { text: "Step 1" },
+        { text: "Step 2", active: true },
+        { text: "Step 3" },
+      ]}
+    />
+  </div>
+</Excerpt>
+
+```jsx
+<Steps
+  steps={[
+    { text: "Step 1" },
+    { text: "Step 2", active: true },
+    { text: "Step 3" },
+  ]}
+/>
+```
+
+## Colors & Variants
+
+Steps can be colored using [Bold Colors](/utilities/color#bold-colors). Semantic, light, and brand colors do not work.
+
+<Excerpt f>
+  {[
+    "blue",
+    "azure",
+    "indigo",
+    "purple",
+    "pink",
+    "red",
+    "orange",
+    "yellow",
+    "lime",
+    "green",
+    "teal",
+    "cyan",
+  ].map((variant) => (
+    <div style={{ width: 350 }}>
+      <Steps
+        color={variant}
+        steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+      />
+    </div>
+  ))}
+</Excerpt>
+
+```jsx
+<Steps
+  color="blue"
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+<Steps
+  color="yellow"
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+```
+
+## Numbered Steps
+
+You can include a number in the circle on the timeline of the steps by passing the `numbered` prop
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      numbered
+      steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+    />
+  </div>
+</Excerpt>
+
+```jsx highlight={2}
+<Steps
+  numbered
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+```
+
+## Vertical Steps
+
+You can change the direction.
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      vertical
+      steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+    />
+  </div>
+</Excerpt>
+
+```jsx highlight={2}
+<Steps
+  vertical
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+```
+
+## Hide Text
+
+You can hide the text on each step with the `hideText` attribute.
+
+<Excerpt>
+  <div style={{ width: 350 }}>
+    <Steps
+      hideText
+      steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+    />
+    <Steps
+      hideText
+      numbered
+      steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+    />
+  </div>
+</Excerpt>
+
+```jsx highlight={2,6}
+<Steps
+  hideText
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+<Steps
+  hideText
+  numbered
+  steps={[{ text: "Step 1" }, { text: "Step 2" }, { text: "Step 3" }]}
+/>
+```

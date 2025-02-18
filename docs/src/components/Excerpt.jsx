@@ -9,7 +9,7 @@ const _Excerpt = styled.div`
   background-size: 20px 20px;
   background-position: -19px -19px;
   border: 1.5px solid #e4e4e4;
-  border-radius: 8px;
+  border-radius: 5px;
   min-height: 100px;
   width: 100%;
   padding: 16px;
@@ -18,6 +18,7 @@ const _Excerpt = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  overflow: auto;
 `;
 
 export const Excerpt = ({ children, f }) => {

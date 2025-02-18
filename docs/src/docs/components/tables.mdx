@@ -1,0 +1,454 @@
+---
+title: Tables
+---
+
+import { Table } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { IconMail } from "@tabler/icons-react";
+import congressPeople from "../../data/congressPeople.json";
+
+Tables are used to display tabular data. They can be used to display data in a table, list, or any other tabular data.
+
+## Signature
+
+```jsx
+import { Table } from "tabler-react-2";
+
+<Table {...props} />;
+```
+
+### Props
+
+| Prop      | Required | Type                | Default | Description                 |
+| --------- | -------- | ------------------- | ------- | --------------------------- |
+| `columns` | Yes      | [`Column`](#column) |         | An array of column objects. |
+| `data`    | Yes      | Array               |         | An array of data objects.   |
+
+<blockquote>
+<p>
+
+<details>
+<summary>For all of the tables on this page, we will use this list of congress people. (click to expand)</summary>
+
+```json
+[
+  {
+    "name": "Ed Case",
+    "email": "ed.case@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Hawaii",
+      "abbr": "HI",
+      "district": "1st"
+    },
+    "website": "https://case.house.gov"
+  },
+  {
+    "name": "Mike Carey",
+    "email": "mike.carey@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Ohio",
+      "abbr": "OH",
+      "district": "15th"
+    },
+    "website": "https://carey.house.gov"
+  },
+  {
+    "name": "Andrew Clyde",
+    "email": "andrew.clyde@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Georgia",
+      "abbr": "GA",
+      "district": "9th"
+    },
+    "website": "https://clyde.house.gov"
+  },
+  {
+    "name": "Angie Craig",
+    "email": "angie.craig@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Minnesota",
+      "abbr": "MN",
+      "district": "2nd"
+    },
+    "website": "https://craig.house.gov"
+  },
+  {
+    "name": "Rick Crawford",
+    "email": "rick.crawford@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "Arkansas",
+      "abbr": "AR",
+      "district": "1st"
+    },
+    "website": "https://crawford.house.gov"
+  },
+  {
+    "name": "Jared Golden",
+    "email": "jared.golden@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Maine",
+      "abbr": "ME",
+      "district": "2nd"
+    },
+    "website": "https://golden.house.gov"
+  },
+  {
+    "name": "Dusty Johnson",
+    "email": "dusty.johnson@mail.house.gov",
+    "party": "Republican",
+    "region": {
+      "state": "South Dakota",
+      "abbr": "SD",
+      "district": "At-Large"
+    },
+    "website": "https://dustyjohnson.house.gov"
+  },
+  {
+    "name": "Susie Lee",
+    "email": "susie.lee@mail.house.gov",
+    "party": "Democrat",
+    "region": {
+      "state": "Nevada",
+      "abbr": "NV",
+      "district": "3rd"
+    },
+    "website": "https://susielee.house.gov"
+  }
+]
+```
+
+</details>
+
+</p>
+</blockquote>
+
+## Basic Usage
+
+The `Table` component is used to display tabular data. It takes an array of objects as a prop called `columns`. Each object in the array represents a column in the table. The object should have a `label` property that is the text to display in the column header, and a `accessor` property that is the key of the object to use for the data in that column.
+
+The `Table` component also takes a `data` prop that is an array of objects. Each object in the array represents a row in the table. The object should have a key for each column in the `columns` array.
+
+<Excerpt>
+  <Table
+    columns={[
+      { label: "Name", accessor: "name", sortable: true },
+      {
+        label: "Party",
+        accessor: "party",
+        render: (party) => (<><img src={`/${party}.png`} style={{width: 25}} /> {party}</>)
+      },
+      {
+        label: "State",
+        accessor: "region.state"
+      },
+      {
+        label: "District",
+        accessor: "region.district",
+        render: (district, row) => (
+          <>
+          <span className="text-secondary">{ row.region.abbr }</span> {district}
+          </>
+        ),
+          },
+      {
+        label: "Email",
+        accessor: "email",
+        className: "text-secondary",
+        render: (email) => (
+          <a href={`mailto:${email}`} className="text-reset">
+            <IconMail strokeWidth={1.5} />
+          </a>
+        ),
+      },
+    ]}
+    data={congressPeople}
+/>
+
+</Excerpt>
+
+```jsx
+import congressPeople from "./congressPeople.json";
+
+<Table
+  columns={[
+    { label: "Name", accessor: "name", sortable: true },
+    {
+      label: "Party",
+      accessor: "party",
+      render: (party) => (
+        <>
+          <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+        </>
+      ),
+    },
+    {
+      label: "State",
+      accessor: "region.state",
+    },
+    {
+      label: "District",
+      accessor: "region.district",
+      render: (district, row) => (
+        <>
+          <span className="text-secondary">{row.region.abbr}</span> {district}
+        </>
+      ),
+    },
+    {
+      label: "Email",
+      accessor: "email",
+      className: "text-secondary",
+      render: (email) => (
+        <a href={`mailto:${email}`} className="text-reset">
+          <IconMail strokeWidth={1.5} />
+        </a>
+      ),
+    },
+  ]}
+  data={congressPeople}
+/>;
+```
+
+## Constructing the `columns` array
+
+The `columns` prop is an array of objects. Each object represents a column in the table. It has the following properties:
+
+| Prop        | Required | Type     | Default | Description                                               |
+| ----------- | -------- | -------- | ------- | --------------------------------------------------------- |
+| `label`     | Yes      | String   |         | The text to display in the column header.                 |
+| `accessor`  | Yes      | String   |         | The key of the object to use for the data in that column. |
+| `className` | No       | String   |         | Additional CSS classes to apply to the column.            |
+| `render`    | No       | Function |         | Custom render function for the cell content.              |
+| `sortable`  | No       | Boolean  | false   | Whether the column is sortable.                           |
+| `sortFn`    | No       | Function |         | Custom sorting function.                                  |
+
+### accessor
+
+The `accessor` prop is the key of the object to use for the data in that column. It is a string that corresponds to the key of the object in the `data` array. It supports nested keys using dot notation.
+
+Use the `accessor` prop to render simple text in your table. If you need any customization, use the `render` prop as well as `accessor`.
+
+Setting the `accessor` prop to the string 'name' will return the values
+
+<Excerpt>
+  <Table
+    columns={[{ label: "Name", accessor: "name" }]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx
+<Table columns={[{ label: "Name", accessor: "name" }]} data={congressPeople} />
+```
+
+You can access the nested keys of (in this case) the `region` object by using dot notation. For example, setting the `accessor` prop to `region.district` will return the values
+
+<Excerpt>
+  <Table
+    columns={[{ label: "District", accessor: "region.district" }]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx
+<Table
+  columns={[{ label: "District", accessor: "region.district" }]}
+  data={congressPeople}
+/>
+```
+
+To access other keys in the object (combining multiple keys in a single cell), you cannot use the accessor. Still provide something to the `accessor` prop so there is not an error, but use the `render` prop to display the content.
+
+### render
+
+The `render` prop is an optional function that will be called with the value of the cell and the row object.
+
+It has the following signature:
+
+```ts
+render(value: any, row: object): React.ReactNode;
+```
+
+Where value is the value provided by the `accessor` and `row` is the entire row.
+
+So, to render the congress person's party with the symbol, (assuming [`/democrat.png`](/democrat.png) and [`/republican.png`](/republican.png) exist), you can use the `render` prop to display the party.
+
+<Excerpt>
+  <Table
+    columns={[
+      {
+        label: "Person's Party",
+        accessor: "party",
+        render: (party) => (
+          <>
+            <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+          </>
+        ),
+      },
+    ]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx
+<Table
+  columns={[
+    {
+      label: "Person's Party",
+      accessor: "party",
+      render: (partyFromAccessor) => (
+        <>
+          <img src={`/${partyFromAccessor}.png`} style={{ width: 25 }} />
+          {partyFromAccessor}
+        </>
+      ),
+    },
+  ]}
+  data={congressPeople}
+/>
+```
+
+To include other values from the row in the cell, you can use the second argument passed to the `render` function. In this case, we will leave the accessor the same, so the first argument will be either `"democrat"` or `"republican"`. The second argument is the entire row object that we will pull the `region.state` value from.
+
+<Excerpt>
+  <Table
+    columns={[
+      {
+        label: "Person's Party",
+        accessor: "party",
+        render: (party, row) => (
+          <>
+            {party} ({row.region.state})
+          </>
+        ),
+      },
+    ]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx
+<Table
+  columns={[
+    {
+      label: "Person's Party",
+      accessor: "party",
+      render: (party, row) => (
+        <>
+          {party} ({row.region.state})
+        </>
+      ),
+    },
+  ]}
+  data={congressPeople}
+/>
+```
+
+### sortable
+
+The `sortable` prop is an optional boolean that determines whether the column is sortable. If it is set to `true`, the column will be sortable. The default value is `false`. It will sort based on the value of the column's accessor.
+
+<Excerpt>
+  <Table
+    columns={[
+      {
+        label: "Name",
+        accessor: "name",
+      },
+      {
+        label: "Party",
+        accessor: "party",
+        render: (party) => (
+          <>
+            <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+          </>
+        ),
+        sortable: true,
+      },
+      {
+        label: "State",
+        accessor: "region.state",
+        sortable: true,
+      },
+    ]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx highlight={11,16}
+<Table
+  columns={[
+    {
+      label: "Name",
+      accessor: "name",
+    },
+    {
+      label: "Party",
+      accessor: "party",
+      render: ...,
+      sortable: true,
+    },
+    {
+      label: "State",
+      accessor: "region.state",
+      sortable: true,
+    },
+  ]}
+  data={congressPeople}
+/>
+```
+
+You can also pass a custom sorting function to the `sortFn` prop. The sorting function should take two arguments and return `-1`, `0`, or `1`. The first argument is the value of the first cell, and the second argument is the value of the second cell.
+
+The default sorting function is
+
+```js title="Default sorting function"
+const defaultSortFn = (a, b) => {
+  if (a === b) return 0;
+  return a > b ? 1 : -1;
+};
+```
+
+If, for some reason, you wanted to sort by the length of the name, you could do the following:
+
+<Excerpt>
+  <Table
+    columns={[
+      {
+        label: "Name",
+        accessor: "name",
+        sortFn: (a, b) => {
+          if (a.length === b.length) return 0;
+          return a.length > b.length ? 1 : -1;
+        },
+        sortable: true,
+      },
+    ]}
+    data={congressPeople.slice(0, 4)}
+  />
+</Excerpt>
+
+```jsx
+const customSortFn = (a, b) => {
+  if (a.length === b.length) return 0;
+  return a.length > b.length ? 1 : -1;
+};
+
+<Table
+  columns={[
+    {
+      label: "Name",
+      accessor: "name",
+      sortFn: customSortFn,
+      sortable: true,
+    },
+  ]}
+  data={congressPeople}
+/>;
+```
