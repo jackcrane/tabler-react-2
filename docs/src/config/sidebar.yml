@@ -46,13 +46,3 @@
       link: "/utilities/colors"
     - label: "Margins"
       link: "/utilities/margins"
-- label: "More"
-  items:
-    - label: "To do list"
-      link: "/todo"
-# - label: More
-#   items:
-#     - label: FAQ
-#       link: /faq
-#     - label: "Github"
-#       link: https://github.com/jpedroschmitz/rocketdocs

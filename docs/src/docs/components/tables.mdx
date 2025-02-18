@@ -452,3 +452,5 @@ const customSortFn = (a, b) => {
   data={congressPeople}
 />;
 ```
+
+> **Note**: Sorting only works for the data in the table. If, for example, you have thousands of rows and are only rendering a few, you will need to handle the sorting yourself, outside of the table. Incorporating internal pagination that supports sorting is a planned feature but not yet implemented.
