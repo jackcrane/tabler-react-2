@@ -32,3 +32,15 @@ function App() {
   );
 }
 ```
+
+<blockquote>
+<p>
+
+**Note:** If you are using the `react-router-dom` library, you will need to set the `fallbackAnchor` prop to `false` in the `TablerProvider` component. This way, links will use the `Link` component from `react-router-dom` instead of the default anchor tag.
+
+```jsx
+<TablerProvider fallbackAnchor={false}>...</TablerProvider>
+```
+
+</p>
+</blockquote>

@@ -13,6 +13,7 @@ export const TablerProvider = ({
   children,
   colorScheme = "light",
   theme: themeColors = {},
+  fallbackAnchor = true,
 }) => {
   useEffect(() => {
     const script1 = document.createElement("script");
@@ -26,7 +27,7 @@ export const TablerProvider = ({
       "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css";
 
     const script2 = document.createElement("script");
-    script2.textContent = "window.USE_FALLBACK_ANCHOR = true;";
+    script2.textContent = `window.USE_FALLBACK_ANCHOR = ${fallbackAnchor};`;
 
     document.head.appendChild(link);
     document.head.appendChild(script1);

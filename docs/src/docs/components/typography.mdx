@@ -101,12 +101,10 @@ import { Typography } from "tabler-react-2";
 <blockquote>
 <p>
 
-It will default to a `Link` component from the `react-router-dom` library, but you can make it use an `a` tag by setting `window.USE_FALLBACK_ANCHOR` to `true`.
+It will default to an `a` tag, but you can make it use a `Link` component from the `react-router-dom` library by setting `fallbackAnchor` to `false` in your `TablerProvider` component.
 
-```html
-<script>
-  window.USE_FALLBACK_ANCHOR = true;
-</script>
+```jsx
+<TablerProvider fallbackAnchor={false}>...</TablerProvider>
 ```
 
 </p>
