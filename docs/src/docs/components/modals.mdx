@@ -113,13 +113,13 @@ You can pass [`ButtonList`](#buttonlist) to the `buttons` prop to display button
         text: "Button 1",
         variant: "danger",
         attrs: { outline: true },
-        onClick: () => alert("Clicked button 1"),
+        onClick: () => window && window.alert("Clicked button 1"),
       },
       {
         text: "Button 2",
         variant: "success",
         attrs: { outline: true },
-        onClick: () => alert("Clicked button 2"),
+        onClick: () => window && window.alert("Clicked button 2"),
       },
     ]}
   >

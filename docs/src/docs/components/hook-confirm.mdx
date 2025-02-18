@@ -71,7 +71,7 @@ The `useConfirm` hook is used to display a confirm.
 
 <Excerpt>
   <ConfirmModal
-    on={alert}
+    on={(d) => window && window.alert(d)}
     hookProps={{
       title: "Confirm Title",
       text: <kbd>A hook-driven confirm.</kbd>,
