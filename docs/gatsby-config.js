@@ -32,7 +32,7 @@ module.exports = {
         start_url: `/getting-started`,
         background_color: `#ffffff`,
         display: `standalone`,
-        icon: `/favicon.png`,
+        icon: `static/favicon.png`,
       },
     },
     `gatsby-plugin-sitemap`,
