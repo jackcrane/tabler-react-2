@@ -141,7 +141,7 @@ The `Table` component also takes a `data` prop that is an array of objects. Each
       {
         label: "Party",
         accessor: "party",
-        render: (party) => (<><img src={`/${party}.png`} style={{width: 25}} /> {party}</>)
+        render: (party) => (<><img src={`/${party.toLowerCase()}.png`} style={{width: 25}} /> {party}</>)
       },
       {
         label: "State",
@@ -183,7 +183,8 @@ import congressPeople from "./congressPeople.json";
       accessor: "party",
       render: (party) => (
         <>
-          <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+          <img src={`/${party.toLowerCase()}.png`} style={{ width: 25 }} />{" "}
+          {party}
         </>
       ),
     },
@@ -287,7 +288,8 @@ So, to render the congress person's party with the symbol, (assuming [`/democrat
         accessor: "party",
         render: (party) => (
           <>
-            <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+            <img src={`/${party.toLowerCase()}.png`} style={{ width: 25 }} />{" "}
+            {party}
           </>
         ),
       },
@@ -366,7 +368,8 @@ The `sortable` prop is an optional boolean that determines whether the column is
         accessor: "party",
         render: (party) => (
           <>
-            <img src={`/${party}.png`} style={{ width: 25 }} /> {party}
+            <img src={`/${party.toLowerCase()}.png`} style={{ width: 25 }} />{" "}
+            {party}
           </>
         ),
         sortable: true,
