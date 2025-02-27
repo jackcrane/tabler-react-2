@@ -673,21 +673,21 @@ const _Table = () => {
 const _Timeline = () => {
   const events = [
     {
-      icon: IconBrandTwitter,
+      icon: <IconBrandTwitter />,
       iconBgColor: "twitter",
       time: "10 hrs ago",
       title: "+1150 Followers",
       description: "You’re getting more and more followers, keep it up!",
     },
     {
-      icon: IconShoppingCart,
+      icon: <IconShoppingCart />,
       iconBgColor: "red",
       time: "2 hrs ago",
       title: "+3 New Products were added!",
       description: "Congratulations!",
     },
     {
-      icon: IconFileDownload,
+      icon: <IconFileDownload />,
       time: "1 day ago",
       title: "Database backup completed!",
       description: "Download the latest backup.",

@@ -2,6 +2,21 @@ import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
 
+const i = (Icon) => {
+  return typeof Icon === "function" ? <Icon /> : Icon;
+
+  const isComponent = typeof Icon === "function" || React.isValidElement(Icon);
+
+  console.log(
+    isComponent,
+    typeof Icon === "function",
+    React.isValidElement(Icon),
+    Icon
+  );
+
+  return <>{isComponent ? <Icon /> : Icon}</>;
+};
+
 export const Timeline = ({ events, dense }) => {
   return (
     <ul className="timeline">
@@ -18,7 +33,7 @@ export const Timeline = ({ events, dense }) => {
               event.iconBgColor && `bg-${event.iconBgColor}-lt`
             } ${event.iconBgClass || ""}`}
           >
-            {event.icon && <event.icon />}
+            {event.icon && i(event.icon)}
           </div>
           <div className={`card timeline-event-card ${dense && "card-sm"}`}>
             <div className="card-body">

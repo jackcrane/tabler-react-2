@@ -1,0 +1,158 @@
+---
+title: Timeline
+---
+
+import { Timeline } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import {
+  IconBrandTwitter,
+  IconCheck,
+  IconMessage,
+  IconUser,
+} from "@tabler/icons-react";
+
+Timeline is a component that displays a list of events. Used to communicate a series of related events, usually in a chronological order.
+
+## Signature
+
+```jsx
+import { Timeline } from "tabler-react-2";
+
+<Timeline {...props} />;
+```
+
+### Props
+
+| Prop     | Required | Type                      | Default | Description                 |
+| -------- | -------- | ------------------------- | ------- | --------------------------- |
+| `events` | Yes      | [`EventList`](#eventlist) |         | A list of events to display |
+| `dense`  | No       | `boolean`                 | `false` | Dense mode                  |
+
+### EventList
+
+The `events` prop is an array of objects that define the events to display. Each event object must contain the following properties:
+
+| Prop           | Required | Type     | Default | Description                                                                                                                                     |
+| -------------- | -------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `icon`         | Yes      | `node`   |         | The icon to display for the event. This can be any React node, but it is recommended to use an SVG icon from the `@tabler/icons-react` package. |
+| `iconBgClass`  | No       | `string` |         | Optional background color class for the icon.                                                                                                   |
+| `time`         | Yes      | `string` |         | The time of the event (e.g., "10 hrs ago").                                                                                                     |
+| `title`        | Yes      | `string` |         | The title of the event (e.g., "+1150 Followers").                                                                                               |
+| `description`  | Yes      | `string` |         | The description of the event.                                                                                                                   |
+| `extraContent` | No       | `node`   |         | Optional extra content (e.g., images, avatars, etc.).                                                                                           |
+
+## Basic Usage
+
+<Excerpt>
+  <div style={{ width: 400 }}>
+    <Timeline
+      events={[
+        {
+          icon: <IconCheck />,
+          time: "10 hrs ago",
+          title: "+1150 Followers",
+          description: "Joined the community",
+        },
+        {
+          icon: <IconMessage />,
+          time: "1 hr ago",
+          title: "New message",
+          description: "You have 1 new message",
+        },
+        {
+          icon: <IconUser />,
+          time: "1 hr ago",
+          title: "New user",
+          description: "You have 1 new user",
+        },
+      ]}
+    />
+  </div>
+</Excerpt>
+
+```jsx
+<Timeline
+  events={[
+    {
+      icon: <IconCheck />,
+      time: "10 hrs ago",
+      title: "+1150 Followers",
+      description: "Joined the community",
+    },
+    {
+      icon: <IconMessage />,
+      time: "1 hr ago",
+      title: "New message",
+      description: "You have 1 new message",
+    },
+    {
+      icon: <IconUser />,
+      time: "1 hr ago",
+      title: "New user",
+      description: "You have 1 new user",
+    },
+  ]}
+/>
+```
+
+## Colors
+
+You can set the color of the icon using the `iconBgColor` prop to any of the [colors](/utilities/colors).
+
+<Excerpt>
+  <div style={{ width: 400 }}>
+    <Timeline
+      dense
+      events={[
+        {
+          icon: <IconBrandTwitter />,
+          time: "10 hrs ago",
+          title: "+1150 Followers",
+          description: "New Twitter followers",
+          iconBgColor: "twitter",
+        },
+        {
+          icon: <IconMessage />,
+          time: "1 hr ago",
+          title: "New message",
+          description: "You have 1 new message",
+          iconBgColor: "red",
+        },
+        {
+          icon: <IconUser />,
+          time: "1 hr ago",
+          title: "New user",
+          description: "You have 1 new user",
+        },
+      ]}
+    />
+  </div>
+</Excerpt>
+
+```jsx
+<Timeline
+  dense
+  events={[
+    {
+      icon: <IconBrandTwitter />,
+      time: "10 hrs ago",
+      title: "+1150 Followers",
+      description: "New Twitter followers",
+      iconBgColor: "twitter",
+    },
+    {
+      icon: <IconMessage />,
+      time: "1 hr ago",
+      title: "New message",
+      description: "You have 1 new message",
+      iconBgColor: "red",
+    },
+    {
+      icon: <IconUser />,
+      time: "1 hr ago",
+      title: "New user",
+      description: "You have 1 new user",
+    },
+  ]}
+/>
+```
