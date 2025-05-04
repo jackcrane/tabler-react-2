@@ -15,3 +15,4 @@ export * from "./steps/index";
 export * from "./table/index";
 export * from "./timeline/index";
 export * from "./input/index";
+export * from "./navbar/index";

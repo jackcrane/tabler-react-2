@@ -162,3 +162,9 @@ export const Typography = {
 export const TablerProvider = loadable(() =>
   import("tabler-react-2").then((mod) => mod.TablerProvider)
 );
+export const Navbar = loadable(() =>
+  import("tabler-react-2").then((mod) => {
+    console.log(mod);
+    return mod.Navbar;
+  })
+);

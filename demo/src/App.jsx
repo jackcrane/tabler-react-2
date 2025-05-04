@@ -826,7 +826,7 @@ const _Input = () => {
           values={[
             { id: 1, label: "One" },
             { id: 2, label: "Two" },
-            { id: 3, label: "Three" },
+            { id: 3, label: <b style={{ color: "red" }}>Three</b> },
           ]}
           onChange={setDropdownValue}
           value={dropdownValue}

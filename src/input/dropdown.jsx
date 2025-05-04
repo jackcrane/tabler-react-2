@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import PropTypes from "prop-types";
 import { Input } from "../index";
 import { Button } from "../index";
@@ -23,6 +23,17 @@ export const DropdownInput = ({
 }) => {
   // Allow aliasing: pass either `values` or `items`
   const values = ivalues || items || [];
+
+  // Helper: extract text from label or dropdownText for filtering
+  const getLabelText = (val) => {
+    const node = val.dropdownText ?? val.label;
+    if (typeof node === "string" || typeof node === "number")
+      return String(node);
+    const children = Children.toArray(node);
+    return children
+      .map((child) => (typeof child === "string" ? child : ""))
+      .join("");
+  };
 
   // When loading, show a Button in a container with an optional label.
   if (loading) {
@@ -63,20 +74,18 @@ export const DropdownInput = ({
     setSelectedValue(matchedValue);
   }, [value, values]);
 
-  // Filter values based on the search query.
+  // Filter values based on the search query using getLabelText
   useEffect(() => {
     setFilteredValues(
       values.filter((val) =>
-        JSON.stringify(val).toLowerCase().includes(searchQuery.toLowerCase())
+        getLabelText(val).toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [searchQuery, values]);
 
   const handleSelection = (val) => {
     setSelectedValue(val);
-    if (onChange) {
-      onChange(val);
-    }
+    if (onChange) onChange(val);
   };
 
   // The main dropdown markup.
@@ -111,7 +120,7 @@ export const DropdownInput = ({
             onClick={() => handleSelection(val)}
             style={{ cursor: "pointer" }}
           >
-            {val.dropdownText || val.label}
+            {val.dropdownText ?? val.label}
           </a>
         ))}
         {filteredValues.length === 0 && (

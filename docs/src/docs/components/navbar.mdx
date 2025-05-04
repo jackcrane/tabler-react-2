@@ -1,0 +1,267 @@
+---
+title: Navbar
+---
+
+import { Navbar } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import {
+  IconBrandTwitter,
+  IconCheck,
+  IconMessage,
+  IconUser,
+} from "@tabler/icons-react";
+
+Navbars are used to display navigation links. They can be used to display a list of links, or a list of dropdowns.
+
+## Signature
+
+```jsx
+import { Navbar } from "tabler-react-2";
+
+<Navbar {...props} />;
+```
+
+### Props
+
+## Basic Usage
+
+The `Navbar` component is used to display a navbar.
+
+<Excerpt>
+  <Navbar
+    items={[
+      {
+        type: "link",
+        href: "#",
+        text: "Link 1",
+      },
+      { type: "link", href: "#", text: "Link 2", disabled: true },
+      {
+        type: "dropdown",
+        text: "Drop 1",
+        items: [
+          {
+            type: "link",
+            href: "#",
+            text: "Link 1",
+          },
+          {
+            type: "link",
+            href: "#",
+            text: "Link 2",
+          },
+        ],
+      },
+    ]}
+  />
+</Excerpt>
+
+```jsx
+<Navbar
+  items={[
+    {
+      type: "link",
+      href: "#",
+      text: "Link 1",
+    },
+    {
+      type: "link",
+      href: "#",
+      text: "Link 2",
+      disabled: true,
+    },
+    {
+      type: "dropdown",
+      text: "Drop 1",
+      items: [
+        {
+          type: "link",
+          href: "#",
+          text: "Link 1",
+        },
+        {
+          type: "link",
+          href: "#",
+          text: "Link 2",
+        },
+      ],
+    },
+  ]}
+/>
+```
+
+## Tabs
+
+Setting the `type` prop to `tabs` will display the navbar as tabs.
+
+<Excerpt>
+  <Navbar
+    type="tabs"
+    items={[
+      {
+        type: "link",
+        href: "#",
+        text: "Link 1",
+      },
+      {
+        type: "link",
+        href: "#",
+        text: "Link 2",
+      },
+      {
+        type: "link",
+        disabled: true,
+        href: "#",
+        text: "Disabled",
+      },
+    ]}
+  />
+</Excerpt>
+
+```jsx
+<Navbar
+  type="tabs"
+  items={[
+    {
+      type: "link",
+      href: "#",
+      text: "Link 1",
+    },
+    {
+      type: "link",
+      href: "#",
+      text: "Link 2",
+    },
+    {
+      type: "link",
+      disabled: true,
+      href: "#",
+      text: "Disabled",
+    },
+  ]}
+/>
+```
+
+## Pills
+
+Setting the `type` prop to `pills` will display the navbar as pills.
+
+<Excerpt>
+  <Navbar
+    type="pills"
+    items={[
+      {
+        type: "link",
+        href: "#",
+        text: "Link 1",
+      },
+      {
+        type: "link",
+        href: "#",
+        text: "Link 2",
+      },
+      {
+        type: "link",
+        disabled: true,
+        href: "#",
+        text: "Disabled",
+      },
+    ]}
+  />
+</Excerpt>
+
+```jsx
+<Navbar
+  type="pills"
+  items={[
+    {
+      type: "link",
+      href: "#",
+      text: "Link 1",
+    },
+    {
+      type: "link",
+      href: "#",
+      text: "Link 2",
+    },
+    {
+      type: "link",
+      disabled: true,
+      href: "#",
+      text: "Disabled",
+    },
+  ]}
+/>
+```
+
+## Underline
+
+Setting the `type` prop to `underline` will display the navbar as underline.
+
+<Excerpt>
+  <Navbar
+    type="underline"
+    items={[
+      {
+        type: "link",
+        href: "#",
+        text: "Link 1",
+      },
+      {
+        type: "link",
+        href: "#",
+        text: "Link 2",
+      },
+      {
+        type: "link",
+        href: "#",
+        text: "Link 3",
+      },
+      {
+        type: "dropdown",
+        text: "Drop 1",
+        items: [
+          {
+            type: "link",
+            href: "#",
+            text: "Link 1",
+          },
+          {
+            type: "link",
+            href: "#",
+            text: "Link 2",
+          },
+          {
+            type: "link",
+            disabled: true,
+            href: "#",
+            text: "Disabled",
+          },
+        ],
+      },
+    ]}
+  />
+</Excerpt>
+
+```jsx
+<Navbar
+  type="underline"
+  items={[
+    {
+      type: "link",
+      href: "#",
+      text: "Link 1",
+    },
+    {
+      type: "link",
+      href: "#",
+      text: "Link 2",
+    },
+    {
+      type: "link",
+      href: "#",
+      text: "Link 3",
+    },
+  ]}
+/>
+```

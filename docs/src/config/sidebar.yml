@@ -42,6 +42,8 @@
       link: "/components/tables"
     - label: "Timeline"
       link: "/components/timeline"
+    - label: "Navbar"
+      link: "/components/navbar"
 - label: "Utilities"
   items:
     - label: "Colors"
