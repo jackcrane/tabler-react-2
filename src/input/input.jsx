@@ -82,7 +82,7 @@ export const Input = ({
           <div className="col">{renderInput()}</div>
           <div className="col-auto">
             <a
-              href={appendedLinkHref ? appendedLinkHref : "#"}
+              href={appendedLinkHref ? appendedLinkHref : "javascript:void(0);"}
               onClick={appendedLinkOnClick}
               className="btn btn-icon"
               aria-label="Button"

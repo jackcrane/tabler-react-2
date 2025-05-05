@@ -1,0 +1,430 @@
+---
+title: Input
+---
+
+import { Input } from "../../components/LoadableTabler";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { IconAerialLift } from "@tabler/icons-react";
+
+Inputs are used to collect user input.
+
+## Signature
+
+```jsx
+import { Input } from "tabler-react-2";
+
+<Input {...props}>{children}</Input>;
+```
+
+### Props
+
+| Prop                  | Required | Type                       | Default   | Description                                                                                                             |
+| --------------------- | -------- | -------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `type`                | No       | [InputType](#inputtype)    | `text`    | The type of input.                                                                                                      |
+| `label`               | No       | String                     |           | The label of the input to be shown above the input box.                                                                 |
+| `placeholder`         | No       | String                     |           | The placeholder text to be shown in the input box.                                                                      |
+| `value`               | No       | String                     |           | The value of the input.                                                                                                 |
+| `onChange`            | No       | Function                   |           | The function to be called when the input value changes. It is called with the new value as the argument, not the event. |
+| `onInput`             | No       | Function                   |           | The function to be called when the input value changes. It is called with the new value as the argument, not the event. |
+| `onRawChange`         | No       | Function                   |           | The function to be called when the input value changes. It is called with the event as the argument.                    |
+| `icon`                | No       | Node                       |           | The icon to be shown in the input.                                                                                      |
+| `iconPos`             | No       | [`leading` \| `trailing`]  | `leading` | The position of the icon.                                                                                               |
+| `loader`              | No       | Boolean                    |           | Whether the input should show a spinner.                                                                                |
+| `separated`           | No       | Boolean                    |           | Whether the input should be separated from an appended button.                                                          |
+| `prependedText`       | No       | String                     |           | The text to be shown before the input in the box.                                                                       |
+| `appendedText`        | No       | String                     |           | The text to be shown after the input in the box.                                                                        |
+| `appendedLinkText`    | No       | String                     |           | The text to be shown in the appended link.                                                                              |
+| `appendedLinkHref`    | No       | String                     |           | The href of the appended link.                                                                                          |
+| `appendedLinkOnClick` | No       | Function                   |           | The function to be called when the appended link is clicked.                                                            |
+| `datalistItems`       | No       | Array of Strings           |           | The list of items to be shown in the datalist.                                                                          |
+| `variant`             | No       | [color](/utilities/colors) |           | The color variant of the button.                                                                                        |
+| `size`                | No       | [`sm`, `md`, `lg`]         | `md`      | The size of the button.                                                                                                 |
+| `inputProps`          | No       | Object                     |           | The props to be passed to the input.                                                                                    |
+
+## Basic Usage
+
+The `Input` component is used to collect user input.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    value={"Starting value"}
+    onInput={console.log}
+  />
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  value={"Starting value"}
+  onInput={console.log}
+/>
+```
+
+## Labels and Placeholders
+
+The `Input` component can be used to collect user input. The `label` and `placeholder` props are used to show a label and placeholder text in the input box. Traditionally, the `label` should describe the input, and the `placeholder` should provide a hint or an example. This way the user can still understand what a field is asking for even when the input is not empty.
+
+<Excerpt>
+  <Input label="Your Name" placeholder="Johnny Appleseed" />
+</Excerpt>
+
+```jsx
+<Input label="Your Name" placeholder="Johnny Appleseed" />
+```
+
+## Input Types
+
+The `Input` component can be used to collect different types of input. The `type` prop accepts a string value of any [input type](#inputtype).
+
+<Excerpt>
+  <Input
+    label="Email input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="email"
+  />
+  <Input
+    label="Password input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="password"
+  />
+  <Input
+    label="Number input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="number"
+  />
+  <Input
+    label="Date input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="date"
+  />
+  <Input
+    label="Datetime input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="datetime-local"
+  />
+  <Input
+    label="Month input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="month"
+  />
+  <Input
+    label="Time input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="time"
+  />
+  <Input
+    label="URL input"
+    placeholder="Type here..."
+    onInput={console.log}
+    type="url"
+  />
+</Excerpt>
+
+```jsx highlight={4,9,14,19,24,29,34,39}
+<Input
+  label="Email input"
+  placeholder="Type here..."
+  type="email"
+/>
+<Input
+  label="Password input"
+  placeholder="Type here..."
+  type="password"
+/>
+<Input
+  label="Number input"
+  placeholder="Type here..."
+  type="number"
+/>
+<Input
+  label="Date input"
+  placeholder="Type here..."
+  type="date"
+/>
+<Input
+  label="Datetime input"
+  placeholder="Type here..."
+  type="datetime-local"
+/>
+<Input
+  label="Month input"
+  placeholder="Type here..."
+  type="month"
+/>
+<Input
+  label="Time input"
+  placeholder="Type here..."
+  type="time"
+/>
+<Input
+  label="URL input"
+  placeholder="Type here..."
+  type="url"
+/>
+```
+
+## `onChange`, `onInput` and `onRawChange` callbacks
+
+The `Input` component can call back to provided functions of `onChange` or `onInput` (which are the same), or `onRawChange`. The `onChange` and `onInput` callbacks are called with the new value as the argument, not the event. The `onRawChange` callback is called with the event as the argument.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    value={"Starting value"}
+    onChange={console.log}
+    onInput={console.log}
+    onRawChange={console.log}
+  />
+</Excerpt>
+
+```jsx highlight={5-7}
+<Input
+  label="Input"
+  placeholder="Type here..."
+  value={"Starting value"}
+  onChange={console.log}
+  onInput={console.log}
+  onRawChange={console.log}
+/>
+```
+
+When this example is run, the following will be logged to the console:
+
+```js
+"Starting value"
+"Starting value"
+{
+  ...
+  target: {
+    ...
+    value: "Starting value"
+  }
+}
+```
+
+## Icon
+
+You can supply an icon to the `Input` component. The `icon` prop accepts a node.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." icon={<IconAerialLift />} />
+  <Input
+    label="Input with icon on the right"
+    placeholder="Type here..."
+    icon={<IconAerialLift />}
+    iconPos="trailing"
+  />
+</Excerpt>
+
+```jsx highlight={4,9-10}
+<Input
+  label="Input"
+  placeholder="Type here..."
+  icon={<IconAerialLift />}
+/>
+<Input
+  label="Input with icon on the right"
+  placeholder="Type here..."
+  icon={<IconAerialLift />}
+  iconPos="trailing"
+/>
+```
+
+## Loader
+
+You can supply a boolean value to the `loader` prop to show a spinner.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." loader />
+</Excerpt>
+
+```jsx
+<Input label="Input" placeholder="Type here..." loader />
+```
+
+## Separated
+
+You can create seperate inputs by passing the `separated` prop. If you do this, you must also provide either an icon or loader, and use the `appendedLinkOnClick` or `appendedLinkHref` props to handle press events.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    appendedLinkOnClick={() => alert("Clicked")}
+    icon={<IconAerialLift size={18} />}
+    separated
+  />
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    appendedLinkOnClick={() => alert("Clicked")}
+    loader
+    separated
+  />
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  appendedLinkOnClick={() => alert("Clicked")}
+  icon={<IconAerialLift size={18} />}
+  separated
+/>
+<Input
+  label="Input"
+  placeholder="Type here..."
+  appendedLinkOnClick={() => alert("Clicked")}
+  icon={<IconAerialLift size={18} />}
+  separated
+/>
+```
+
+## Prepended and Appended Text or Links
+
+You can embed text or links in the input box by passing the `prependedText` or `appendedText` props. You can also pass an `appendedLinkText` prop to show a link in the text. The `appendedLinkHref` prop is used to set the href of the link. The `appendedLinkOnClick` prop is used to handle the click event of the link. You can only add event handlers to the appended link. If using links, you cannot also use a prependedText.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    prependedText="https://"
+    appendedText=".com"
+  />
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    appendedLinkText="Link"
+    appendedLinkHref="javascript:void(0);"
+    appendedLinkOnClick={() => alert("Clicked")}
+  />
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  prependedText="https://"
+  appendedText=".com"
+/>
+<Input
+  label="Input"
+  placeholder="Type here..."
+  appendedLinkText="Link"
+  appendedLinkHref="javascript:void(0);"
+  appendedLinkOnClick={() => alert("Clicked")}
+/>
+```
+
+## Variants
+
+You can pass a `variant` prop to the `Input` component to change the color of the input box.
+
+<Excerpt>
+  {[
+    "primary",
+    "secondary",
+    "success",
+    "danger",
+    "warning",
+    "info",
+    "light",
+    "dark",
+    "pink",
+    "yellow",
+  ].map((color) => (
+    <Input
+      key={color}
+      label="Input"
+      placeholder="Type here..."
+      variant={color}
+    />
+  ))}
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  variant="primary"
+/>
+<Input
+  label="Input"
+  placeholder="Type here..."
+  variant="secondary"
+/>
+...
+```
+
+## Invalid
+
+There is not `invalid` prop. You can use the `variant` prop to change the color of the input box to indicate an invalid state.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." variant="danger" />
+</Excerpt>
+
+```jsx
+<Input label="Input" placeholder="Type here..." variant="danger" />
+```
+
+## Sizes
+
+You can pass a `size` prop to the `Input` component to change the size of the input box.
+
+<Excerpt>
+  {["sm", "md", "lg"].map((size) => (
+    <Input key={size} label="Input" placeholder="Type here..." size={size} />
+  ))}
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  size="sm"
+/>
+<Input
+  label="Input"
+  placeholder="Type here..."
+  size="md"
+/>
+<Input
+  label="Input"
+  placeholder="Type here..."
+  size="lg"
+/>
+```
+
+## Datalist (Autocomplete)
+
+You can supply a list of items to the `datalistItems` prop to show a datalist. The `datalistItems` prop accepts an array of strings.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    datalistItems={["One", "Two", "Three"]}
+  />
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  datalistItems={["One", "Two", "Three"]}
+/>
+```
+
+This is different than a DropdownInput because the datalist is not exclusive, meaning the user can use a value that is not in the list.
