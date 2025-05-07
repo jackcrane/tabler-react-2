@@ -168,3 +168,9 @@ export const Navbar = loadable(() =>
     return mod.Navbar;
   })
 );
+export const SelectGroup = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.SelectGroup)
+);
+export const EnclosedSelectGroup = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.EnclosedSelectGroup)
+);

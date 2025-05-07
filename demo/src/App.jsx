@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarStackedList,
@@ -869,11 +869,14 @@ const _SelectGroup = () => {
     value: "one",
     label: "One",
   });
+  useEffect(() => {
+    console.log(singleSelectValue);
+  }, [singleSelectValue]);
 
   return (
     <Card title="Select Groups">
       <H2>Multi Select</H2>
-      {JSON.stringify(selectValue)}
+      {/* {JSON.stringify(selectValue)} */}
       <br />
       <SelectGroup
         items={[
@@ -887,7 +890,7 @@ const _SelectGroup = () => {
       />
       <Hr />
       <H2>Single Select</H2>
-      {JSON.stringify(singleSelectValue)}
+      {/* {JSON.stringify(singleSelectValue)} */}
       <br />
       <SelectGroup
         items={[
@@ -896,16 +899,19 @@ const _SelectGroup = () => {
           { value: "three", label: "Three" },
         ]}
         value={singleSelectValue}
-        onChange={setSingleSelectValue}
+        onChange={(v) => {
+          console.log(v);
+          setSingleSelectValue(v);
+        }}
       />
       <Hr />
       <H2>Enclosed Select Group</H2>
       <br />
       <EnclosedSelectGroup
         items={[
-          { value: "one", content: <b>One</b> },
-          { value: "two", content: "Two" },
-          { value: "three", content: "Three" },
+          { value: "one", label: <b>One</b> },
+          { value: "two", label: "Two" },
+          { value: "three", label: "Three" },
         ]}
         value={singleSelectValue}
         onChange={setSingleSelectValue}
@@ -914,12 +920,41 @@ const _SelectGroup = () => {
       <EnclosedSelectGroup
         direction="column"
         items={[
-          { value: "one", content: <b>One</b> },
-          { value: "two", content: "Two" },
-          { value: "three", content: "Three" },
+          { value: "one", label: <b>One</b> },
+          { value: "two", label: "Two" },
+          { value: "three", label: "Three" },
         ]}
         value={singleSelectValue}
         onChange={setSingleSelectValue}
+      />
+      <br />
+      <br />
+      <EnclosedSelectGroup
+        multiple
+        value={selectValue}
+        onChange={(v) => {
+          console.log(v);
+          setSelectValue(v);
+        }}
+        items={[
+          { value: "one", label: <b>One</b> },
+          { value: "two", label: "Two" },
+          { value: "three", label: "Three" },
+        ]}
+      />
+      <EnclosedSelectGroup
+        multiple
+        direction="column"
+        value={selectValue}
+        onChange={(v) => {
+          console.log(v);
+          setSelectValue(v);
+        }}
+        items={[
+          { value: "one", label: <b>One</b> },
+          { value: "two", label: "Two" },
+          { value: "three", label: "Three" },
+        ]}
       />
     </Card>
   );

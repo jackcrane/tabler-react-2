@@ -1,31 +1,19 @@
-/*
-<label class="form-selectgroup-item flex-fill">
-  <input type="radio" name="form-payment" value="mastercard" class="form-selectgroup-input" checked />
-  <div class="form-selectgroup-label d-flex align-items-center p-3">
-    <div class="me-3">
-      <span class="form-selectgroup-check"></span>
-    </div>
-    <div>
-      ending in <strong>2807</strong>
-    </div>
-  </div>
-</label>
-
-*/
-
-import React from "react";
+import React, { useId } from "react";
 import PropTypes from "prop-types";
 
 export const EnclosedSelectGroup = ({
   items,
   value,
   onChange,
+  multiple = false,
   direction = "row",
-  itemClassName,
-  style,
-  itemStyle,
+  itemClassName = "",
+  style = {},
+  itemStyle = {},
 }) => {
-  const multiple = false;
+  // generate a unique name for each instance so radio groups don't collide
+  const groupName = useId();
+
   const handleChange = (selectedItem) => {
     if (multiple) {
       if (value.some((item) => item.value === selectedItem.value)) {
@@ -38,53 +26,49 @@ export const EnclosedSelectGroup = ({
     }
   };
 
-  const isChecked = (item) => {
-    if (multiple) {
-      return value.some((val) => val.value === item.value);
-    }
-    return value?.value === item.value;
-  };
+  const isChecked = (item) =>
+    multiple
+      ? value.some((val) => val.value === item.value)
+      : value?.value === item.value;
 
   return (
     <div
       className="form-selectgroup"
-      style={{
-        flexDirection: direction,
-        ...style,
-      }}
+      style={{ display: "flex", flexDirection: direction, ...style }}
     >
       {items.map((item) => (
         <label
+          key={`${groupName}-${item.value}`}
           className={`form-selectgroup-item flex-fill ${itemClassName}`}
-          key={item.value}
           style={{
-            pointerEvents: item.disabled,
-            cursor: item.disabled ? "not-allowed" : null,
+            pointerEvents: item.disabled ? "none" : undefined,
+            cursor: item.disabled ? "not-allowed" : undefined,
             ...itemStyle,
           }}
         >
           <input
-            type="radio"
-            className="form-selectgroup-input"
-            name={item.label}
+            type={multiple ? "checkbox" : "radio"}
+            name={groupName}
+            id={`${groupName}-${item.value}`}
             value={item.value}
             checked={isChecked(item)}
-            onChange={() => handleChange({ value: item.value })}
+            onChange={() => handleChange(item)}
             disabled={item.disabled}
+            className="form-selectgroup-input"
           />
           <div
             className={`form-selectgroup-label d-flex p-3 ${
-              item?.disabled && `bg-gray-400`
+              item.disabled ? "bg-gray-400" : ""
             }`}
             style={{
-              pointerEvents: item.disabled,
-              cursor: item.disabled ? "not-allowed" : null,
+              pointerEvents: item.disabled ? "none" : undefined,
+              cursor: item.disabled ? "not-allowed" : undefined,
             }}
           >
             <div className="me-3">
-              <span className="form-selectgroup-check"></span>
+              <span className="form-selectgroup-check" />
             </div>
-            <div style={{ textAlign: "left" }}>{item.content}</div>
+            <div style={{ textAlign: "left" }}>{item.label}</div>
           </div>
         </label>
       ))}
@@ -96,21 +80,26 @@ EnclosedSelectGroup.propTypes = {
   items: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
+      label: PropTypes.node.isRequired,
+      disabled: PropTypes.bool,
     })
   ).isRequired,
   value: PropTypes.oneOfType([
     PropTypes.shape({
       value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
+      label: PropTypes.any,
     }),
     PropTypes.arrayOf(
       PropTypes.shape({
         value: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
+        label: PropTypes.any,
       })
     ),
   ]).isRequired,
   onChange: PropTypes.func.isRequired,
-  multiple: PropTypes.bool.isRequired,
+  multiple: PropTypes.bool,
+  direction: PropTypes.oneOf(["row", "column"]),
+  itemClassName: PropTypes.string,
+  style: PropTypes.object,
+  itemStyle: PropTypes.object,
 };

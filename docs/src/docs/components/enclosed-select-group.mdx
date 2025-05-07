@@ -1,0 +1,145 @@
+---
+title: Enclosed Select Group
+---
+
+import { EnclosedSelectGroup } from "../../components/LoadableTabler.jsx";
+import { Excerpt } from "../../components/Excerpt.jsx";
+import { useState } from "react";
+
+Enclosed Select Groups are used to mask radio and checkbox inputs in boxes with a label.
+
+## Signature
+
+export const ControlledEnclosedSelectGroup = (props) => {
+  const [value, setValue] = useState(props.value);
+  return (
+    <>
+      <EnclosedSelectGroup
+        {...props}
+        value={value}
+        onChange={(d) => {
+          setValue(d);
+          props.onChange && props.onChange(d);
+        }}
+      />
+    </>
+  );
+};
+
+```jsx
+import { EnclosedSelectGroup } from "tabler-react-2";
+
+<EnclosedSelectGroup
+  items={[
+    { value: "one", label: <b>One</b> },
+    { value: "two", label: "Two" },
+    { value: "three", label: "Three" },
+  ]}
+  value={null}
+  onChange={console.log}
+/>;
+```
+
+### Props
+
+| Prop        | Required | Type                                   | Default | Description                                                                                                                                                                                                                                                                      |
+| ----------- | -------- | -------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`     | Yes      | Array of objects                       |         | The items to be shown in the select group. Each item should have a `value` and `label` prop.                                                                                                                                                                                     |
+| `value`     | Yes      | Object or Array of Objects if multiple |         | The value of the select group. If the value is an array, multiple items can be selected. The value of each item should be the same as the `value` prop of the item.                                                                                                              |
+| `onChange`  | Yes      | Function                               |         | The function to be called when the value of the select group changes. It is called with the new value as the argument, not the event. If the value is an array, the new value is an array of objects. The value of each item should be the same as the `value` prop of the item. |
+| `multiple`  | No       | Boolean                                |         | Whether multiple items can be selected.                                                                                                                                                                                                                                          |
+| `direction` | No       | String                                 | "row"   | The direction of the items. Can be "row" or "column".                                                                                                                                                                                                                            |
+
+## Basic Usage
+
+The `EnclosedSelectGroup` component is used to mask radio and checkbox inputs in boxes with a label.
+
+<Excerpt>
+  <ControlledEnclosedSelectGroup
+    items={[
+      { value: "one", label: <u>One</u> },
+      { value: "two", label: "Two" },
+      { value: "three", label: "Three" },
+    ]}
+    value={null}
+    onChange={console.log}
+  />
+</Excerpt>
+
+```jsx
+<EnclosedSelectGroup
+  items={[
+    { value: "one", label: <u>One</u> },
+    { value: "two", label: "Two" },
+    { value: "three", label: "Three" },
+  ]}
+  value={null}
+  onChange={console.log}
+/>
+```
+
+## Multiple Select
+
+The `multiple` prop can be used to allow multiple items to be selected.
+
+<Excerpt>
+  <ControlledEnclosedSelectGroup
+    items={[
+      { value: "one", label: <u>One</u> },
+      { value: "two", label: "Two" },
+      { value: "three", label: "Three" },
+    ]}
+    value={[{ value: "one" }]}
+    onChange={console.log}
+    multiple
+  />
+</Excerpt>
+
+```jsx
+<EnclosedSelectGroup
+  items={[
+    { value: "one", label: <u>One</u> },
+    { value: "two", label: "Two" },
+    { value: "three", label: "Three" },
+  ]}
+  value={[
+    {
+      value: "one",
+    },
+  ]}
+  onChange={console.log}
+  multiple
+/>
+```
+
+## Direction
+
+The `direction` prop can be used to change the direction of the items.
+
+<Excerpt>
+  <ControlledEnclosedSelectGroup
+    items={[
+      { value: "one", label: <u>One</u> },
+      { value: "two", label: "Two" },
+      { value: "three", label: "Three" },
+    ]}
+    value={[]}
+    onChange={console.log}
+    direction="column"
+    multiple
+  />
+</Excerpt>
+
+```jsx
+<EnclosedSelectGroup
+  items={[
+    { value: "one", label: <u>One</u> },
+    { value: "two", label: "Two" },
+    { value: "three", label: "Three" },
+  ]}
+  value={[]}
+  onChange={console.log}
+  direction="column"
+  multiple
+/>
+```
