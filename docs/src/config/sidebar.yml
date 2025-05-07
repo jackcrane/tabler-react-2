@@ -6,6 +6,8 @@
   link: "/getting-started"
 - label: "Theme"
   link: "/theme"
+- label: "Changelog"
+  link: "/changelog"
 - label: "Components"
   items:
     - label: "Typography"

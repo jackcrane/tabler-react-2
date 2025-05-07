@@ -732,6 +732,39 @@ const _Input = () => {
         value={value}
         onInput={setValue}
       />
+      <Input
+        title="Input"
+        placeholder="Type here..."
+        label="Input with a label and help text"
+        value={value}
+        onInput={setValue}
+        helpText="This is some help text"
+        helpPrompt="?"
+      />
+      <Input
+        title="Input"
+        placeholder="Type here..."
+        label="Required Input"
+        value={value}
+        onInput={setValue}
+        required
+      />
+      <Input
+        title="Input"
+        placeholder="Type here..."
+        label="Input with a label description"
+        value={value}
+        onInput={setValue}
+        labelDescription={"37/100"}
+      />
+      <Input
+        title="Input"
+        placeholder="Type here..."
+        label="Input with a hint"
+        value={value}
+        onInput={setValue}
+        hint={"This is a hint"}
+      />
       <H2>Input with icons</H2>
       <Row gap={1}>
         <Input

@@ -40,6 +40,12 @@ import { Input } from "tabler-react-2";
 | `variant`             | No       | [color](/utilities/colors) |           | The color variant of the button.                                                                                        |
 | `size`                | No       | [`sm`, `md`, `lg`]         | `md`      | The size of the button.                                                                                                 |
 | `inputProps`          | No       | Object                     |           | The props to be passed to the input.                                                                                    |
+| `helpText`            | No       | String                     |           | The help text to be shown below the label.                                                                              |
+| `helpTextPlacement`   | No       | String                     | `top`     | The placement of the help text.                                                                                         |
+| `helpPrompt`          | No       | String                     | `?`       | The prompt to be shown in the field's label.                                                                            |
+| `required`            | No       | Boolean                    |           | Whether the input is required.                                                                                          |
+| `hint`                | No       | String                     |           | The hint to be shown below the input.                                                                                   |
+| `labelDescription`    | No       | String                     |           | The description to be shown to the right of the label.                                                                  |
 
 ## Basic Usage
 
@@ -428,3 +434,60 @@ You can supply a list of items to the `datalistItems` prop to show a datalist. T
 ```
 
 This is different than a DropdownInput because the datalist is not exclusive, meaning the user can use a value that is not in the list.
+
+## Help Text
+
+You can supply a `helpText` prop to the `Input` component to show a help text below the label.
+
+<Excerpt>
+  <Input
+    label="Input"
+    placeholder="Type here..."
+    helpText="This is some help text"
+    helpPrompt="?"
+  />
+</Excerpt>
+
+```jsx
+<Input
+  label="Input"
+  placeholder="Type here..."
+  helpText="This is some help text"
+/>
+```
+
+## Required
+
+You can supply a `required` prop to the `Input` component to show a red asterisk next to the label.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." required />
+</Excerpt>
+
+```jsx
+<Input label="Input" placeholder="Type here..." required />
+```
+
+## Hint
+
+You can supply a `hint` prop to the `Input` component to show a hint below the input.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." hint="This is a hint" />
+</Excerpt>
+
+```jsx
+<Input label="Input" placeholder="Type here..." hint="This is a hint" />
+```
+
+## Label Description
+
+You can supply a `labelDescription` prop to the `Input` component to show a description to the right of the label.
+
+<Excerpt>
+  <Input label="Input" placeholder="Type here..." labelDescription="37/100" />
+</Excerpt>
+
+```jsx
+<Input label="Input" placeholder="Type here..." labelDescription="37/100" />
+```

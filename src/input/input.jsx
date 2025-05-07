@@ -25,6 +25,12 @@ export const Input = ({
   size,
   noMargin = false,
   inputProps,
+  helpText,
+  helpTextPlacement,
+  helpPrompt,
+  required,
+  hint,
+  labelDescription,
   ...props
 }) => {
   // State for managing uncontrolled input value
@@ -75,7 +81,28 @@ export const Input = ({
 
   return (
     <div className={`${noMargin ? "" : "mb-3"}`} {...props}>
-      {label && <label className="form-label">{label}</label>}
+      {label && (
+        <label className={`form-label ${required ? "required" : ""}`}>
+          {label}
+          {helpText && (
+            <>
+              {" "}
+              <span
+                class="form-help"
+                data-bs-toggle="popover"
+                data-bs-placement={helpTextPlacement || "top"}
+                data-bs-html="true"
+                data-bs-content={helpText}
+              >
+                {helpPrompt || "?"}
+              </span>
+            </>
+          )}
+          {labelDescription && (
+            <span className="form-label-description">{labelDescription}</span>
+          )}
+        </label>
+      )}
 
       {separated ? (
         <div className="row g-2">
@@ -156,6 +183,8 @@ export const Input = ({
           )}
         </>
       )}
+
+      {hint && <div className="form-hint">{hint}</div>}
     </div>
   );
 };

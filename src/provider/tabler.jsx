@@ -18,13 +18,13 @@ export const TablerProvider = ({
   useEffect(() => {
     const script1 = document.createElement("script");
     script1.src =
-      "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/js/tabler.min.js";
+      "https://cdn.jsdelivr.net/npm/@tabler/core@1.2.0/dist/js/tabler.min.js";
     script1.async = true;
 
     const link = document.createElement("link");
     link.rel = "stylesheet";
     link.href =
-      "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler.min.css";
+      "https://cdn.jsdelivr.net/npm/@tabler/core@1.2.0/dist/css/tabler.min.css";
 
     const script2 = document.createElement("script");
     script2.textContent = `window.USE_FALLBACK_ANCHOR = ${fallbackAnchor};`;
