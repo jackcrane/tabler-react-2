@@ -177,7 +177,9 @@ export const Input = ({
           {datalistItems.length > 0 && (
             <datalist id="datalist-options">
               {datalistItems.map((item, index) => (
-                <option key={index} value={item} />
+                <option key={index} value={item}>
+                  {item}
+                </option>
               ))}
             </datalist>
           )}

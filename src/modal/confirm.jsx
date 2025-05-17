@@ -82,41 +82,54 @@ const DangerConfirm = ({
   );
 };
 
-export const useConfirm = (options) => {
-  const title = options?.title;
-  const text = options?.text;
-  const commitText = options?.commitText;
-  const cancelText = options?.cancelText;
-
+export const useConfirm = (options = {}) => {
   const [confirmState, setConfirmState] = useState({
     open: false,
     resolve: null,
+    title: options.title,
+    text: options.text,
+    commitText: options.commitText,
+    cancelText: options.cancelText,
   });
 
-  const confirm = useCallback((message) => {
-    return new Promise((resolve) => {
-      setConfirmState({
-        open: true,
-        resolve,
+  const confirm = useCallback(
+    (newOptions = {}) => {
+      return new Promise((resolve) => {
+        setConfirmState({
+          open: true,
+          resolve,
+          title: newOptions.title ?? options.title,
+          text: newOptions.text ?? options.text,
+          commitText: newOptions.commitText ?? options.commitText,
+          cancelText: newOptions.cancelText ?? options.cancelText,
+        });
       });
-    });
-  }, []);
+    },
+    [options]
+  );
 
-  const handleDecision = (decision) => {
-    if (confirmState.resolve) {
-      confirmState.resolve(decision);
-      setConfirmState({ ...confirmState, open: false, resolve: null });
-    }
-  };
+  const handleDecision = useCallback(
+    (decision) => {
+      if (confirmState.resolve) {
+        confirmState.resolve(decision);
+        setConfirmState((prev) => ({
+          ...prev,
+          open: false,
+          resolve: null,
+        }));
+      }
+    },
+    [confirmState]
+  );
 
   const ConfirmModal = (
     <DangerConfirm
       open={confirmState.open}
       onDecision={handleDecision}
-      title={title || "Are you sure?"}
-      text={text || "This action cannot be undone."}
-      commitText={commitText || "Confirm"}
-      cancelText={cancelText || "Cancel"}
+      title={confirmState.title || "Are you sure?"}
+      text={confirmState.text || "This action cannot be undone."}
+      commitText={confirmState.commitText || "Confirm"}
+      cancelText={confirmState.cancelText || "Cancel"}
     />
   );
 

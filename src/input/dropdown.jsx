@@ -19,6 +19,7 @@ export const DropdownInput = ({
   showLabel = true,
   color,
   outline,
+  maxHeight = "300px",
   ...props
 }) => {
   // Allow aliasing: pass either `values` or `items`
@@ -74,11 +75,17 @@ export const DropdownInput = ({
     setSelectedValue(matchedValue);
   }, [value, values]);
 
+  const normalize = (str) => str.toLowerCase().replace(/[\s_\-+]+/g, "");
+
   // Filter values based on the search query using getLabelText
   useEffect(() => {
     setFilteredValues(
-      values.filter((val) =>
-        getLabelText(val).toLowerCase().includes(searchQuery.toLowerCase())
+      values.filter(
+        (val) =>
+          getLabelText(val).toLowerCase().includes(searchQuery.toLowerCase()) ||
+          normalize(val.searchIndex.toLowerCase()).includes(
+            normalize(searchQuery).toLowerCase()
+          )
       )
     );
   }, [searchQuery, values]);
@@ -111,21 +118,28 @@ export const DropdownInput = ({
             />
           </div>
         )}
-        {filteredValues.map((val, index) => (
-          <a
-            key={index}
-            className={`dropdown-item${
-              selectedValue && selectedValue.id === val.id ? " active" : ""
-            }`}
-            onClick={() => handleSelection(val)}
-            style={{ cursor: "pointer" }}
-          >
-            {val.dropdownText ?? val.label}
-          </a>
-        ))}
-        {filteredValues.length === 0 && (
-          <div className="dropdown-item text-muted">No results found</div>
-        )}
+        <div
+          style={{
+            maxHeight: maxHeight,
+            overflowY: "auto",
+          }}
+        >
+          {filteredValues.map((val, index) => (
+            <a
+              key={index}
+              className={`dropdown-item${
+                selectedValue && selectedValue.id === val.id ? " active" : ""
+              }`}
+              onClick={() => handleSelection(val)}
+              style={{ cursor: "pointer" }}
+            >
+              {val.dropdownText ?? val.label}
+            </a>
+          ))}
+          {filteredValues.length === 0 && (
+            <div className="dropdown-item text-muted">No results found</div>
+          )}
+        </div>
       </div>
     </div>
   );

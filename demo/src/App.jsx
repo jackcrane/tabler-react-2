@@ -42,6 +42,7 @@ import {
 } from "../../src/input";
 import { Router, Routes } from "react-router-dom";
 import { TablerProvider } from "../../src/provider/Tabler";
+import { Offcanvas, useOffcanvas } from "../../src/offcanvas";
 const { H1, H2, H3, H4, Text, Strong, I, U, B, Special } = Typography;
 
 const colors = [
@@ -301,6 +302,7 @@ export default () => (
         <_Input />
         <_Switch />
         <_SelectGroup />
+        <_OffCanvas />
       </Col>
     </div>
   </TablerProvider>
@@ -860,6 +862,16 @@ const _Input = () => {
             { id: 1, label: "One" },
             { id: 2, label: "Two" },
             { id: 3, label: <b style={{ color: "red" }}>Three</b> },
+            { id: 1, label: "One" },
+            { id: 2, label: "Two" },
+            { id: 1, label: "One" },
+            { id: 2, label: "Two" },
+            { id: 1, label: "One" },
+            { id: 2, label: "Two" },
+            { id: 1, label: "One" },
+            { id: 2, label: "Two" },
+            { id: 1, label: "One" },
+            { id: 2, label: "Two" },
           ]}
           onChange={setDropdownValue}
           value={dropdownValue}
@@ -989,6 +1001,26 @@ const _SelectGroup = () => {
           { value: "three", label: "Three" },
         ]}
       />
+    </Card>
+  );
+};
+
+const _OffCanvas = () => {
+  const [show, setShow] = useState(false);
+  const { offcanvas, OffcanvasElement } = useOffcanvas({
+    offcanvasProps: { position: "end" },
+    content: <i>Hello!</i>,
+  });
+
+  return (
+    <Card title="Offcanvas">
+      <Button onClick={() => setShow(true)}>Open offcanvas</Button>
+      <Offcanvas show={show} onHide={() => setShow(false)}>
+        Hello!
+      </Offcanvas>
+
+      <Button onClick={() => offcanvas()}>Open hook offcanvas</Button>
+      {OffcanvasElement}
     </Card>
   );
 };

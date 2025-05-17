@@ -16,3 +16,4 @@ export * from "./table/index";
 export * from "./timeline/index";
 export * from "./input/index";
 export * from "./navbar/index";
+export * from "./offcanvas/index";
