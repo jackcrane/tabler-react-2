@@ -20,6 +20,7 @@ export const DropdownInput = ({
   color,
   outline,
   maxHeight = "300px",
+  required,
   ...props
 }) => {
   // Allow aliasing: pass either `values` or `items`
@@ -147,7 +148,9 @@ export const DropdownInput = ({
   // If a label is provided, wrap the dropdown with the label inside a container.
   return label && showLabel ? (
     <Util.Col>
-      <label className="form-label">{label}</label>
+      <label className={`form-label ${required ? "required" : ""}`}>
+        {label}
+      </label>
       {dropdownContent}
     </Util.Col>
   ) : (

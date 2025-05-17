@@ -107,6 +107,7 @@ export const useOffcanvas = (options = {}) => {
     content: options.content || null,
     position: options.position || "start",
   });
+  const [rand, setRand] = useState(Math.random());
 
   const offcanvas = useCallback((newOptions = {}) => {
     return new Promise((resolve) => {
@@ -117,6 +118,7 @@ export const useOffcanvas = (options = {}) => {
         content: newOptions.content ?? prev.content,
         position: newOptions.position ?? prev.position,
       }));
+      setRand(Math.random());
     });
   }, []);
 
@@ -146,7 +148,7 @@ export const useOffcanvas = (options = {}) => {
         onClick={close}
         style={{ position: "absolute", top: 10, right: 10 }}
       />
-      {state.content}
+      <div key={rand}>{state.content}</div>
     </Offcanvas>
   );
 
