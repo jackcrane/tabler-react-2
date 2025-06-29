@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Button } from "../button";
 
@@ -47,6 +47,7 @@ export const Modal = ({
               className="modal-body"
               style={{
                 maxHeight: "80dvh",
+                overflow: "auto",
                 ...modalBodyStyle,
               }}
             >
@@ -92,7 +93,7 @@ Modal.propTypes = {
 export const useModal = (options) => {
   const [modalState, setModalState] = useState({
     open: false,
-    resolve: null,
+    resolve: () => {},
     title: options?.title,
     text: options?.text,
     buttons: options?.buttons,
@@ -115,12 +116,12 @@ export const useModal = (options) => {
   const handleDecision = (decision) => {
     if (modalState.resolve) {
       modalState.resolve(decision);
-      setModalState((prevState) => ({
-        ...prevState,
-        open: false,
-        resolve: null,
-      }));
     }
+    setModalState((prevState) => ({
+      ...prevState,
+      open: false,
+      // resolve: null,
+    }));
   };
 
   const update = () => {
@@ -129,6 +130,10 @@ export const useModal = (options) => {
       text: options.text,
     });
   };
+
+  useEffect(() => {
+    console.log("modalState updated", modalState);
+  }, [modalState]);
 
   const ModalElement = (
     <Modal
@@ -142,6 +147,7 @@ export const useModal = (options) => {
       }))}
       {...(options.modalProps || {})}
     >
+      {JSON.stringify({ ...modalState, text: undefined })}
       {modalState.text}
     </Modal>
   );

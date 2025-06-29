@@ -32,6 +32,7 @@ import {
   IconInfoHexagon,
   IconRadioactive,
   IconShoppingCart,
+  IconUser,
 } from "@tabler/icons-react";
 import { Link } from "../../src/typography";
 import {
@@ -610,7 +611,7 @@ const _Steps = () => {
 
 const _Table = () => {
   const columns = [
-    { label: "Name", accessor: "name" },
+    { label: "Name", accessor: "name", icon: <IconUser size={16} /> },
     { label: "Title", accessor: "title", className: "text-secondary" },
     {
       label: "Email",
@@ -667,7 +668,7 @@ const _Table = () => {
 
   return (
     <Card title="Tables">
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={[...data, ...data, ...data]} />
     </Card>
   );
 };
@@ -865,7 +866,7 @@ const _Input = () => {
             { id: 1, label: "One" },
             { id: 2, label: "Two" },
             { id: 1, label: "One" },
-            { id: 2, label: "Two" },
+            { id: 2, label: "Two (d)", disabled: true },
             { id: 1, label: "One" },
             { id: 2, label: "Two" },
             { id: 1, label: "One" },

@@ -22,6 +22,9 @@ export const Timeline = ({ events, dense }) => {
     <ul className="timeline">
       {events.map((event, index) => (
         <li
+          style={{
+            "--tblr-content-padding": "1rem",
+          }}
           className={classNames(
             "timeline-event",
             dense && "timeline-event-tight"

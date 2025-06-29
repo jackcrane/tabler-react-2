@@ -31,6 +31,8 @@ export const Input = ({
   required,
   hint,
   labelDescription,
+  autocomplete,
+  useTextarea = false,
   ...props
 }) => {
   // State for managing uncontrolled input value
@@ -61,24 +63,41 @@ export const Input = ({
     }
   };
 
-  const renderInput = () => (
-    <input
-      type={type}
-      className={classNames(
-        "form-control",
-        variant && `border-${variant}`,
-        variant && `text-${variant}`,
-        variant && `bg-${variant}-lt`,
-        size && `form-control-${size}`
-      )}
-      placeholder={placeholder}
-      value={value ?? ""} // Always ensure value is a string
-      onChange={handleInputChange}
-      list={datalistItems.length > 0 ? "datalist-options" : undefined}
-      {...inputProps}
-    />
-  );
-
+  const renderInput = () =>
+    useTextarea ? (
+      <textarea
+        className={classNames(
+          "form-control",
+          variant && `border-${variant}`,
+          variant && `text-${variant}`,
+          variant && `bg-${variant}-lt`,
+          size && `form-control-${size}`
+        )}
+        placeholder={placeholder}
+        value={value ?? ""} // Always ensure value is a string
+        onChange={handleInputChange}
+        list={datalistItems.length > 0 ? "datalist-options" : undefined}
+        autoComplete={autocomplete}
+        {...inputProps}
+      />
+    ) : (
+      <input
+        type={type}
+        className={classNames(
+          "form-control",
+          variant && `border-${variant}`,
+          variant && `text-${variant}`,
+          variant && `bg-${variant}-lt`,
+          size && `form-control-${size}`
+        )}
+        placeholder={placeholder}
+        value={value ?? ""} // Always ensure value is a string
+        onChange={handleInputChange}
+        list={datalistItems.length > 0 ? "datalist-options" : undefined}
+        autoComplete={autocomplete}
+        {...inputProps}
+      />
+    );
   return (
     <div className={`${noMargin ? "" : "mb-3"}`} {...props}>
       {label && (

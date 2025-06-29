@@ -20,7 +20,7 @@ export const Alert = ({
       <div className="d-flex">
         {icon && <div className="me-2">{icon}</div>}
         <div>
-          <h4 className="alert-title">{title}</h4>
+          <h4 className="alert-title alert-heading">{title}</h4>
           <div className="text-secondary">{children}</div>
         </div>
       </div>

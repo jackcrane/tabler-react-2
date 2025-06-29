@@ -10,25 +10,42 @@ export const EnclosedSelectGroup = ({
   itemClassName = "",
   style = {},
   itemStyle = {},
+  small = false,
 }) => {
-  // generate a unique name for each instance so radio groups don't collide
   const groupName = useId();
 
   const handleChange = (selectedItem) => {
     if (multiple) {
-      if (value.some((item) => item.value === selectedItem.value)) {
-        onChange(value.filter((item) => item.value !== selectedItem.value));
+      // get current values as an array of strings
+      const selectedValues = Array.isArray(value)
+        ? value.map((v) => v.value)
+        : [];
+      let newValues;
+      if (selectedValues.includes(selectedItem.value)) {
+        // deselect
+        newValues = selectedValues.filter((v) => v !== selectedItem.value);
       } else {
-        onChange([...value, selectedItem]);
+        // select
+        newValues = [...selectedValues, selectedItem.value];
       }
+      // map back to full item objects from `items`
+      const newSelectedItems = newValues
+        .map((val) => items.find((item) => item.value === val))
+        .filter(Boolean);
+      onChange(newSelectedItems);
     } else {
-      onChange(selectedItem.value === value?.value ? null : selectedItem);
+      // single-select: toggle off if same, otherwise pick full item
+      const isSame = value?.value === selectedItem.value;
+      const newSelection = isSame
+        ? null
+        : items.find((item) => item.value === selectedItem.value);
+      onChange(newSelection);
     }
   };
 
   const isChecked = (item) =>
     multiple
-      ? value.some((val) => val.value === item.value)
+      ? Array.isArray(value) && value.some((val) => val.value === item.value)
       : value?.value === item.value;
 
   return (
@@ -57,9 +74,9 @@ export const EnclosedSelectGroup = ({
             className="form-selectgroup-input"
           />
           <div
-            className={`form-selectgroup-label d-flex p-3 ${
-              item.disabled ? "bg-gray-400" : ""
-            }`}
+            className={`form-selectgroup-label d-flex ${
+              small ? "p-2" : "p-3"
+            } ${item.disabled ? "bg-gray-200" : ""}`}
             style={{
               pointerEvents: item.disabled ? "none" : undefined,
               cursor: item.disabled ? "not-allowed" : undefined,
@@ -102,4 +119,5 @@ EnclosedSelectGroup.propTypes = {
   itemClassName: PropTypes.string,
   style: PropTypes.object,
   itemStyle: PropTypes.object,
+  small: PropTypes.bool,
 };

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, Children } from "react";
 import PropTypes from "prop-types";
-import { Input } from "../index";
-import { Button } from "../index";
-import { Util } from "../index";
+import { Input, Button, Util } from "../index";
 
 export const DropdownInput = ({
   prompt,
@@ -23,21 +21,19 @@ export const DropdownInput = ({
   required,
   ...props
 }) => {
-  // Allow aliasing: pass either `values` or `items`
   const values = ivalues || items || [];
 
-  // Helper: extract text from label or dropdownText for filtering
   const getLabelText = (val) => {
+    if (val.type === "header") return String(val.text);
     const node = val.dropdownText ?? val.label;
-    if (typeof node === "string" || typeof node === "number")
+    if (typeof node === "string" || typeof node === "number") {
       return String(node);
-    const children = Children.toArray(node);
-    return children
-      .map((child) => (typeof child === "string" ? child : ""))
+    }
+    return Children.toArray(node)
+      .filter((c) => typeof c === "string")
       .join("");
   };
 
-  // When loading, show a Button in a container with an optional label.
   if (loading) {
     return (
       <Util.Col>
@@ -49,7 +45,6 @@ export const DropdownInput = ({
     );
   }
 
-  // When disabled, show a disabled Button (with alternate text if provided).
   if (disabled) {
     return (
       <Util.Col>
@@ -59,48 +54,44 @@ export const DropdownInput = ({
     );
   }
 
-  // Helper: if value is an object, use its id; otherwise, assume the value itself is the id.
   const getId = (val) =>
     typeof val === "object" && val !== null ? val.id : val;
 
-  // Set up state for the selected value and search/filtering.
   const [selectedValue, setSelectedValue] = useState(
-    values.find((val) => val.id === getId(value)) || null
+    values.find((v) => v.id === getId(value)) || null
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredValues, setFilteredValues] = useState(values);
 
-  // Update the selected value if the prop changes.
   useEffect(() => {
-    const matchedValue = values.find((val) => val.id === getId(value)) || null;
-    setSelectedValue(matchedValue);
+    const match = values.find((v) => v.id === getId(value)) || null;
+    setSelectedValue(match);
   }, [value, values]);
 
-  const normalize = (str) => str.toLowerCase().replace(/[\s_\-+]+/g, "");
+  const normalize = (str) => str?.toLowerCase()?.replace(/[\s_\-+]+/g, "");
 
-  // Filter values based on the search query using getLabelText
   useEffect(() => {
     setFilteredValues(
-      values.filter(
-        (val) =>
-          getLabelText(val).toLowerCase().includes(searchQuery.toLowerCase()) ||
-          normalize(val.searchIndex.toLowerCase()).includes(
-            normalize(searchQuery).toLowerCase()
-          )
-      )
+      values.filter((v) => {
+        if (v.type === "divider" || v.type === "header") return true;
+        const text = getLabelText(v).toLowerCase();
+        return (
+          text.includes(searchQuery.toLowerCase()) ||
+          normalize(v.searchIndex ?? "").includes(normalize(searchQuery))
+        );
+      })
     );
   }, [searchQuery, values]);
 
   const handleSelection = (val) => {
     setSelectedValue(val);
-    if (onChange) onChange(val);
+    onChange(val);
   };
 
-  // The main dropdown markup.
   const dropdownContent = (
     <div className="dropdown" {...props}>
       <a
-        href="#"
+        href="javascript:void(0)"
         className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""} ${
           color ? `btn-${outline ? "outline-" : ""}${color}` : ""
         }`}
@@ -115,28 +106,39 @@ export const DropdownInput = ({
             <Input
               placeholder="Search..."
               value={searchQuery}
-              onChange={(value) => setSearchQuery(value)}
+              onChange={(q) => setSearchQuery(q)}
             />
           </div>
         )}
-        <div
-          style={{
-            maxHeight: maxHeight,
-            overflowY: "auto",
-          }}
-        >
-          {filteredValues.map((val, index) => (
-            <a
-              key={index}
-              className={`dropdown-item${
-                selectedValue && selectedValue.id === val.id ? " active" : ""
-              }`}
-              onClick={() => handleSelection(val)}
-              style={{ cursor: "pointer" }}
-            >
-              {val.dropdownText ?? val.label}
-            </a>
-          ))}
+        <div style={{ maxHeight, overflowY: "auto" }}>
+          {filteredValues.map((v, i) => {
+            if (v.type === "divider") {
+              return <div key={`div-${i}`} className="dropdown-divider" />;
+            }
+            if (v.type === "header") {
+              return (
+                <span key={`hdr-${i}`} className="dropdown-header">
+                  {v.text}
+                </span>
+              );
+            }
+            const isActive = selectedValue?.id === v.id;
+            const isItemDisabled = v.disabled === true;
+            return (
+              <a
+                key={v.id ?? i}
+                className={`dropdown-item${isActive ? " active" : ""}${
+                  isItemDisabled ? " disabled" : ""
+                }`}
+                onClick={() => !isItemDisabled && handleSelection(v)}
+                style={{ cursor: isItemDisabled ? "not-allowed" : "pointer" }}
+                href={v.href || "javascript:void(0)"}
+              >
+                {v.icon && <span className="dropdown-item-icon">{v.icon}</span>}
+                {v.dropdownText ?? v.label}
+              </a>
+            );
+          })}
           {filteredValues.length === 0 && (
             <div className="dropdown-item text-muted">No results found</div>
           )}
@@ -145,10 +147,9 @@ export const DropdownInput = ({
     </div>
   );
 
-  // If a label is provided, wrap the dropdown with the label inside a container.
   return label && showLabel ? (
     <Util.Col>
-      <label className={`form-label ${required ? "required" : ""}`}>
+      <label className={`form-label${required ? " required" : ""}`}>
         {label}
       </label>
       {dropdownContent}
@@ -161,19 +162,25 @@ export const DropdownInput = ({
 DropdownInput.propTypes = {
   prompt: PropTypes.string.isRequired,
   values: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      label: PropTypes.string.isRequired,
-      dropdownText: PropTypes.string,
-    })
+    PropTypes.oneOfType([
+      PropTypes.shape({ type: PropTypes.oneOf(["divider"]).isRequired }),
+      PropTypes.shape({
+        type: PropTypes.oneOf(["header"]).isRequired,
+        text: PropTypes.string.isRequired,
+      }),
+      PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+          .isRequired,
+        label: PropTypes.string.isRequired,
+        dropdownText: PropTypes.string,
+        searchIndex: PropTypes.string,
+        disabled: PropTypes.bool,
+        href: PropTypes.string,
+        icon: PropTypes.node,
+      }),
+    ])
   ),
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      label: PropTypes.string.isRequired,
-      dropdownText: PropTypes.string,
-    })
-  ),
+  items: PropTypes.array,
   value: PropTypes.oneOfType([
     PropTypes.shape({
       id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -191,4 +198,6 @@ DropdownInput.propTypes = {
   showLabel: PropTypes.bool,
   color: PropTypes.string,
   outline: PropTypes.bool,
+  maxHeight: PropTypes.string,
+  required: PropTypes.bool,
 };

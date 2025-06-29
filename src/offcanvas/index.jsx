@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button } from "../button";
 
 export const Offcanvas = React.memo(
-  ({ show, onHide, position, children, size = 300 }) => {
+  ({ show, onHide, position, children, size = 300, zIndex = 1000 }) => {
     // backdrop style
     const backdropStyle = useMemo(
       () => ({
@@ -13,7 +13,7 @@ export const Offcanvas = React.memo(
         width: "100vw",
         height: "100vh",
         backgroundColor: "rgba(0,0,0,0.1)",
-        zIndex: 999,
+        zIndex: zIndex - 1,
       }),
       []
     );
@@ -23,9 +23,9 @@ export const Offcanvas = React.memo(
       const base = {
         position: "fixed",
         backgroundColor: "#fff",
-        boxShadow: "0 0.5rem 1rem rgba(0,0,0,0.15)",
+        boxShadow: show ? "0 0.5rem 1rem rgba(0,0,0,0.15)" : "none",
         transition: "transform 0.3s ease-out",
-        zIndex: 1000,
+        zIndex: zIndex,
         padding: 20,
         overflow: "auto",
       };
