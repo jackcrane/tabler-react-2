@@ -19,6 +19,7 @@ import {
   Ribbon,
   Table,
   useModal,
+  SegmentedControl,
 } from "../../src/index";
 import { Col, Hr, Row } from "../../src/util";
 import {
@@ -304,6 +305,7 @@ export default () => (
         <_Switch />
         <_SelectGroup />
         <_OffCanvas />
+        <_SegmentedControl />
       </Col>
     </div>
   </TablerProvider>
@@ -1022,6 +1024,36 @@ const _OffCanvas = () => {
 
       <Button onClick={() => offcanvas()}>Open hook offcanvas</Button>
       {OffcanvasElement}
+    </Card>
+  );
+};
+
+const _SegmentedControl = () => {
+  const [value, setValue] = useState({ id: "one" });
+  const data = [
+    { id: "one", label: "One", icon: <IconUser size={16} /> },
+    {
+      id: "two",
+      label: "Two",
+      icon: <IconAlien size={16} />,
+      style: { color: "red" },
+    },
+    { id: "three", label: "Three", disabled: true },
+  ];
+
+  return (
+    <Card title="Segmented Control">
+      <SegmentedControl
+        value={value}
+        onChange={(v) => setValue(v.id)}
+        items={data}
+      />
+      <SegmentedControl
+        vertical
+        value={value}
+        onChange={(v) => setValue(v.id)}
+        items={data}
+      />
     </Card>
   );
 };

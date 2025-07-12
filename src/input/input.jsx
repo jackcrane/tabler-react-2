@@ -88,7 +88,8 @@ export const Input = ({
           variant && `border-${variant}`,
           variant && `text-${variant}`,
           variant && `bg-${variant}-lt`,
-          size && `form-control-${size}`
+          size && `form-control-${size}`,
+          props.inputClassName
         )}
         placeholder={placeholder}
         value={value ?? ""} // Always ensure value is a string

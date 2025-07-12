@@ -174,3 +174,6 @@ export const SelectGroup = loadable(() =>
 export const EnclosedSelectGroup = loadable(() =>
   import("tabler-react-2").then((mod) => mod.EnclosedSelectGroup)
 );
+export const SegmentedControl = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.SegmentedControl)
+);

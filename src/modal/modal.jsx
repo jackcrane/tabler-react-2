@@ -131,10 +131,6 @@ export const useModal = (options) => {
     });
   };
 
-  useEffect(() => {
-    console.log("modalState updated", modalState);
-  }, [modalState]);
-
   const ModalElement = (
     <Modal
       open={modalState.open}
@@ -147,7 +143,6 @@ export const useModal = (options) => {
       }))}
       {...(options.modalProps || {})}
     >
-      {JSON.stringify({ ...modalState, text: undefined })}
       {modalState.text}
     </Modal>
   );

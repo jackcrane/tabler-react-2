@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Children } from "react";
 import PropTypes from "prop-types";
 import { Input, Button, Util } from "../index";
+import { Row } from "../util";
 
 export const DropdownInput = ({
   prompt,
@@ -19,6 +20,7 @@ export const DropdownInput = ({
   outline,
   maxHeight = "300px",
   required,
+  autofocusSearch = false,
   ...props
 }) => {
   const values = ivalues || items || [];
@@ -94,11 +96,14 @@ export const DropdownInput = ({
         href="javascript:void(0)"
         className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""} ${
           color ? `btn-${outline ? "outline-" : ""}${color}` : ""
-        }`}
+        } ${props.className || ""}`}
         data-bs-toggle="dropdown"
         {...aprops}
       >
-        {selectedValue ? selectedValue.label : prompt}
+        <Row gap={0.5}>
+          {selectedValue && props.showIconInPrompt ? selectedValue.icon : null}
+          {selectedValue ? selectedValue.label : prompt}
+        </Row>
       </a>
       <div className="dropdown-menu">
         {showSearch && (
@@ -107,6 +112,9 @@ export const DropdownInput = ({
               placeholder="Search..."
               value={searchQuery}
               onChange={(q) => setSearchQuery(q)}
+              inputProps={{
+                autoFocus: autofocusSearch,
+              }}
             />
           </div>
         )}

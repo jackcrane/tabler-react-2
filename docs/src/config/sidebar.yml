@@ -26,6 +26,8 @@
       link: "/components/select-group"
     - label: "Enclosed Select Group"
       link: "/components/enclosed-select-group"
+    - label: "Segmented Control"
+      link: "/components/segmented-control"
     - label: "Horizontal Rule"
       link: "/components/hr"
     - label: "Alerts"
