@@ -33,6 +33,7 @@ export const Input = ({
   labelDescription,
   autocomplete,
   useTextarea = false,
+  invalid,
   ...props
 }) => {
   // State for managing uncontrolled input value
@@ -71,7 +72,8 @@ export const Input = ({
           variant && `border-${variant}`,
           variant && `text-${variant}`,
           variant && `bg-${variant}-lt`,
-          size && `form-control-${size}`
+          size && `form-control-${size}`,
+          invalid && "is-invalid"
         )}
         placeholder={placeholder}
         value={value ?? ""} // Always ensure value is a string
@@ -89,6 +91,7 @@ export const Input = ({
           variant && `text-${variant}`,
           variant && `bg-${variant}-lt`,
           size && `form-control-${size}`,
+          invalid && "is-invalid",
           props.inputClassName
         )}
         placeholder={placeholder}

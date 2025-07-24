@@ -24,13 +24,21 @@ const IconAlertTriangle = ({ size, strokeWidth }) => (
   </svg>
 );
 
-const ConfirmBase = ({ open, onDecision, children, modalId, status }) => {
+const ConfirmBase = ({
+  open,
+  onDecision,
+  children,
+  modalId,
+  status,
+  ...props
+}) => {
   return (
     <Modal
       open={open}
       onClose={() => onDecision(false)}
       modalId={modalId}
       status={"danger"}
+      {...props}
     >
       {children}
     </Modal>
@@ -50,6 +58,19 @@ const DangerConfirm = ({
       open={open}
       onDecision={onDecision}
       modalId="asdfpiuhs987huyoasidfa"
+      buttons={[
+        {
+          text: cancelText,
+          onClick: () => onDecision(false),
+          style: { flex: 1 },
+        },
+        {
+          text: commitText,
+          onClick: () => onDecision(true),
+          variant: "danger",
+          style: { flex: 1 },
+        },
+      ]}
     >
       <div class="modal-body text-center py-4">
         <Color color="danger">
@@ -58,7 +79,7 @@ const DangerConfirm = ({
         <H3>{title}</H3>
         <Text className="text-secondary">{text}</Text>
       </div>
-      <div class="modal-footer">
+      {/* <div class="modal-footer">
         <div class="w-100">
           <div class="row">
             <div class="col">
@@ -77,7 +98,7 @@ const DangerConfirm = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </ConfirmBase>
   );
 };

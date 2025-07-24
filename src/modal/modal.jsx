@@ -58,7 +58,7 @@ export const Modal = ({
                 <Button
                   variant={button.variant}
                   key={index}
-                  {...button.attrs}
+                  {...button}
                   onClick={button.onClick}
                 >
                   {button.text}
