@@ -454,3 +454,101 @@ const customSortFn = (a, b) => {
 ```
 
 > **Note**: Sorting only works for the data in the table. If, for example, you have thousands of rows and are only rendering a few, you will need to handle the sorting yourself, outside of the table. Incorporating internal pagination that supports sorting is a planned feature but not yet implemented.
+
+## Pagination
+
+The `Table` supports built-in pagination UI. Enable it with `showPagination`.
+
+- showPagination: toggles the pagination controls
+- defaultRowsPerPage: initial rows per page for internal mode
+- pageSizeOptions: selectable page sizes (default `[10, 25, 50, 100]`)
+
+<Excerpt>
+  <Table
+    columns={[
+      { label: "Name", accessor: "name" },
+      { label: "Party", accessor: "party" },
+      { label: "State", accessor: "region.state" },
+    ]}
+    data={congressPeople}
+    showPagination
+    defaultRowsPerPage={10}
+  />
+</Excerpt>
+
+```jsx
+<Table
+  columns={columns}
+  data={rows}
+  showPagination
+  defaultRowsPerPage={10}
+  pageSizeOptions={[10, 25, 50, 100]}
+/>
+```
+
+### External pagination
+
+You can also fully control pagination from the parent (e.g., server-side paging) while keeping the same UI. Provide the controlled props and callbacks below. When any controlled pagination prop is provided, the table does not slice your `data` and instead assumes `data` already contains the current page.
+
+- page: current page (1-based)
+- size: current page size
+- totalRows: total available row count used for page count and the “Showing … of …” text
+- onSetPage: called with next page (1-based)
+- onSetSize: called with next page size
+
+Aliases are supported for compatibility: `rowsPerPage`, `onPageChange`, `onRowsPerPageChange`.
+
+<Excerpt>
+  {(() => {
+    // Simulated external pagination
+    const React = require("react");
+    const [page, setPage] = React.useState(1);
+    const [rpp, setRpp] = React.useState(4);
+    const total = congressPeople.length;
+    const start = (page - 1) * rpp;
+    const pageData = congressPeople.slice(start, start + rpp);
+    return (
+      <Table
+        columns={[
+          { label: "Name", accessor: "name" },
+          { label: "Party", accessor: "party" },
+          { label: "State", accessor: "region.state" },
+        ]}
+        data={pageData}
+        showPagination
+        page={page}
+        size={rpp}
+        totalRows={total}
+        onSetPage={setPage}
+        onSetSize={(n) => {
+          setPage(1);
+          setRpp(n);
+        }}
+      />
+    );
+  })()}
+</Excerpt>
+
+```jsx
+// Parent controls the table
+const [page, setPage] = useState(1);
+const [rowsPerPage, setRowsPerPage] = useState(10);
+const totalRows = allRows.length; // from your API
+
+// Only pass the current slice to the table
+const start = (page - 1) * rowsPerPage;
+const currentData = allRows.slice(start, start + rowsPerPage);
+
+<Table
+  columns={columns}
+  data={currentData}
+  showPagination
+  page={page}
+  size={rowsPerPage}
+  totalRows={totalRows}
+  onSetPage={setPage}
+  onSetSize={(n) => { setPage(1); setRowsPerPage(n); }}
+/>;
+```
+
+If you don’t supply these controlled props, the table falls back to its internal pagination state, preserving backwards compatibility.

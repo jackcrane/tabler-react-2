@@ -76,6 +76,16 @@ export const Table = ({
   className = "",
   showPagination = false,
   defaultRowsPerPage = 10,
+  // external/controlled pagination support
+  page, // 1-based, when provided makes page controlled
+  rowsPerPage, // deprecated alias — prefer `size`
+  size, // preferred name for rows per page (controlled)
+  totalRows, // total row count (for server-side pagination)
+  onPageChange, // deprecated alias — prefer `onSetPage`
+  onRowsPerPageChange, // deprecated alias — prefer `onSetSize`
+  onSetPage,
+  onSetSize,
+  pageSizeOptions = [10, 25, 50, 100],
   tableClassName = "",
   paginationClassName = "",
   parentClassName = "",
@@ -83,6 +93,25 @@ export const Table = ({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(defaultRowsPerPage);
+
+  // Determine controlled vs uncontrolled values
+  const isPageControlled = typeof page === "number" && page > 0;
+  const isPageSizeControlled =
+    (typeof size === "number" && size > 0) ||
+    (typeof rowsPerPage === "number" && rowsPerPage > 0);
+  const useExternalPagination =
+    isPageControlled ||
+    isPageSizeControlled ||
+    typeof totalRows === "number" ||
+    typeof onSetPage === "function" ||
+    typeof onSetSize === "function" ||
+    typeof onPageChange === "function" ||
+    typeof onRowsPerPageChange === "function";
+
+  const effectivePage = isPageControlled ? page : currentPage;
+  const effectivePageSize = isPageSizeControlled
+    ? (typeof size === "number" && size > 0 ? size : rowsPerPage)
+    : pageSize;
 
   const defaultSortFn = (a, b) => {
     if (a === b) return 0;
@@ -95,7 +124,17 @@ export const Table = ({
       direction = "desc";
     }
     setSortConfig({ key: accessor, direction });
-    setCurrentPage(1);
+    if (useExternalPagination) {
+      if (typeof onSetPage === "function") {
+        onSetPage(1);
+      } else if (typeof onPageChange === "function") {
+        onPageChange(1);
+      } else {
+        setCurrentPage(1);
+      }
+    } else {
+      setCurrentPage(1);
+    }
   };
 
   const sortedData = useMemo(() => {
@@ -111,17 +150,22 @@ export const Table = ({
     });
   }, [data, sortConfig, columns]);
 
-  const pageSizeOptions = [10, 25, 50, 100];
+  const totalRowCount = useMemo(
+    () => (useExternalPagination ? totalRows ?? data.length : sortedData.length),
+    [useExternalPagination, totalRows, data.length, sortedData]
+  );
+
   const totalPages = useMemo(
-    () => Math.max(1, Math.ceil(sortedData.length / pageSize)),
-    [sortedData, pageSize]
+    () => Math.max(1, Math.ceil((totalRowCount || 0) / (effectivePageSize || 1))),
+    [totalRowCount, effectivePageSize]
   );
 
   const paginatedData = useMemo(() => {
     if (!showPagination) return sortedData;
-    const start = (currentPage - 1) * pageSize;
-    return sortedData.slice(start, start + pageSize);
-  }, [sortedData, currentPage, pageSize, showPagination]);
+    if (useExternalPagination) return sortedData; // data is already paginated externally
+    const start = (effectivePage - 1) * effectivePageSize;
+    return sortedData.slice(start, start + effectivePageSize);
+  }, [sortedData, effectivePage, effectivePageSize, showPagination, useExternalPagination]);
 
   const getSortIcon = (column) => {
     if (sortConfig.key === column.accessor) {
@@ -194,31 +238,58 @@ export const Table = ({
         >
           <div>
             <Button
-              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              disabled={currentPage === 1}
+              onClick={() => {
+                const prev = Math.max(effectivePage - 1, 1);
+                if (useExternalPagination) {
+                  if (typeof onSetPage === "function") return onSetPage(prev);
+                  if (typeof onPageChange === "function") return onPageChange(prev);
+                }
+                setCurrentPage(prev);
+              }}
+              disabled={effectivePage === 1}
             >
               Previous
             </Button>
             <Button
-              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              disabled={currentPage === totalPages}
+              onClick={() => {
+                const next = Math.min(effectivePage + 1, totalPages);
+                if (useExternalPagination) {
+                  if (typeof onSetPage === "function") return onSetPage(next);
+                  if (typeof onPageChange === "function") return onPageChange(next);
+                }
+                setCurrentPage(next);
+              }}
+              disabled={effectivePage === totalPages}
               style={{ marginLeft: 8 }}
             >
               Next
             </Button>
             <span style={{ marginLeft: 16 }}>
-              Page {currentPage} of {totalPages}
+              Page {effectivePage} of {totalPages}
             </span>
             <span style={{ marginLeft: 16 }}>
-              Showing {(currentPage - 1) * pageSize + 1} to{" "}
-              {Math.min(currentPage * pageSize, sortedData.length)} of{" "}
-              {sortedData.length} rows
+              {(() => {
+                const hasData = paginatedData.length > 0;
+                const startIndex = hasData ? (effectivePage - 1) * effectivePageSize + 1 : 0;
+                const endIndex = hasData ? startIndex + paginatedData.length - 1 : 0;
+                return (
+                  <>
+                    Showing {startIndex} to {endIndex} of {totalRowCount || 0} rows
+                  </>
+                );
+              })()}
             </span>
           </div>
           <DropdownInput
             prompt="Rows per page"
             items={pageSizeOptions.map((size) => ({ id: size, label: size }))}
+            value={effectivePageSize}
             onChange={(selected) => {
+              if (useExternalPagination) {
+                if (typeof onSetSize === "function") return onSetSize(selected.id);
+                if (typeof onRowsPerPageChange === "function")
+                  return onRowsPerPageChange(selected.id);
+              }
               setPageSize(selected.id);
               setCurrentPage(1);
             }}
@@ -247,4 +318,14 @@ Table.propTypes = {
   className: PropTypes.string,
   showPagination: PropTypes.bool,
   defaultRowsPerPage: PropTypes.number,
+  // external pagination
+  page: PropTypes.number,
+  rowsPerPage: PropTypes.number,
+  size: PropTypes.number,
+  totalRows: PropTypes.number,
+  onPageChange: PropTypes.func,
+  onRowsPerPageChange: PropTypes.func,
+  onSetPage: PropTypes.func,
+  onSetSize: PropTypes.func,
+  pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
 };
