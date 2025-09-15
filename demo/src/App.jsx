@@ -37,6 +37,7 @@ import {
 } from "@tabler/icons-react";
 import { Link } from "../../src/typography";
 import {
+  Checkbox,
   DropdownInput,
   EnclosedSelectGroup,
   SelectGroup,
@@ -306,6 +307,7 @@ export default () => (
         <_SelectGroup />
         <_OffCanvas />
         <_SegmentedControl />
+        <_Checkbox />
       </Col>
     </div>
   </TablerProvider>
@@ -1053,6 +1055,20 @@ const _SegmentedControl = () => {
         value={value}
         onChange={(v) => setValue(v.id)}
         items={data}
+      />
+    </Card>
+  );
+};
+
+const _Checkbox = () => {
+  const [value, setValue] = useState(false);
+  return (
+    <Card>
+      <Checkbox value={value} onChange={(v) => setValue(v)} label="Checkbox" />
+      <Checkbox
+        value={value}
+        onChange={(v) => setValue(v)}
+        label="Checkbox 2"
       />
     </Card>
   );

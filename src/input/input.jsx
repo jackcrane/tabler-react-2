@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { Spinner } from "../spinner";
 import classNames from "classnames";
@@ -11,6 +11,7 @@ export const Input = ({
   onChange,
   onRawChange,
   onInput,
+  onKeyDown,
   icon,
   iconPos = "leading",
   loader,
@@ -34,6 +35,8 @@ export const Input = ({
   autocomplete,
   useTextarea = false,
   invalid,
+  invalidText,
+  autoFocus,
   ...props
 }) => {
   // State for managing uncontrolled input value
@@ -64,6 +67,14 @@ export const Input = ({
     }
   };
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [autoFocus]);
+
   const renderInput = () =>
     useTextarea ? (
       <textarea
@@ -80,6 +91,7 @@ export const Input = ({
         onChange={handleInputChange}
         list={datalistItems.length > 0 ? "datalist-options" : undefined}
         autoComplete={autocomplete}
+        ref={inputRef}
         {...inputProps}
       />
     ) : (
@@ -97,8 +109,10 @@ export const Input = ({
         placeholder={placeholder}
         value={value ?? ""} // Always ensure value is a string
         onChange={handleInputChange}
+        onKeyDown={(e) => onKeyDown?.(e)}
         list={datalistItems.length > 0 ? "datalist-options" : undefined}
         autoComplete={autocomplete}
+        ref={inputRef}
         {...inputProps}
       />
     );
@@ -166,7 +180,7 @@ export const Input = ({
           ) : prependedText || appendedText ? (
             <div
               className={`input-group input-group-flat ${
-                noMargin ? "" : "mb-3"
+                invalid && "is-invalid"
               }`}
             >
               {prependedText && (
@@ -178,7 +192,11 @@ export const Input = ({
               )}
             </div>
           ) : appendedLinkText ? (
-            <div className="input-group input-group-flat">
+            <div
+              className={`input-group input-group-flat  ${
+                invalid && "is-invalid"
+              }`}
+            >
               {renderInput()}
               <span className="input-group-text">
                 <a
@@ -210,6 +228,9 @@ export const Input = ({
       )}
 
       {hint && <div className="form-hint">{hint}</div>}
+      {invalidText && invalid && (
+        <div className="invalid-feedback">{invalidText}</div>
+      )}
     </div>
   );
 };
@@ -231,4 +252,17 @@ Input.propTypes = {
   appendedLinkHref: PropTypes.string,
   appendedLinkOnClick: PropTypes.func,
   datalistItems: PropTypes.arrayOf(PropTypes.string),
+  autoFocus: PropTypes.bool,
+  onKeyDown: PropTypes.func,
+  inputProps: PropTypes.object,
+  helpText: PropTypes.string,
+  helpTextPlacement: PropTypes.string,
+  helpPrompt: PropTypes.string,
+  required: PropTypes.bool,
+  hint: PropTypes.string,
+  labelDescription: PropTypes.string,
+  autocomplete: PropTypes.string,
+  useTextarea: PropTypes.bool,
+  invalid: PropTypes.bool,
+  invalidText: PropTypes.string,
 };

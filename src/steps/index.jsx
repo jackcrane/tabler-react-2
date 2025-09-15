@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import classNames from "classnames";
 
 export const Steps = ({
   steps,
@@ -8,6 +9,8 @@ export const Steps = ({
   numbered = false,
   hideText = false,
   vertical = false,
+  className,
+  ...props
 }) => {
   const color = passedColor || passedVariant;
   const stepClass = `steps ${color ? `steps-${color}` : ""} ${
@@ -15,7 +18,7 @@ export const Steps = ({
   } ${vertical ? "steps-vertical" : ""}`;
 
   return (
-    <ul className={stepClass}>
+    <ul className={classNames(stepClass, className)} {...props}>
       {steps.map((step, index) => {
         const stepClasses = `step-item ${step.active ? "active" : ""}`;
         const stepContent = hideText ? "" : step.text;

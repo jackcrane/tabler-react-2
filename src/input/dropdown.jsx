@@ -96,7 +96,7 @@ export const DropdownInput = ({
         href="javascript:void(0)"
         className={`btn dropdown-toggle ${props.disabled ? "disabled" : ""} ${
           color ? `btn-${outline ? "outline-" : ""}${color}` : ""
-        } ${props.className || ""}`}
+        } ${props.className || ""} ${props.invalid ? "is-invalid" : ""}`}
         data-bs-toggle="dropdown"
         {...aprops}
       >
@@ -134,7 +134,7 @@ export const DropdownInput = ({
             const isItemDisabled = v.disabled === true;
             return (
               <a
-                key={v.id ?? i}
+                key={(v.id ?? i) + "__" + i}
                 className={`dropdown-item${isActive ? " active" : ""}${
                   isItemDisabled ? " disabled" : ""
                 }`}
