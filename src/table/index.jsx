@@ -85,6 +85,10 @@ export const Table = ({
   onRowsPerPageChange, // deprecated alias — prefer `onSetSize`
   onSetPage,
   onSetSize,
+  // external/controlled ordering (sorting)
+  orderBy, // accessor string to indicate active ordered column
+  order, // 'asc' | 'desc'
+  onSetOrder, // (by: string, order: 'asc' | 'desc') => void
   pageSizeOptions = [10, 25, 50, 100],
   tableClassName = "",
   paginationClassName = "",
@@ -119,11 +123,24 @@ export const Table = ({
   };
 
   const handleSort = (accessor, sortFn) => {
-    let direction = "asc";
-    if (sortConfig.key === accessor && sortConfig.direction === "asc") {
-      direction = "desc";
+    const isSortControlled = typeof orderBy === "string" || typeof onSetOrder === "function";
+    if (isSortControlled) {
+      const currentKey = typeof orderBy === "string" ? orderBy : null;
+      const currentDir = order === "desc" ? "desc" : "asc";
+      let nextDir = "asc";
+      if (currentKey === accessor) {
+        nextDir = currentDir === "asc" ? "desc" : "asc";
+      }
+      if (typeof onSetOrder === "function") {
+        onSetOrder(accessor, nextDir);
+      }
+    } else {
+      let direction = "asc";
+      if (sortConfig.key === accessor && sortConfig.direction === "asc") {
+        direction = "desc";
+      }
+      setSortConfig({ key: accessor, direction });
     }
-    setSortConfig({ key: accessor, direction });
     if (useExternalPagination) {
       if (typeof onSetPage === "function") {
         onSetPage(1);
@@ -138,6 +155,9 @@ export const Table = ({
   };
 
   const sortedData = useMemo(() => {
+    // If sorting is controlled externally, do not sort here
+    const isSortControlled = typeof orderBy === "string" || typeof onSetOrder === "function";
+    if (isSortControlled) return data;
     if (!sortConfig.key) return data;
     const { key, direction } = sortConfig;
     const sortColumn = columns.find((col) => col.accessor === key);
@@ -148,7 +168,7 @@ export const Table = ({
       const bValue = getValueByAccessor(b, key);
       return sortFunction(aValue, bValue) * order;
     });
-  }, [data, sortConfig, columns]);
+  }, [data, sortConfig, columns, orderBy, order, onSetOrder]);
 
   const totalRowCount = useMemo(
     () => (useExternalPagination ? totalRows ?? data.length : sortedData.length),
@@ -168,14 +188,26 @@ export const Table = ({
   }, [sortedData, effectivePage, effectivePageSize, showPagination, useExternalPagination]);
 
   const getSortIcon = (column) => {
-    if (sortConfig.key === column.accessor) {
-      return sortConfig.direction === "asc" ? (
-        <IconSortAscending size={16} />
-      ) : (
-        <IconSortDescending size={16} />
-      );
+    const isSortControlled = typeof orderBy === "string" || typeof onSetOrder === "function";
+    if (isSortControlled) {
+      if (orderBy === column.accessor) {
+        return order === "desc" ? (
+          <IconSortDescending size={16} />
+        ) : (
+          <IconSortAscending size={16} />
+        );
+      }
+      return <IconArrowsSort size={16} />;
+    } else {
+      if (sortConfig.key === column.accessor) {
+        return sortConfig.direction === "asc" ? (
+          <IconSortAscending size={16} />
+        ) : (
+          <IconSortDescending size={16} />
+        );
+      }
+      return <IconArrowsSort size={16} />;
     }
-    return <IconArrowsSort size={16} />;
   };
 
   return (
@@ -328,4 +360,8 @@ Table.propTypes = {
   onSetPage: PropTypes.func,
   onSetSize: PropTypes.func,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
+  // external ordering
+  orderBy: PropTypes.string,
+  order: PropTypes.oneOf(["asc", "desc"]),
+  onSetOrder: PropTypes.func,
 };

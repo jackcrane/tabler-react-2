@@ -455,6 +455,88 @@ const customSortFn = (a, b) => {
 
 > **Note**: Sorting only works for the data in the table. If, for example, you have thousands of rows and are only rendering a few, you will need to handle the sorting yourself, outside of the table. Incorporating internal pagination that supports sorting is a planned feature but not yet implemented.
 
+### External ordering
+
+You can control ordering from the parent (e.g., server-side sort) and still use the table’s sortable headers. Provide the props below. When controlled, the table will not sort your `data`; it assumes you already passed rows in the desired order.
+
+- orderBy: accessor of the active column
+- order: either `"asc"` or `"desc"`
+- onSetOrder: called with `(orderBy, order)` when the user clicks a header
+
+<Excerpt>
+  {(() => {
+    const React = require("react");
+    const [page, setPage] = React.useState(1);
+    const [size, setSize] = React.useState(5);
+    const [orderBy, setOrderBy] = React.useState("name");
+    const [order, setOrder] = React.useState("asc");
+    const total = congressPeople.length;
+
+    const sorted = [...congressPeople].sort((a, b) => {
+      const av = orderBy.split('.').reduce((acc, k) => acc?.[k], a);
+      const bv = orderBy.split('.').reduce((acc, k) => acc?.[k], b);
+      if (av === bv) return 0;
+      const cmp = av > bv ? 1 : -1;
+      return order === 'asc' ? cmp : -cmp;
+    });
+    const start = (page - 1) * size;
+    const pageData = sorted.slice(start, start + size);
+
+    return (
+      <Table
+        columns={[
+          { label: "Name", accessor: "name", sortable: true },
+          { label: "Party", accessor: "party", sortable: true },
+          { label: "State", accessor: "region.state", sortable: true },
+        ]}
+        data={pageData}
+        showPagination
+        page={page}
+        size={size}
+        totalRows={total}
+        orderBy={orderBy}
+        order={order}
+        onSetOrder={(by, dir) => { setOrderBy(by); setOrder(dir); }}
+        onSetPage={setPage}
+        onSetSize={(n) => { setPage(1); setSize(n); }}
+      />
+    );
+  })()}
+</Excerpt>
+
+```jsx
+// Parent controls ordering and pagination
+const [orderBy, setOrderBy] = useState('name');
+const [order, setOrder] = useState('asc');
+const [page, setPage] = useState(1);
+const [size, setSize] = useState(10);
+
+const ordered = [...allRows].sort((a, b) => {
+  const av = orderBy.split('.').reduce((acc, k) => acc?.[k], a);
+  const bv = orderBy.split('.').reduce((acc, k) => acc?.[k], b);
+  if (av === bv) return 0;
+  const cmp = av > bv ? 1 : -1;
+  return order === 'asc' ? cmp : -cmp;
+});
+
+const start = (page - 1) * size;
+const currentData = ordered.slice(start, start + size);
+
+<Table
+  columns={columns}
+  data={currentData}
+  showPagination
+  page={page}
+  size={size}
+  totalRows={allRows.length}
+  orderBy={orderBy}
+  order={order}
+  onSetOrder={(by, dir) => { setOrderBy(by); setOrder(dir); }}
+  onSetPage={setPage}
+  onSetSize={(n) => { setPage(1); setSize(n); }}
+/>;
+```
+
 ## Pagination
 
 The `Table` supports built-in pagination UI. Enable it with `showPagination`.
