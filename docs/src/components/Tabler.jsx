@@ -1,63 +1,136 @@
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 
-export const Tabler = ({ children }) => {
+const TABLER_CSS_URL =
+  "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.0/dist/css/tabler.min.css";
+const TABLER_JS_URL = "/tabler.min.js"; // your local path
+
+// Naive CSS rewrite: map `html` → `:host` and `body` → `.shadow-body`.
+// Also handle common combos like `body.theme-dark` → `:host(.theme-dark) .shadow-body`.
+const rewriteTablerCss = (css) => {
+  // body.<class> → :host(.<class>) .shadow-body
+  css = css.replace(
+    /(^|,)\s*body\.([A-Za-z0-9_-]+)/g,
+    (_m, p1, cls) => `${p1} :host(.${cls}) .shadow-body`
+  );
+  // html body → :host .shadow-body
+  css = css.replace(
+    /(^|,)\s*html\s+body/g,
+    (_m, p1) => `${p1} :host .shadow-body`
+  );
+  // body → .shadow-body
+  css = css.replace(
+    /(^|,)\s*body(\b|[^\w-])/g,
+    (_m, p1, tail) => `${p1} .shadow-body${tail}`
+  );
+  // html → :host
+  css = css.replace(
+    /(^|,)\s*html(\b|[^\w-])/g,
+    (_m, p1, tail) => `${p1} :host${tail}`
+  );
+  css = css.replace(`,[data-bs-theme="light"]`, "");
+  return css;
+};
+
+export const Tabler = ({ children, theme = "theme-light" }) => {
   const containerRef = useRef(null);
   const shadowRef = useRef(null);
-  const [wrapper, setWrapper] = useState(null);
+  const [bodyEl, setBodyEl] = useState(null);
 
   useEffect(() => {
-    const initialize = async () => {
-      if (containerRef.current && !shadowRef.current) {
-        // Create a shadow root for this instance
-        const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
-        shadowRef.current = shadowRoot;
+    let aborted = false;
 
-        // Inject Tabler stylesheet
-        const styleLink = document.createElement("link");
-        styleLink.rel = "stylesheet";
-        styleLink.href =
-          "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.0/dist/css/tabler.min.css";
+    const init = async () => {
+      if (!containerRef.current || shadowRef.current) return;
 
-        // Create a wrapper div for children
-        const wrapperDiv = document.createElement("div");
-        wrapperDiv.style.display = "inline-block";
-        wrapperDiv.style.width = "auto";
-        wrapperDiv.style.height = "auto";
+      const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
+      shadowRef.current = shadowRoot;
 
-        shadowRoot.appendChild(styleLink);
-        shadowRoot.appendChild(wrapperDiv);
-        setWrapper(wrapperDiv);
+      // Create "shadow body" wrapper
+      const wrapperDiv = document.createElement("div");
+      wrapperDiv.className = "shadow-body"; // our stand-in for <body>
+      wrapperDiv.style.display = "contents"; // don't interfere with layout
+      wrapperDiv.setAttribute("data-bs-theme", "light");
+      shadowRoot.appendChild(wrapperDiv);
+      setBodyEl(wrapperDiv);
 
-        // Load and run Tabler script in an isolated context
-        try {
-          const response = await fetch("/tabler.min.js");
-          const scriptText = await response.text();
-
-          // Wrap the code in a function that temporarily sets window.SHADOW_DOC
-          const runTablerScript = new Function(
-            "shadowRoot",
-            `
-            window.USE_FALLBACK_ANCHOR = true;
-            const originalShadowDoc = window.SHADOW_DOC;
-            window.SHADOW_DOC = shadowRoot;
-            ${scriptText}
-            window.SHADOW_DOC = originalShadowDoc;
-          `
-          );
-          runTablerScript(shadowRoot);
-        } catch (err) {
-          console.error("Failed to load Tabler script:", err);
-        }
+      // Apply theme class on :host (so rules like :host(.theme-dark) work)
+      if (theme) {
+        // Attach the theme class to the host element:
+        containerRef.current.classList.add(theme);
       }
+
+      // Load & rewrite Tabler CSS → inject into shadow root
+      try {
+        const res = await fetch(TABLER_CSS_URL, { cache: "force-cache" });
+        const originalCss = await res.text();
+        const patchedCss = rewriteTablerCss(originalCss);
+
+        if ("adoptedStyleSheets" in Document.prototype) {
+          const sheet = new CSSStyleSheet();
+          await sheet.replace(patchedCss);
+          // Preserve existing sheets if any
+          shadowRoot.adoptedStyleSheets = [
+            ...shadowRoot.adoptedStyleSheets,
+            sheet,
+          ];
+        } else {
+          const styleEl = document.createElement("style");
+          styleEl.textContent = patchedCss;
+          shadowRoot.prepend(styleEl);
+        }
+      } catch (e) {
+        console.error("Failed to load Tabler CSS:", e);
+      }
+
+      // Load and run Tabler JS with a minimal document.body shim
+      try {
+        const jsRes = await fetch(TABLER_JS_URL, { cache: "force-cache" });
+        const scriptText = await jsRes.text();
+
+        const runTablerScript = new Function(
+          "shadowRoot",
+          "bodyEl",
+          `
+            // Optional flag you used
+            window.USE_FALLBACK_ANCHOR = true;
+
+            // Provide a very thin 'document' shim within this scope
+            const _doc = new Proxy(window.document, {
+              get(target, prop, receiver) {
+                if (prop === "body") return bodyEl;
+                return Reflect.get(target, prop, receiver);
+              }
+            });
+
+            // Some libraries read 'document.documentElement' too; point it at host
+            Object.defineProperty(_doc, "documentElement", {
+              get: () => shadowRoot.host,
+            });
+
+            (function(document){
+              ${scriptText}
+            })(_doc);
+          `
+        );
+
+        runTablerScript(shadowRoot, wrapperDiv);
+      } catch (err) {
+        console.error("Failed to load Tabler script:", err);
+      }
+
+      if (aborted) return;
     };
 
-    initialize();
-  }, []);
+    init();
+    return () => {
+      aborted = true;
+    };
+  }, [theme]);
 
   return (
     <div ref={containerRef}>
-      {wrapper && ReactDOM.createPortal(children, wrapper)}
+      {bodyEl && ReactDOM.createPortal(children, bodyEl)}
     </div>
   );
 };
