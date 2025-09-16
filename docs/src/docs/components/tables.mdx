@@ -634,3 +634,51 @@ const currentData = allRows.slice(start, start + rowsPerPage);
 ```
 
 If you don’t supply these controlled props, the table falls back to its internal pagination state, preserving backwards compatibility.
+
+## useTable hook
+
+For async workflows, use the helper hook to centralize loading, pagination, count, and ordering while preserving the Table’s controlled API.
+
+```jsx
+import { useEffect, useState } from 'react';
+import { Table, useTable } from 'tabler-react-2';
+
+function PeopleTable() {
+  const [rows, setRows] = useState([]);
+  const { tableProps, setLoading, setPage, setCount, setOrder } = useTable({
+    autoLoading: false,
+    onPageChange: async (page, size, sort) => {
+      setLoading(true);
+      try {
+        // fetch your data here using page, size, and sort
+        const res = await fetchPeople({ page, size, sort });
+        setRows(res.items);
+        setCount(res.total);
+      } finally {
+        setLoading(false);
+      }
+    },
+    onSortChange: async (by, dir) => {
+      // optionally kick off a fetch based on new sort
+      // setOrder(by, dir) is already called for you
+    },
+  });
+
+  useEffect(() => {
+    // initial load
+    setPage(1);
+  }, [setPage]);
+
+  return <Table {...tableProps} columns={[
+      { label: 'Name', accessor: 'name', sortable: true },
+      { label: 'Party', accessor: 'party', sortable: true },
+      { label: 'State', accessor: 'region.state', sortable: true },
+    ]} data={rows} />;
+}
+```
+
+The hook returns:
+
+- tableProps: spread onto `<Table />` to enable controlled pagination, ordering, and loading
+- setLoading, setPage, setCount: imperative helpers for async flows
+- Also available: page, size, count, orderBy, order, setSize, setOrder

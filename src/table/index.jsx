@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
-import { Button, DropdownInput } from "../index";
+import { Button, DropdownInput, Spinner } from "../index";
 
 export const IconSortDescending = ({ size }) => (
   <svg
@@ -89,6 +89,8 @@ export const Table = ({
   orderBy, // accessor string to indicate active ordered column
   order, // 'asc' | 'desc'
   onSetOrder, // (by: string, order: 'asc' | 'desc') => void
+  // async/loading state control
+  loading = false,
   pageSizeOptions = [10, 25, 50, 100],
   tableClassName = "",
   paginationClassName = "",
@@ -231,11 +233,11 @@ export const Table = ({
                     column.sortable ? "sortable" : ""
                   }`}
                   onClick={
-                    column.sortable
+                    column.sortable && !loading
                       ? () => handleSort(column.accessor, column.sortFn)
                       : undefined
                   }
-                  style={{ cursor: column.sortable ? "pointer" : "default" }}
+                  style={{ cursor: column.sortable && !loading ? "pointer" : "default" }}
                 >
                   {column.icon && (
                     <span style={{ marginRight: 8 }}>{column.icon}</span>
@@ -247,6 +249,13 @@ export const Table = ({
             </tr>
           </thead>
           <tbody>
+            {loading && (
+              <tr>
+                <td colSpan={columns.length} className="text-center py-3">
+                  <Spinner />
+                </td>
+              </tr>
+            )}
             {paginatedData.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns.map((column, colIndex) => (
@@ -278,7 +287,7 @@ export const Table = ({
                 }
                 setCurrentPage(prev);
               }}
-              disabled={effectivePage === 1}
+              disabled={loading || effectivePage === 1}
             >
               Previous
             </Button>
@@ -291,7 +300,7 @@ export const Table = ({
                 }
                 setCurrentPage(next);
               }}
-              disabled={effectivePage === totalPages}
+              disabled={loading || effectivePage === totalPages}
               style={{ marginLeft: 8 }}
             >
               Next
@@ -316,6 +325,7 @@ export const Table = ({
             prompt="Rows per page"
             items={pageSizeOptions.map((size) => ({ id: size, label: size }))}
             value={effectivePageSize}
+            disabled={loading}
             onChange={(selected) => {
               if (useExternalPagination) {
                 if (typeof onSetSize === "function") return onSetSize(selected.id);
@@ -364,4 +374,8 @@ Table.propTypes = {
   orderBy: PropTypes.string,
   order: PropTypes.oneOf(["asc", "desc"]),
   onSetOrder: PropTypes.func,
+  // loading
+  loading: PropTypes.bool,
 };
+
+export { useTable } from "./useTable";
