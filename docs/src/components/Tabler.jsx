@@ -17,7 +17,7 @@ export const Tabler = ({ children }) => {
         const styleLink = document.createElement("link");
         styleLink.rel = "stylesheet";
         styleLink.href =
-          "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.2/dist/css/tabler.min.css";
+          "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.0/dist/css/tabler.min.css";
 
         // Create a wrapper div for children
         const wrapperDiv = document.createElement("div");
