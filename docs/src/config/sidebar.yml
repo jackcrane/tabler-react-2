@@ -50,6 +50,8 @@
       link: "/components/steps"
     - label: "Tables"
       link: "/components/tables"
+    - label: "Tables v2"
+      link: "/components/table-v2"
     - label: "Timeline"
       link: "/components/timeline"
     - label: "Navbar"

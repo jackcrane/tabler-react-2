@@ -1,0 +1,191 @@
+---
+title: Tables v2
+---
+
+Tables v2 is a new data table built on TanStack Table v8 with Tabler styling. It is fully controlled: you pass the current page of `data`, the total row count, and the active `sorting`. This design fits server-side pagination and ordering out of the box.
+
+> Note: live previews on this page may require a package version that exports `TableV2`. If you don’t see live examples, the code snippets still illustrate usage.
+
+## Signature
+
+```jsx
+import { TableV2 } from "tabler-react-2";
+
+<TableV2 {...props} />
+```
+
+### Core props
+
+| Prop | Required | Type | Description |
+| ---- | -------- | ---- | ----------- |
+| `columns` | Yes | TanStack `ColumnDef[]` | Column definitions using `accessorKey`, `header`, and optional `cell` renderers. |
+| `data` | Yes | `any[]` | Current page rows only. |
+| `totalRows` | Yes | `number` | Total available row count (for page count and range text). |
+| `page` | Yes | `number` | Current page (1-based). |
+| `size` | Yes | `number` | Current page size. |
+| `onPageChange` | Yes | `(page:number) => void` | Called with next 1-based page. |
+| `onSizeChange` | Yes | `(size:number) => void` | Called with next page size. Typically also reset page to 1. |
+| `sorting` | Yes | `{ id:string, desc?:boolean }[]` | Active ordering (TanStack format). Empty array for “no sort”. |
+| `onSortingChange` | Yes | `(next) => void` | Called when the user clicks a sortable header. |
+| `loading` | No | `boolean` | Shows a small spinner and disables pager while loading. |
+| `headerSticky` | No | `boolean` | Makes the header stick to the top of the card. |
+| `emptyState` | No | `string | () => ReactNode` | What to render when there are no rows. |
+| `getRowId` | No | `(row) => string` | Supply when your rows need a stable custom ID. |
+| `rowSelection` | No | `Record<string, boolean>` | Controlled selection map. |
+| `onRowSelectionChange` | No | `(updater) => void` | Controlled selection callback. |
+| `renderToolbarLeft` | No | `({ page,size,totalRows,sorting }) => ReactNode` | Custom left content in the card header. |
+| `renderToolbarRight` | No | same | Custom right content in the card header. |
+
+## Basic usage (client or server data)
+
+The table is controlled; keep `page`, `size`, and `sorting` in your component state. The example below uses in-memory data, but the same shape works with server APIs.
+
+```jsx
+import { useMemo, useState } from 'react';
+import { TableV2 } from 'tabler-react-2';
+
+const allRows = congressPeople; // e.g., from your API
+
+export default function Demo() {
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(5);
+  const [sorting, setSorting] = useState([]); // [{ id:'name', desc:false }]
+
+  const columns = useMemo(() => [
+    { accessorKey: 'name', header: 'Name' },
+    { accessorKey: 'party', header: 'Party' },
+    { accessorKey: 'region.state', header: 'State' },
+    {
+      accessorKey: 'email',
+      header: 'Email',
+      cell: ({ getValue }) => (
+        <a className="text-reset" href={`mailto:${getValue()}`}>{getValue()}</a>
+      ),
+    },
+  ], []);
+
+  // client-side slice just for the demo
+  const ordered = useMemo(() => {
+    if (!sorting.length) return allRows;
+    const { id, desc } = sorting[0];
+    const val = (row) => id.split('.').reduce((a, k) => a?.[k], row);
+    const cmp = (a, b) => (a === b ? 0 : a > b ? 1 : -1);
+    const sorted = [...allRows].sort((a, b) => cmp(val(a), val(b)));
+    return desc ? sorted.reverse() : sorted;
+  }, [sorting]);
+
+  const start = (page - 1) * size;
+  const pageData = ordered.slice(start, start + size);
+
+  return (
+    <TableV2
+      columns={columns}
+      data={pageData}
+      totalRows={allRows.length}
+      page={page}
+      size={size}
+      onPageChange={setPage}
+      onSizeChange={(n) => { setPage(1); setSize(n); }}
+      sorting={sorting}
+      onSortingChange={(next) => { setPage(1); setSorting(next); }}
+    />
+  );
+}
+```
+
+## Server-side workflow
+
+When fetching from an API, keep the same controlled state, but fetch rows for the current `page`, `size`, and `sorting`.
+
+```jsx
+const [page, setPage] = useState(1);
+const [size, setSize] = useState(25);
+const [sorting, setSorting] = useState([]);
+const [rows, setRows] = useState([]);
+const [total, setTotal] = useState(0);
+const [loading, setLoading] = useState(false);
+
+useEffect(() => {
+  let isMounted = true;
+  (async () => {
+    setLoading(true);
+    try {
+      const res = await fetchPeople({ page, size, sorting });
+      if (!isMounted) return;
+      setRows(res.items);
+      setTotal(res.total);
+    } finally {
+      setLoading(false);
+    }
+  })();
+  return () => { isMounted = false; };
+}, [page, size, sorting]);
+
+<TableV2
+  columns={columns}
+  data={rows}
+  totalRows={total}
+  page={page}
+  size={size}
+  onPageChange={setPage}
+  onSizeChange={(n) => { setPage(1); setSize(n); }}
+  sorting={sorting}
+  onSortingChange={(next) => { setPage(1); setSorting(next); }}
+  loading={loading}
+/>;
+```
+
+## Extras
+
+- Sticky header: pass `headerSticky` to keep headers visible while scrolling.
+- Toolbars: use `renderToolbarLeft`/`renderToolbarRight` to add filters or actions.
+- Row selection: control with `rowSelection` and `onRowSelectionChange`.
+
+### Sticky header example
+
+```jsx
+<TableV2
+  {...commonProps}
+  headerSticky
+/>
+```
+
+### Toolbar example
+
+```jsx
+<TableV2
+  {...commonProps}
+  renderToolbarLeft={() => (
+    <input className="form-control form-control-sm" placeholder="Search" />
+  )}
+  renderToolbarRight={() => (
+    <button className="btn btn-sm btn-primary">Add</button>
+  )}
+/>
+```
+
+### Row selection (minimal)
+
+```jsx
+const [rowSelection, setRowSelection] = useState({});
+
+<TableV2
+  {...commonProps}
+  rowSelection={rowSelection}
+  onRowSelectionChange={setRowSelection}
+  columns={[
+    {
+      id: 'select',
+      header: () => null,
+      cell: ({ row }) => (
+        <input
+          type="checkbox"
+          checked={row.getIsSelected()}
+          onChange={row.getToggleSelectedHandler()}
+        />
+      ),
+    },
+    ...columns,
+  ]}
+/>;
+```

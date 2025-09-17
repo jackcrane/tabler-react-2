@@ -1,136 +1,140 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 
 const TABLER_CSS_URL =
   "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.0/dist/css/tabler.min.css";
-const TABLER_JS_URL = "/tabler.min.js"; // your local path
+const TABLER_JS_URL =
+  "https://cdn.jsdelivr.net/npm/@tabler/core@1.3.0/dist/js/tabler.min.js";
 
-// Naive CSS rewrite: map `html` → `:host` and `body` → `.shadow-body`.
-// Also handle common combos like `body.theme-dark` → `:host(.theme-dark) .shadow-body`.
-const rewriteTablerCss = (css) => {
-  // body.<class> → :host(.<class>) .shadow-body
-  css = css.replace(
-    /(^|,)\s*body\.([A-Za-z0-9_-]+)/g,
-    (_m, p1, cls) => `${p1} :host(.${cls}) .shadow-body`
-  );
-  // html body → :host .shadow-body
-  css = css.replace(
-    /(^|,)\s*html\s+body/g,
-    (_m, p1) => `${p1} :host .shadow-body`
-  );
-  // body → .shadow-body
-  css = css.replace(
-    /(^|,)\s*body(\b|[^\w-])/g,
-    (_m, p1, tail) => `${p1} .shadow-body${tail}`
-  );
-  // html → :host
-  css = css.replace(
-    /(^|,)\s*html(\b|[^\w-])/g,
-    (_m, p1, tail) => `${p1} :host${tail}`
-  );
-  css = css.replace(`,[data-bs-theme="light"]`, "");
-  return css;
-};
+/**
+ * <Tabler>
+ * Same public API as before:
+ *   - children
+ *   - theme?: "light" | "dark" (defaults to "light")
+ * Also accepts className and style for the outer iframe element.
+ */
+export const Tabler = ({
+  children,
+  theme = "light",
+  className,
+  style,
+  headExtras = "",
+  cssUrl = TABLER_CSS_URL,
+  jsUrl = TABLER_JS_URL,
+}) => {
+  const iframeRef = useRef(null);
+  const [mountNode, setMountNode] = useState(null);
+  const roRef = useRef(null);
 
-export const Tabler = ({ children, theme = "theme-light" }) => {
-  const containerRef = useRef(null);
-  const shadowRef = useRef(null);
-  const [bodyEl, setBodyEl] = useState(null);
+  const srcDoc = useMemo(() => {
+    const t = theme === "dark" ? "dark" : "light";
+    return `<!DOCTYPE html>
+<html lang="en" data-bs-theme="${t}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="${cssUrl}">
+  ${headExtras}
+  <style>
+    html, body { margin: 0; padding: 0; }
+    body { display: block; background-color: transparent!important; }
+    #app { min-height: 0; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>`;
+  }, [cssUrl, headExtras, theme]);
 
   useEffect(() => {
-    let aborted = false;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
 
-    const init = async () => {
-      if (!containerRef.current || shadowRef.current) return;
+    iframe.srcdoc = srcDoc;
 
-      const shadowRoot = containerRef.current.attachShadow({ mode: "open" });
-      shadowRef.current = shadowRoot;
+    const onLoad = () => {
+      const doc = iframe.contentDocument;
+      const win = iframe.contentWindow;
+      if (!doc || !win) return;
 
-      // Create "shadow body" wrapper
-      const wrapperDiv = document.createElement("div");
-      wrapperDiv.className = "shadow-body"; // our stand-in for <body>
-      wrapperDiv.style.display = "contents"; // don't interfere with layout
-      wrapperDiv.setAttribute("data-bs-theme", "light");
-      shadowRoot.appendChild(wrapperDiv);
-      setBodyEl(wrapperDiv);
+      // Ensure theme attribute is correct
+      doc.documentElement.setAttribute(
+        "data-bs-theme",
+        theme === "dark" ? "dark" : "light"
+      );
 
-      // Apply theme class on :host (so rules like :host(.theme-dark) work)
-      if (theme) {
-        // Attach the theme class to the host element:
-        containerRef.current.classList.add(theme);
+      const app = doc.getElementById("app");
+      setMountNode(app || null);
+
+      // Inject Tabler JS in iframe context
+      const s = doc.createElement("script");
+      s.src = jsUrl;
+      s.defer = true;
+      doc.head.appendChild(s);
+
+      // Auto-resize to content
+      if (roRef.current) {
+        try {
+          roRef.current.disconnect();
+        } catch {}
       }
+      const ro = new win.ResizeObserver(() => {
+        const h =
+          doc.documentElement.scrollHeight ||
+          doc.body.scrollHeight ||
+          app?.scrollHeight ||
+          0;
+        // iframe.style.height = `${Math.ceil(h) + 1}px`;
+      });
+      roRef.current = ro;
+      ro.observe(doc.documentElement);
 
-      // Load & rewrite Tabler CSS → inject into shadow root
-      try {
-        const res = await fetch(TABLER_CSS_URL, { cache: "force-cache" });
-        const originalCss = await res.text();
-        const patchedCss = rewriteTablerCss(originalCss);
-
-        if ("adoptedStyleSheets" in Document.prototype) {
-          const sheet = new CSSStyleSheet();
-          await sheet.replace(patchedCss);
-          // Preserve existing sheets if any
-          shadowRoot.adoptedStyleSheets = [
-            ...shadowRoot.adoptedStyleSheets,
-            sheet,
-          ];
-        } else {
-          const styleEl = document.createElement("style");
-          styleEl.textContent = patchedCss;
-          shadowRoot.prepend(styleEl);
-        }
-      } catch (e) {
-        console.error("Failed to load Tabler CSS:", e);
-      }
-
-      // Load and run Tabler JS with a minimal document.body shim
-      try {
-        const jsRes = await fetch(TABLER_JS_URL, { cache: "force-cache" });
-        const scriptText = await jsRes.text();
-
-        const runTablerScript = new Function(
-          "shadowRoot",
-          "bodyEl",
-          `
-            // Optional flag you used
-            window.USE_FALLBACK_ANCHOR = true;
-
-            // Provide a very thin 'document' shim within this scope
-            const _doc = new Proxy(window.document, {
-              get(target, prop, receiver) {
-                if (prop === "body") return bodyEl;
-                return Reflect.get(target, prop, receiver);
-              }
-            });
-
-            // Some libraries read 'document.documentElement' too; point it at host
-            Object.defineProperty(_doc, "documentElement", {
-              get: () => shadowRoot.host,
-            });
-
-            (function(document){
-              ${scriptText}
-            })(_doc);
-          `
-        );
-
-        runTablerScript(shadowRoot, wrapperDiv);
-      } catch (err) {
-        console.error("Failed to load Tabler script:", err);
-      }
-
-      if (aborted) return;
+      // Initial sizing tick
+      setTimeout(() => {
+        const h =
+          doc.documentElement.scrollHeight ||
+          doc.body.scrollHeight ||
+          app?.scrollHeight ||
+          0;
+        iframe.style.height = `${Math.ceil(h) + 1}px`;
+      }, 0);
     };
 
-    init();
+    iframe.addEventListener("load", onLoad);
     return () => {
-      aborted = true;
+      iframe.removeEventListener("load", onLoad);
+      if (roRef.current) {
+        try {
+          roRef.current.disconnect();
+        } catch {}
+        roRef.current = null;
+      }
+      setMountNode(null);
     };
+  }, [srcDoc, jsUrl, theme]);
+
+  // Keep theme in sync if it changes
+  useEffect(() => {
+    const doc = iframeRef.current?.contentDocument;
+    if (doc) {
+      doc.documentElement.setAttribute(
+        "data-bs-theme",
+        theme === "dark" ? "dark" : "light"
+      );
+    }
   }, [theme]);
 
   return (
-    <div ref={containerRef}>
-      {bodyEl && ReactDOM.createPortal(children, bodyEl)}
-    </div>
+    <>
+      <iframe
+        ref={iframeRef}
+        className={className}
+        style={{ width: "100%", border: 0, display: "block", ...(style || {}) }}
+        // Add sandbox if you want stricter isolation; e.g.:
+        // sandbox="allow-scripts allow-same-origin"
+      />
+      {mountNode ? ReactDOM.createPortal(children, mountNode) : null}
+    </>
   );
 };

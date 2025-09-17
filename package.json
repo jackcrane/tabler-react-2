@@ -6,7 +6,9 @@
   "scripts": {
     "test": "cd demo && yarn start",
     "build:css": "postcss src/**/*.css --dir dist",
-    "build": "babel src --out-dir dist && npm run build:css"
+    "build": "babel src --out-dir dist && npm run build:css",
+    "docs:vanilla": "yarn --cwd docs start",
+    "docs": "cpulimit -l 20 -- yarn --cwd docs start"
   },
   "author": "Jack Crane",
   "license": "MIT",
