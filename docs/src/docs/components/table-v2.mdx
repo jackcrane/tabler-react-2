@@ -20,25 +20,25 @@ import { TableV2 } from "tabler-react-2";
 
 ### Core props
 
-| Prop                   | Required | Type                                             | Description                                                                      |
-| ---------------------- | -------- | ------------------------------------------------ | -------------------------------------------------------------------------------- | -------------------------------------- |
-| `columns`              | Yes      | TanStack `ColumnDef[]`                           | Column definitions using `accessorKey`, `header`, and optional `cell` renderers. |
-| `data`                 | Yes      | `any[]`                                          | Current page rows only.                                                          |
-| `totalRows`            | Yes      | `number`                                         | Total available row count (for page count and range text).                       |
-| `page`                 | Yes      | `number`                                         | Current page (1-based).                                                          |
-| `size`                 | Yes      | `number`                                         | Current page size.                                                               |
-| `onPageChange`         | Yes      | `(page:number) => void`                          | Called with next 1-based page.                                                   |
-| `onSizeChange`         | Yes      | `(size:number) => void`                          | Called with next page size. Typically also reset page to 1.                      |
-| `sorting`              | Yes      | `{ id:string, desc?:boolean }[]`                 | Active ordering (TanStack format). Empty array for “no sort”.                    |
-| `onSortingChange`      | Yes      | `(next) => void`                                 | Called when the user clicks a sortable header.                                   |
-| `loading`              | No       | `boolean`                                        | Shows a small spinner and disables pager while loading.                          |
-| `headerSticky`         | No       | `boolean`                                        | Makes the header stick to the top of the card.                                   |
-| `emptyState`           | No       | `string                                          | () => ReactNode`                                                                 | What to render when there are no rows. |
-| `getRowId`             | No       | `(row) => string`                                | Supply when your rows need a stable custom ID.                                   |
-| `rowSelection`         | No       | `Record<string, boolean>`                        | Controlled selection map.                                                        |
-| `onRowSelectionChange` | No       | `(updater) => void`                              | Controlled selection callback.                                                   |
-| `renderToolbarLeft`    | No       | `({ page,size,totalRows,sorting }) => ReactNode` | Custom left content in the card header.                                          |
-| `renderToolbarRight`   | No       | same                                             | Custom right content in the card header.                                         |
+| Prop                   | Required | Type                                                                 | Description                                                                      |
+| ---------------------- | -------- | -------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `columns`              | Yes      | TanStack `ColumnDef[]`                                               | Column definitions using `accessorKey`, `header`, and optional `cell` renderers. |
+| `data`                 | Yes      | `any[]`                                                              | Current page rows only.                                                          |
+| `totalRows`            | Yes      | `number`                                                             | Total available row count (for page count and range text).                       |
+| `page`                 | Yes      | `number`                                                             | Current page (1-based).                                                          |
+| `size`                 | Yes      | `number`                                                             | Current page size.                                                               |
+| `onPageChange`         | Yes      | `(page:number) => void`                                              | Called with next 1-based page.                                                   |
+| `onSizeChange`         | Yes      | `(size:number) => void`                                              | Called with next page size. Typically also reset page to 1.                      |
+| `sorting`              | Yes      | `{ id:string, desc?:boolean }[]`                                     | Active ordering (TanStack format). Empty array for “no sort”.                    |
+| `onSortingChange`      | Yes      | `(next) => void`                                                     | Called when the user clicks a sortable header.                                   |
+| `loading`              | No       | `boolean`                                                            | Shows a small spinner and disables pager while loading.                          |
+| `headerSticky`         | No       | `boolean`                                                            | Makes the header stick to the top of the card.                                   |
+| `emptyState`           | No       | `string                                          \| () => ReactNode` | What to render when there are no rows.                                           |
+| `getRowId`             | No       | `(row) => string`                                                    | Supply when your rows need a stable custom ID.                                   |
+| `rowSelection`         | No       | `Record<string, boolean>`                                            | Controlled selection map.                                                        |
+| `onRowSelectionChange` | No       | `(updater) => void`                                                  | Controlled selection callback.                                                   |
+| `renderToolbarLeft`    | No       | `({ page,size,totalRows,sorting }) => ReactNode`                     | Custom left content in the card header.                                          |
+| `renderToolbarRight`   | No       | same                                                                 | Custom right content in the card header.                                         |
 
 ## Basic usage (client or server data)
 
@@ -110,42 +110,60 @@ export default function Demo() {
 
 <Excerpt>
 {(() => {
-        const React = require("react");
+  const React = require("react");
+  const { useMemo, useState } = React;
 
-        return (
-          <TableV2
-            columns={[
-              { accessorKey: "name", header: "Name" },
-              { accessorKey: "party", header: "Party" },
-              { accessorKey: "region.state", header: "State" },
-              {
-                accessorKey: "email",
-                header: "Email",
-                cell: ({ getValue }) => (
-                  <a className="text-reset" href={`mailto:${getValue()}`}>
-                    {getValue()}
-                  </a>
-                ),
-              },
-            ]}
-            data={congressPeople}
-            totalRows={congressPeople.length}
-            page={1}
-            size={25}
-            onPageChange={(page) => {
-              console.log("page", page);
-            }}
-            onSizeChange={(size) => {
-              console.log("size", size);
-            }}
-            sorting={[]}
-            onSortingChange={(sorting) => {
-              console.log("sorting", sorting);
-            }}
-            loading={false}
-          />
-        )
+  // Local, fully functional demo state (client-side slice)
+  const allRows = congressPeople;
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const [sorting, setSorting] = useState([]); // [{ id:'name', desc:false }]
 
+  const ordered = useMemo(() => {
+    if (!sorting.length) return allRows;
+    const { id, desc } = sorting[0];
+    const val = (row) => id.split(".").reduce((a, k) => a?.[k], row);
+    const cmp = (a, b) => (a === b ? 0 : a > b ? 1 : -1);
+    const sorted = [...allRows].sort((a, b) => cmp(val(a), val(b)));
+    return desc ? sorted.reverse() : sorted;
+  }, [sorting]);
+
+  const start = (page - 1) * size;
+  const pageData = ordered.slice(start, start + size);
+
+  return (
+    <TableV2
+      columns={[
+        { accessorKey: "name", header: "Name" },
+        { accessorKey: "party", header: "Party" },
+        { accessorKey: "region.state", header: "State" },
+        {
+          accessorKey: "email",
+          header: "Email",
+          cell: ({ getValue }) => (
+            <a className="text-reset" href={`mailto:${getValue()}`}>
+              {getValue()}
+            </a>
+          ),
+        },
+      ]}
+      data={pageData}
+      totalRows={allRows.length}
+      page={page}
+      size={size}
+      onPageChange={setPage}
+      onSizeChange={(n) => {
+        setPage(1);
+        setSize(n);
+      }}
+      sorting={sorting}
+      onSortingChange={(next) => {
+        setPage(1);
+        setSorting(next);
+      }}
+      loading={false}
+    />
+  );
 })()}
 
 </Excerpt>
@@ -199,6 +217,102 @@ useEffect(() => {
   loading={loading}
 />;
 ```
+
+### Live async demo (simulated API)
+
+The preview below simulates a server by sorting and slicing in a faux `fetch` with a 1s delay.
+
+<Excerpt>
+{(() => {
+  const React = require("react");
+  const { useEffect, useMemo, useState } = React;
+
+  // Simulated API that delays 1s and then returns sorted, paged rows
+  const fetchPeople = ({ page, size, sorting }) =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        const all = congressPeople;
+        const total = all.length;
+
+        // server-side order
+        let ordered = all;
+        if (sorting?.length) {
+          const { id, desc } = sorting[0];
+          const val = (row) => id.split(".").reduce((a, k) => a?.[k], row);
+          const cmp = (a, b) => (a === b ? 0 : a > b ? 1 : -1);
+          const sorted = [...all].sort((a, b) => cmp(val(a), val(b)));
+          ordered = desc ? sorted.reverse() : sorted;
+        }
+
+        // server-side page
+        const start = (page - 1) * size;
+        const items = ordered.slice(start, start + size);
+        resolve({ items, total });
+      }, 1000);
+    });
+
+  const columns = useMemo(
+    () => [
+      { accessorKey: "name", header: "Name" },
+      { accessorKey: "party", header: "Party" },
+      { accessorKey: "region.state", header: "State" },
+      {
+        accessorKey: "email",
+        header: "Email",
+        cell: ({ getValue }) => (
+          <a className="text-reset" href={`mailto:${getValue()}`}>
+            {getValue()}
+          </a>
+        ),
+      },
+    ],
+    []
+  );
+
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const [sorting, setSorting] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    setLoading(true);
+    fetchPeople({ page, size, sorting }).then((res) => {
+      if (!isMounted) return;
+      setRows(res.items);
+      setTotal(res.total);
+      setLoading(false);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, [page, size, sorting]);
+
+  return (
+    <TableV2
+      columns={columns}
+      data={rows}
+      totalRows={total}
+      page={page}
+      size={size}
+      onPageChange={setPage}
+      onSizeChange={(n) => {
+        setPage(1);
+        setSize(n);
+      }}
+      sorting={sorting}
+      onSortingChange={(next) => {
+        setPage(1);
+        setSorting(next);
+      }}
+      loading={loading}
+    />
+  );
+})()}
+
+</Excerpt>
 
 ## Extras
 

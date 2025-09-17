@@ -86,5 +86,93 @@
       "district": "3rd"
     },
     "website": "https://susielee.house.gov"
+  },
+  {
+    "name": "Ashley Hinson",
+    "email": "ashley.hinson@mail.house.gov",
+    "party": "republican",
+    "region": {
+      "state": "Iowa",
+      "abbr": "IA",
+      "district": "2nd"
+    },
+    "website": "https://hinson.house.gov"
+  },
+  {
+    "name": "Ilhan Omar",
+    "email": "ilhan.omar@mail.house.gov",
+    "party": "democrat",
+    "region": {
+      "state": "Minnesota",
+      "abbr": "MN",
+      "district": "5th"
+    },
+    "website": "https://omar.house.gov"
+  },
+  {
+    "name": "Nancy Mace",
+    "email": "nancy.mace@mail.house.gov",
+    "party": "republican",
+    "region": {
+      "state": "South Carolina",
+      "abbr": "SC",
+      "district": "1st"
+    },
+    "website": "https://mace.house.gov"
+  },
+  {
+    "name": "Maxwell Frost",
+    "email": "maxwell.frost@mail.house.gov",
+    "party": "democrat",
+    "region": {
+      "state": "Florida",
+      "abbr": "FL",
+      "district": "10th"
+    },
+    "website": "https://frost.house.gov"
+  },
+  {
+    "name": "Dan Crenshaw",
+    "email": "dan.crenshaw@mail.house.gov",
+    "party": "republican",
+    "region": {
+      "state": "Texas",
+      "abbr": "TX",
+      "district": "2nd"
+    },
+    "website": "https://crenshaw.house.gov"
+  },
+  {
+    "name": "Ayanna Pressley",
+    "email": "ayanna.pressley@mail.house.gov",
+    "party": "democrat",
+    "region": {
+      "state": "Massachusetts",
+      "abbr": "MA",
+      "district": "7th"
+    },
+    "website": "https://pressley.house.gov"
+  },
+  {
+    "name": "Lauren Boebert",
+    "email": "lauren.boebert@mail.house.gov",
+    "party": "republican",
+    "region": {
+      "state": "Colorado",
+      "abbr": "CO",
+      "district": "3rd"
+    },
+    "website": "https://boebert.house.gov"
+  },
+  {
+    "name": "Ruben Gallego",
+    "email": "ruben.gallego@mail.house.gov",
+    "party": "democrat",
+    "region": {
+      "state": "Arizona",
+      "abbr": "AZ",
+      "district": "3rd"
+    },
+    "website": "https://gallego.house.gov"
   }
 ]

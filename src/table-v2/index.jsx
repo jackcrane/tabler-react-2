@@ -144,7 +144,8 @@ export const TableV2 = ({
     columns,
     state: {
       sorting,
-      rowSelection,
+      // Ensure TanStack always receives an object for selection state
+      rowSelection: rowSelection ?? {},
     },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true, // server-side sorting
