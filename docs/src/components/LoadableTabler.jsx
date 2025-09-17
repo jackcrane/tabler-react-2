@@ -57,6 +57,9 @@ export const Table = loadable(() =>
 export const Timeline = loadable(() =>
   import("tabler-react-2").then((mod) => mod.Timeline)
 );
+export const TableV2 = loadable(() =>
+  import("tabler-react-2").then((mod) => mod.TableV2)
+);
 
 // Util
 const Hr = loadable(() => import("tabler-react-2").then((mod) => mod.Util.Hr));

@@ -13,6 +13,7 @@ export * from "./ribbon/index";
 export * from "./spinner/index";
 export * from "./steps/index";
 export * from "./table/index";
+export * from "./table-v2/index";
 export * from "./timeline/index";
 export * from "./input/index";
 export * from "./navbar/index";
