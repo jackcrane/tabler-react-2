@@ -1,7 +1,7 @@
 // TableV2.jsx
-// TanStack Table v8 styled with Tabler CSS classes.
-// Controlled (server-side) pagination & sorting. Ready to paste.
-// ES modules, named exports, arrow functions only.
+// TanStack Table v8 styled like the Original component's Tabler look.
+// Adds `dense` mode for a compact layout.
+// Controlled (server-side) pagination & sorting. ES modules, named exports, arrow functions only.
 
 import React, { useMemo } from "react";
 import PropTypes from "prop-types";
@@ -11,10 +11,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-/** Small utility components (pure, named, arrow) */
+/** Small utilities */
 
-const SortIcon = ({ state }) => {
-  // state: 'asc' | 'desc' | false
+export const SortIcon = ({ state }) => {
   if (state === "asc") return <span aria-label="sorted ascending">▲</span>;
   if (state === "desc") return <span aria-label="sorted descending">▼</span>;
   return (
@@ -24,24 +23,29 @@ const SortIcon = ({ state }) => {
   );
 };
 
-const RangeText = ({ page, size, total }) => {
+export const RangeText = ({ page, size, total, dense }) => {
   const start = total === 0 ? 0 : (page - 1) * size + 1;
   const end = Math.min(page * size, total);
   return (
-    <span className="text-muted">
+    <span className={dense ? "ms-2 small text-muted" : "ms-3 text-muted"}>
       {start.toLocaleString()}–{end.toLocaleString()} of{" "}
       {total.toLocaleString()}
     </span>
   );
 };
 
-const PageSizeSelect = ({ value, onChange, options = [10, 25, 50, 100] }) => (
+export const PageSizeSelect = ({
+  value,
+  onChange,
+  options = [10, 25, 50, 100],
+  dense,
+}) => (
   <select
-    className="form-select form-select-sm"
+    className={dense ? "form-select form-select-sm" : "form-select"}
     value={value}
     onChange={(e) => onChange(Number(e.target.value))}
     aria-label="Rows per page"
-    style={{ width: 90 }}
+    style={{ width: dense ? 90 : 110 }}
   >
     {options.map((n) => (
       <option key={n} value={n}>
@@ -51,7 +55,15 @@ const PageSizeSelect = ({ value, onChange, options = [10, 25, 50, 100] }) => (
   </select>
 );
 
-const Pager = ({ page, size, total, onPageChange, disabled }) => {
+export const Pager = ({
+  page,
+  size,
+  total,
+  onPageChange,
+  disabled,
+  className = "",
+  dense,
+}) => {
   const totalPages = Math.max(1, Math.ceil(total / Math.max(1, size)));
   const canPrev = page > 1 && !disabled;
   const canNext = page < totalPages && !disabled;
@@ -62,111 +74,87 @@ const Pager = ({ page, size, total, onPageChange, disabled }) => {
   };
 
   return (
-    <ul className="pagination pagination-sm mb-0">
-      <li className={`page-item ${!canPrev ? "disabled" : ""}`}>
-        <button
-          className="page-link"
-          onClick={() => go(1)}
-          disabled={!canPrev}
-          aria-label="First"
-        >
-          «
-        </button>
-      </li>
-      <li className={`page-item ${!canPrev ? "disabled" : ""}`}>
-        <button
-          className="page-link"
-          onClick={() => go(page - 1)}
-          disabled={!canPrev}
-          aria-label="Previous"
-        >
-          ‹
-        </button>
-      </li>
-      <li className="page-item active">
-        <span className="page-link">
-          {page} / {totalPages}
-        </span>
-      </li>
-      <li className={`page-item ${!canNext ? "disabled" : ""}`}>
-        <button
-          className="page-link"
-          onClick={() => go(page + 1)}
-          disabled={!canNext}
-          aria-label="Next"
-        >
-          ›
-        </button>
-      </li>
-      <li className={`page-item ${!canNext ? "disabled" : ""}`}>
-        <button
-          className="page-link"
-          onClick={() => go(totalPages)}
-          disabled={!canNext}
-          aria-label="Last"
-        >
-          »
-        </button>
-      </li>
-    </ul>
+    <div
+      className={`d-inline-flex align-items-center ${
+        dense ? "gap-2" : ""
+      } ${className}`}
+    >
+      <button
+        className={`btn ${dense ? "btn-sm" : "btn-sm"} ${
+          dense ? "px-2 py-1" : ""
+        }`}
+        onClick={() => go(Math.max(1, page - 1))}
+        disabled={!canPrev}
+      >
+        Previous
+      </button>
+      <button
+        className={`btn ${dense ? "btn-sm ms-1" : "btn-sm ms-2"} ${
+          dense ? "px-2 py-1" : ""
+        }`}
+        onClick={() => go(Math.min(totalPages, page + 1))}
+        disabled={!canNext}
+      >
+        Next
+      </button>
+      <span className={dense ? "ms-2 small text-muted" : "ms-3 text-muted"}>
+        Page {page} of {totalPages}
+      </span>
+    </div>
   );
 };
 
 /** Main table */
 
 export const TableV2 = ({
+  // data/columns
   columns,
   data,
   totalRows,
+  // controlled pagination (1-based)
   page,
   size,
   onPageChange,
   onSizeChange,
+  // controlled sorting [{id, desc}]
   sorting,
   onSortingChange,
+  // ids & selection (optional)
   getRowId,
   rowSelection,
   onRowSelectionChange,
+  // visuals (matching Original component’s classes/layout)
+  nowrap = false,
+  stickyHeader = false,
   className = "",
-  tableClassName = "table table-striped table-hover table-sm mb-0",
-  theadClassName = "",
-  tbodyClassName = "",
+  tableClassName = "",
+  paginationClassName = "",
+  parentClassName = "",
+  dense = false, // <<< NEW
+  // misc
   emptyState = "No data",
   loading = false,
-  headerSticky = false,
-  renderToolbarLeft,
-  renderToolbarRight,
+  showPagination = true,
+  pageSizeOptions = [10, 25, 50, 100],
 }) => {
-  // TanStack expects 0-based pageIndex internally, but we control paging outside,
-  // so we leave TanStack in "manual" mode and pass already-sliced data.
   const table = useReactTable({
     data,
     columns,
     state: {
       sorting,
-      // Ensure TanStack always receives an object for selection state
       rowSelection: rowSelection ?? {},
     },
     getCoreRowModel: getCoreRowModel(),
-    manualSorting: true, // server-side sorting
+    manualSorting: true,
     enableSortingRemoval: false,
     onSortingChange,
     getRowId,
     onRowSelectionChange,
   });
 
-  const headerStyle = headerSticky
-    ? {
-        position: "sticky",
-        top: 0,
-        zIndex: 1,
-        background: "var(--tblr-bg-surface, #fff)",
-      }
-    : undefined;
-
-  const Th = ({ header }) => {
+  const headerCell = ({ header }) => {
     const canSort = header.column.getCanSort();
-    const sortState = header.column.getIsSorted(); // 'asc' | 'desc' | false
+    const sortState = header.column.getIsSorted();
     const handleSort = () => {
       if (!canSort) return;
       const id = header.column.id;
@@ -178,14 +166,21 @@ export const TableV2 = ({
           : [{ id, desc: false }];
       onSortingChange(next);
     };
-    const buttonClass = canSort
-      ? "btn btn-link p-0 text-reset text-decoration-none d-inline-flex align-items-center gap-1"
-      : "";
+
+    const thClass = [
+      header.column.columnDef.className || "",
+      canSort ? "sortable" : "",
+      dense ? "py-1" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
     return (
       <th
-        scope="col"
-        style={headerStyle}
-        className={canSort ? "cursor-pointer" : undefined}
+        key={header.id}
+        className={thClass}
+        onClick={canSort && !loading ? handleSort : undefined}
+        style={{ cursor: canSort && !loading ? "pointer" : "default" }}
         aria-sort={
           sortState === "asc"
             ? "ascending"
@@ -194,14 +189,10 @@ export const TableV2 = ({
             : "none"
         }
       >
-        {canSort ? (
-          <button type="button" className={buttonClass} onClick={handleSort}>
-            {flexRender(header.column.columnDef.header, header.getContext())}
-            <SortIcon state={sortState || false} />
-          </button>
-        ) : (
-          flexRender(header.column.columnDef.header, header.getContext())
-        )}
+        <span style={{ marginRight: 8 }}>
+          {flexRender(header.column.columnDef.header, header.getContext())}
+        </span>
+        {canSort && <SortIcon state={sortState || false} />}
       </th>
     );
   };
@@ -212,7 +203,9 @@ export const TableV2 = ({
         <tr>
           <td
             colSpan={table.getAllLeafColumns().length}
-            className="text-center text-muted py-5"
+            className={`text-center ${
+              dense ? "py-3 small" : "py-3"
+            } text-muted`}
           >
             {typeof emptyState === "function" ? emptyState() : emptyState}
           </td>
@@ -222,75 +215,111 @@ export const TableV2 = ({
     return table.getRowModel().rows.map((row) => (
       <tr
         key={row.id}
-        className={row.getIsSelected() ? "table-active" : undefined}
+        className={[
+          row.getIsSelected() ? "table-active" : "",
+          dense ? "align-middle" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
       >
         {row.getVisibleCells().map((cell) => (
-          <td key={cell.id}>
+          <td
+            key={cell.id}
+            className={[
+              cell.column.columnDef.className || "",
+              dense ? "py-1" : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </td>
         ))}
       </tr>
     ));
-  }, [data, loading, emptyState, table]);
+  }, [data, loading, emptyState, table, dense]);
+
+  const total = totalRows ?? 0;
 
   return (
-    <div className={`card ${className}`}>
-      {(renderToolbarLeft || renderToolbarRight) && (
-        <div className="card-header d-flex align-items-center justify-content-between gap-2">
-          <div className="d-flex align-items-center gap-2">
-            {renderToolbarLeft?.({ page, size, totalRows, sorting })}
-          </div>
-          <div className="d-flex align-items-center gap-2">
-            {renderToolbarRight?.({ page, size, totalRows, sorting })}
-          </div>
-        </div>
-      )}
-
-      <div className="table-responsive">
-        <table className={tableClassName}>
-          <thead className={theadClassName}>
+    <div className={parentClassName}>
+      <div
+        className={`table-responsive ${
+          nowrap ? "table-nowrap" : ""
+        } ${className}`}
+      >
+        <table
+          className={[
+            "table table-vcenter",
+            stickyHeader ? "sticky-top" : "",
+            dense ? "table-sm" : "",
+            tableClassName,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <thead>
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id}>
-                {hg.headers.map((header) => (
-                  <Th key={header.id} header={header} />
-                ))}
+                {hg.headers.map((h) => headerCell({ header: h }))}
               </tr>
             ))}
           </thead>
-          <tbody className={tbodyClassName}>{content}</tbody>
+          <tbody>
+            {loading && (
+              <tr>
+                <td
+                  colSpan={table.getAllLeafColumns().length}
+                  className={`text-center ${dense ? "py-2" : "py-3"}`}
+                >
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden
+                  />
+                  <span className={dense ? "small text-muted" : "text-muted"}>
+                    Loading…
+                  </span>
+                </td>
+              </tr>
+            )}
+            {content}
+          </tbody>
         </table>
       </div>
 
-      <div className="card-footer d-flex align-items-center justify-content-between gap-3">
-        <div className="d-flex align-items-center gap-3">
-          <PageSizeSelect value={size} onChange={onSizeChange} />
-          <RangeText page={page} size={size} total={totalRows} />
-        </div>
-        <div className="d-flex align-items-center gap-3">
-          {loading && (
-            <div className="d-flex align-items-center gap-2">
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden
-              />
-              <span className="text-muted">Loading…</span>
-            </div>
-          )}
-          <Pager
-            page={page}
-            size={size}
-            total={totalRows}
-            onPageChange={onPageChange}
-            disabled={loading}
+      {showPagination && (
+        <div
+          className={`d-flex justify-content-between align-items-center ${
+            dense ? "mt-1" : "mt-2"
+          } ${paginationClassName}`}
+        >
+          <div className={`d-flex align-items-center ${dense ? "gap-2" : ""}`}>
+            <Pager
+              page={page}
+              size={size}
+              total={total}
+              onPageChange={onPageChange}
+              disabled={loading}
+              dense={dense}
+            />
+            <RangeText page={page} size={size} total={total} dense={dense} />
+          </div>
+          <PageSizeSelect
+            value={size}
+            onChange={(n) => {
+              onSizeChange?.(n);
+            }}
+            options={pageSizeOptions}
+            dense={dense}
           />
         </div>
-      </div>
+      )}
     </div>
   );
 };
 
-/** PropTypes (explicit, concise) */
+/** PropTypes */
 
 SortIcon.propTypes = {
   state: PropTypes.oneOf(["asc", "desc", false]),
@@ -300,12 +329,14 @@ RangeText.propTypes = {
   page: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
+  dense: PropTypes.bool,
 };
 
 PageSizeSelect.propTypes = {
   value: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired,
   options: PropTypes.arrayOf(PropTypes.number),
+  dense: PropTypes.bool,
 };
 
 Pager.propTypes = {
@@ -314,14 +345,16 @@ Pager.propTypes = {
   total: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  className: PropTypes.string,
+  dense: PropTypes.bool,
 };
 
 TableV2.propTypes = {
-  columns: PropTypes.array.isRequired, // TanStack column defs
-  data: PropTypes.array.isRequired, // current page rows
+  columns: PropTypes.array.isRequired,
+  data: PropTypes.array.isRequired,
   totalRows: PropTypes.number.isRequired,
 
-  page: PropTypes.number.isRequired, // 1-based
+  page: PropTypes.number.isRequired,
   size: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onSizeChange: PropTypes.func.isRequired,
@@ -335,28 +368,25 @@ TableV2.propTypes = {
   rowSelection: PropTypes.object,
   onRowSelectionChange: PropTypes.func,
 
+  nowrap: PropTypes.bool,
+  stickyHeader: PropTypes.bool,
   className: PropTypes.string,
   tableClassName: PropTypes.string,
-  theadClassName: PropTypes.string,
-  tbodyClassName: PropTypes.string,
+  paginationClassName: PropTypes.string,
+  parentClassName: PropTypes.string,
 
   emptyState: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   loading: PropTypes.bool,
-  headerSticky: PropTypes.bool,
+  showPagination: PropTypes.bool,
+  pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
 
-  renderToolbarLeft: PropTypes.func,
-  renderToolbarRight: PropTypes.func,
+  dense: PropTypes.bool, // <<< NEW
 };
 
-/** ----
- * Minimal usage reference (server-side)
- *
- * const [page, setPage] = useState(1);
- * const [size, setSize] = useState(25);
- * const [sorting, setSorting] = useState([]); // [{ id:'name', desc:false }]
- * const { data, total, loading } = useMyQuery({ page, size, sorting });
+/** Usage (server-side)
  *
  * <TableV2
+ *   dense // compact mode
  *   columns={columns}
  *   data={data}
  *   totalRows={total}
@@ -367,6 +397,7 @@ TableV2.propTypes = {
  *   sorting={sorting}
  *   onSortingChange={(next)=>{ setPage(1); setSorting(next); }}
  *   loading={loading}
+ *   nowrap
+ *   stickyHeader
  * />
- * ----
  */
