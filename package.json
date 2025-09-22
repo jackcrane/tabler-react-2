@@ -1,6 +1,6 @@
 {
   "name": "tabler-react-2",
-  "version": "0.1.158-alpha.0",
+  "version": "0.1.158-alpha.1",
   "description": "A react implementation of Tabler ui",
   "main": "dist/index.js",
   "scripts": {
