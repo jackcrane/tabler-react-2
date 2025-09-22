@@ -41,7 +41,7 @@ export const PageSizeSelect = ({
   dense,
 }) => (
   <select
-    className={dense ? "form-select form-select-sm" : "form-select"}
+    className={"form-select form-select-sm"}
     value={value}
     onChange={(e) => onChange(Number(e.target.value))}
     aria-label="Rows per page"
@@ -111,7 +111,7 @@ const isEmptyRender = (node) => {
   return false;
 };
 
-const renderCellWithFallback = (cell) => {
+const renderCellWithFallback = (cell, fallbackText) => {
   const rendered = flexRender(cell.column.columnDef.cell, cell.getContext());
   const finalNode = isEmptyRender(rendered) ? cell.getValue?.() : rendered;
 
@@ -120,10 +120,36 @@ const renderCellWithFallback = (cell) => {
     finalNode === undefined ||
     (typeof finalNode === "string" && finalNode.trim() === "")
   ) {
-    return <span className="text-muted">—</span>;
+    return <span className="text-muted">{fallbackText}</span>;
   }
 
   return finalNode;
+};
+
+/** Skeletons */
+
+const SkeletonCSS = () => (
+  <style>{`
+    /* TableV2 skeletons */
+    .tblv2-skel {
+      display: inline-block;
+      vertical-align: middle;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, #e9ecef 25%, #f1f3f5 37%, #e9ecef 63%);
+      background-size: 400% 100%;
+      animation: tblv2-shimmer 1.2s ease-in-out infinite;
+    }
+    @keyframes tblv2-shimmer {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0 0; }
+    }
+  `}</style>
+);
+
+const skeletonWidthAt = (rowIdx, colIdx) => {
+  // Cycle through some natural-looking widths
+  const widths = [48, 72, 96, 120, 64, 88, 140];
+  return widths[(rowIdx + colIdx) % widths.length];
 };
 
 /** Main table */
@@ -155,10 +181,9 @@ export const TableV2 = ({
   dense = false, // <<< supports compact rows
   // misc
   emptyState = "No data",
-  loading = false,
+  loading = false, // <<< shows a light grey skeleton pill in each cell
   showPagination = true,
   pageSizeOptions = [10, 25, 50, 100],
-
   fallbackText = "—",
 }) => {
   const table = useReactTable({
@@ -176,8 +201,6 @@ export const TableV2 = ({
     autoResetRowSelection: false,
 
     onSortingChange,
-    // Note: renderFallbackValue triggers only when a renderer returns `undefined`.
-    // We still handle null/"" ourselves in renderCellWithFallback.
     renderFallbackValue: <span className="text-muted">{fallbackText}</span>,
   });
 
@@ -229,12 +252,38 @@ export const TableV2 = ({
     );
   };
 
+  const total = totalRows ?? 0;
+  const leafCols = table.getAllLeafColumns().length;
+
   const content = useMemo(() => {
+    if (loading) {
+      const rowCount = Math.max(1, size || data.length || 10);
+      const rowClass = [dense ? "align-middle" : ""].filter(Boolean).join(" ");
+      const cellClass = [dense ? "py-1" : ""].filter(Boolean).join(" ");
+      const pillHeight = dense ? 16 : 18;
+
+      return Array.from({ length: rowCount }).map((_, r) => (
+        <tr key={`skel-${r}`} className={rowClass} aria-hidden="true">
+          {Array.from({ length: leafCols }).map((__, c) => (
+            <td key={`skel-${r}-${c}`} className={cellClass}>
+              <span
+                className="tblv2-skel"
+                style={{
+                  height: pillHeight,
+                  width: skeletonWidthAt(r, c),
+                }}
+              />
+            </td>
+          ))}
+        </tr>
+      ));
+    }
+
     if (!loading && data.length === 0) {
       return (
         <tr>
           <td
-            colSpan={table.getAllLeafColumns().length}
+            colSpan={leafCols}
             className={`text-center ${
               dense ? "py-3 small" : "py-3"
             } text-muted`}
@@ -265,18 +314,29 @@ export const TableV2 = ({
               .filter(Boolean)
               .join(" ")}
           >
-            {renderCellWithFallback(cell)}
+            {renderCellWithFallback(cell, fallbackText)}
           </td>
         ))}
       </tr>
     ));
     // Depend on internal table state so selection/sorting changes trigger re-render
-  }, [data, loading, emptyState, dense, table, rs, currentSorting]);
-
-  const total = totalRows ?? 0;
+  }, [
+    loading,
+    size,
+    data,
+    dense,
+    table,
+    rs,
+    currentSorting,
+    emptyState,
+    leafCols,
+    fallbackText,
+  ]);
 
   return (
     <div className={parentClassName}>
+      <SkeletonCSS />
+
       <div
         className={`table-responsive ${
           nowrap ? "table-nowrap" : ""
@@ -299,33 +359,14 @@ export const TableV2 = ({
               </tr>
             ))}
           </thead>
-          <tbody>
-            {loading && (
-              <tr>
-                <td
-                  colSpan={table.getAllLeafColumns().length}
-                  className={`text-center ${dense ? "py-2" : "py-3"}`}
-                >
-                  <span
-                    className="spinner-border spinner-border-sm me-2"
-                    role="status"
-                    aria-hidden
-                  />
-                  <span className={dense ? "small text-muted" : "text-muted"}>
-                    Loading…
-                  </span>
-                </td>
-              </tr>
-            )}
-            {content}
-          </tbody>
+          <tbody>{content}</tbody>
         </table>
       </div>
 
       {showPagination && (
         <div
-          className={`d-flex justify-content-between align-items-center ${
-            dense ? "mt-1" : "mt-2"
+          className={`d-flex justify-content-between align-items-center mx-2 ${
+            dense ? "my-1" : "my-2"
           } ${paginationClassName}`}
         >
           <div className={`d-flex align-items-center ${dense ? "gap-2" : ""}`}>
@@ -410,7 +451,7 @@ TableV2.propTypes = {
   parentClassName: PropTypes.string,
 
   emptyState: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  loading: PropTypes.bool,
+  loading: PropTypes.bool, // now shows skeleton pills per cell
   showPagination: PropTypes.bool,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
 
@@ -433,7 +474,7 @@ TableV2.propTypes = {
  *   rowSelection={rowSelection} // { [rowId]: true }
  *   onRowSelectionChange={setRowSelection}
  *   getRowId={(row) => row.id} // <<< stable id across pages
- *   loading={loading}
+ *   loading={loading} // <<< skeletons instead of spinner row
  *   nowrap
  *   stickyHeader
  * />
