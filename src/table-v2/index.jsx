@@ -104,6 +104,33 @@ export const Pager = ({
   );
 };
 
+/** Helper: render a cell with a null/empty fallback */
+const isEmptyRender = (node) => {
+  if (node === null || node === undefined) return true;
+  if (typeof node === "string" && node.trim() === "") return true;
+  return false;
+};
+
+const renderCellWithFallback = (cell) => {
+  // If the column provided a custom cell renderer, use it first.
+  const rendered = flexRender(cell.column.columnDef.cell, cell.getContext());
+
+  // If the renderer returned something empty-ish, or if there's no renderer,
+  // fall back to the raw value.
+  const finalNode = isEmptyRender(rendered) ? cell.getValue?.() : rendered;
+
+  // If the final node is still null/undefined/empty string, show a placeholder.
+  if (
+    finalNode === null ||
+    finalNode === undefined ||
+    (typeof finalNode === "string" && finalNode.trim() === "")
+  ) {
+    return <span className="text-muted">—</span>;
+  }
+
+  return finalNode;
+};
+
 /** Main table */
 
 export const TableV2 = ({
@@ -130,12 +157,14 @@ export const TableV2 = ({
   tableClassName = "",
   paginationClassName = "",
   parentClassName = "",
-  dense = false, // <<< NEW
+  dense = false, // <<< supports compact rows
   // misc
   emptyState = "No data",
   loading = false,
   showPagination = true,
   pageSizeOptions = [10, 25, 50, 100],
+
+  fallbackText = "—",
 }) => {
   const table = useReactTable({
     data,
@@ -150,6 +179,9 @@ export const TableV2 = ({
     onSortingChange,
     getRowId,
     onRowSelectionChange,
+    // Note: renderFallbackValue triggers only when a renderer returns `undefined`.
+    // We still handle null/"" ourselves in renderCellWithFallback.
+    renderFallbackValue: <span className="text-muted">{fallbackText}</span>,
   });
 
   const headerCell = ({ header }) => {
@@ -232,7 +264,7 @@ export const TableV2 = ({
               .filter(Boolean)
               .join(" ")}
           >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            {renderCellWithFallback(cell)}
           </td>
         ))}
       </tr>
@@ -380,7 +412,7 @@ TableV2.propTypes = {
   showPagination: PropTypes.bool,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
 
-  dense: PropTypes.bool, // <<< NEW
+  dense: PropTypes.bool,
 };
 
 /** Usage (server-side)
