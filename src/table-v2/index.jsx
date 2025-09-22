@@ -1,7 +1,6 @@
 // TableV2.jsx
 // TanStack Table v8 styled like the Original component's Tabler look.
 // Adds `dense` mode for a compact layout.
-// Supports null/empty cells without layout shift via placeholder rendering.
 // Controlled (server-side) pagination & sorting. ES modules, named exports, arrow functions only.
 
 import React, { useMemo } from "react";
@@ -131,19 +130,12 @@ export const TableV2 = ({
   tableClassName = "",
   paginationClassName = "",
   parentClassName = "",
-  dense = false,
+  dense = false, // <<< NEW
   // misc
   emptyState = "No data",
   loading = false,
   showPagination = true,
   pageSizeOptions = [10, 25, 50, 100],
-
-  // NEW: stabilize cells with null/empty values
-  emptyCellPlaceholder = "",
-  treatEmptyStringAsNull = false,
-
-  // NEW: stronger width stability
-  fixedLayout = true,
 }) => {
   const table = useReactTable({
     data,
@@ -205,24 +197,6 @@ export const TableV2 = ({
     );
   };
 
-  // Helper: render a stable placeholder for empty cells
-  const renderCellContent = (cell) => {
-    // Prefer the raw value to detect emptiness; custom renderers still run for non-empty values
-    const raw = cell.getValue?.();
-    const isEmpty =
-      raw === null ||
-      raw === undefined ||
-      (treatEmptyStringAsNull && raw === "");
-
-    if (isEmpty) {
-      // Use an invisible placeholder to keep height without adding visual noise.
-      // Wrap in inline-block so the cell keeps a minimal box even in dense mode.
-      return emptyCellPlaceholder;
-    }
-
-    return flexRender(cell.column.columnDef.cell, cell.getContext());
-  };
-
   const content = useMemo(() => {
     if (!loading && data.length === 0) {
       return (
@@ -258,20 +232,12 @@ export const TableV2 = ({
               .filter(Boolean)
               .join(" ")}
           >
-            {renderCellContent(cell)}
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </td>
         ))}
       </tr>
     ));
-  }, [
-    data,
-    loading,
-    emptyState,
-    table,
-    dense,
-    treatEmptyStringAsNull,
-    emptyCellPlaceholder,
-  ]);
+  }, [data, loading, emptyState, table, dense]);
 
   const total = totalRows ?? 0;
 
@@ -291,7 +257,6 @@ export const TableV2 = ({
           ]
             .filter(Boolean)
             .join(" ")}
-          style={fixedLayout ? { tableLayout: "fixed" } : undefined}
         >
           <thead>
             {table.getHeaderGroups().map((hg) => (
@@ -415,17 +380,13 @@ TableV2.propTypes = {
   showPagination: PropTypes.bool,
   pageSizeOptions: PropTypes.arrayOf(PropTypes.number),
 
-  dense: PropTypes.bool,
-
-  emptyCellPlaceholder: PropTypes.node,
-  treatEmptyStringAsNull: PropTypes.bool,
-  fixedLayout: PropTypes.bool,
+  dense: PropTypes.bool, // <<< NEW
 };
 
 /** Usage (server-side)
  *
  * <TableV2
- *   dense
+ *   dense // compact mode
  *   columns={columns}
  *   data={data}
  *   totalRows={total}
@@ -438,9 +399,5 @@ TableV2.propTypes = {
  *   loading={loading}
  *   nowrap
  *   stickyHeader
- *   // NEW props for null-safe cells:
- *   emptyCellPlaceholder="—"
- *   treatEmptyStringAsNull
- *   fixedLayout
  * />
  */
