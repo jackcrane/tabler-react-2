@@ -112,14 +112,9 @@ const isEmptyRender = (node) => {
 };
 
 const renderCellWithFallback = (cell) => {
-  // If the column provided a custom cell renderer, use it first.
   const rendered = flexRender(cell.column.columnDef.cell, cell.getContext());
-
-  // If the renderer returned something empty-ish, or if there's no renderer,
-  // fall back to the raw value.
   const finalNode = isEmptyRender(rendered) ? cell.getValue?.() : rendered;
 
-  // If the final node is still null/undefined/empty string, show a placeholder.
   if (
     finalNode === null ||
     finalNode === undefined ||
@@ -169,20 +164,25 @@ export const TableV2 = ({
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
-      rowSelection: rowSelection ?? {},
-    },
+    state: { sorting, ...(rowSelection !== undefined ? { rowSelection } : {}) },
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     enableSortingRemoval: false,
-    onSortingChange,
-    getRowId,
+
+    /** Selection essentials */
+    enableRowSelection: true,
     onRowSelectionChange,
+    getRowId, // IMPORTANT: provide a stable id (e.g., row => row.id) when paginating
+    autoResetRowSelection: false,
+
+    onSortingChange,
     // Note: renderFallbackValue triggers only when a renderer returns `undefined`.
     // We still handle null/"" ourselves in renderCellWithFallback.
     renderFallbackValue: <span className="text-muted">{fallbackText}</span>,
   });
+
+  /** Make memoization responsive to internal table state, not just the instance ref */
+  const { rowSelection: rs, sorting: currentSorting } = table.getState();
 
   const headerCell = ({ header }) => {
     const canSort = header.column.getCanSort();
@@ -244,6 +244,7 @@ export const TableV2 = ({
         </tr>
       );
     }
+
     return table.getRowModel().rows.map((row) => (
       <tr
         key={row.id}
@@ -269,7 +270,8 @@ export const TableV2 = ({
         ))}
       </tr>
     ));
-  }, [data, loading, emptyState, table, dense]);
+    // Depend on internal table state so selection/sorting changes trigger re-render
+  }, [data, loading, emptyState, dense, table, rs, currentSorting]);
 
   const total = totalRows ?? 0;
 
@@ -428,6 +430,9 @@ TableV2.propTypes = {
  *   onSizeChange={(n)=>{ setPage(1); setSize(n); }}
  *   sorting={sorting}
  *   onSortingChange={(next)=>{ setPage(1); setSorting(next); }}
+ *   rowSelection={rowSelection} // { [rowId]: true }
+ *   onRowSelectionChange={setRowSelection}
+ *   getRowId={(row) => row.id} // <<< stable id across pages
  *   loading={loading}
  *   nowrap
  *   stickyHeader
